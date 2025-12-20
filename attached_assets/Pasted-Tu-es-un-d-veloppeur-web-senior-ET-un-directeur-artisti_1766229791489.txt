@@ -1,0 +1,96 @@
+Tu es un développeur web senior ET un directeur artistique digital.
+
+AVERTISSEMENT IMPORTANT (À RESPECTER STRICTEMENT) :
+- NE PAS utiliser de template standard Replit
+- NE PAS utiliser de layout générique (hero basique, sections empilées sans identité)
+- NE PAS générer de design “bootstrap-like” ou “dashboard par défaut”
+- Le site DOIT avoir une identité visuelle originale, moderne et immersive
+- Chaque page doit avoir un design adapté à son contenu
+- Le rendu final doit ressembler à un site de marque artistique haut de gamme, PAS à un template
+
+OBJECTIF :
+Construire une Web Application multilingue, immersive et originale pour l’artiste DAMO FAMA : Damofama.com
+
+DIRECTION ARTISTIQUE (OBLIGATOIRE) :
+- Design moderne, cinématographique, afro-contemporain
+- Typographies fortes et élégantes (headline expressif)
+- Utilisation maîtrisée des contrastes, overlays, animations subtiles
+- Navigation fluide avec micro-interactions
+- Sections non linéaires (grilles créatives, rythmes visuels variés)
+- Transitions douces entre pages
+- Hero section immersive (image ou vidéo + overlay artistique)
+- Esthétique “site de label / artiste international”
+
+TECHNOLOGIES (à justifier) :
+- Frontend moderne (React + Next.js ou équivalent)
+- Styling avancé (Tailwind personnalisé, CSS Modules ou Styled Components)
+- Animations légères (Framer Motion ou équivalent)
+- Backend Node.js sécurisé
+- Base de données structurée
+- API REST claire et sécurisée
+
+FONCTIONNALITÉS GÉNÉRALES :
+- Web App dynamique et moderne
+- Responsive & mobile-first
+- Multilingue (FR / EN extensible)
+- Pages publiques + Page Admin sécurisée
+- L’admin peut :
+  - Éditer toutes les pages
+  - Ajouter / modifier tout type de contenu
+  - Gérer médias (audio, vidéo, images)
+  - Publier librement sans contrainte de format
+- Lecteur audio personnalisé (pas un player basique)
+- Lecteur YouTube intégré dans le design
+- Liens vers réseaux sociaux
+
+NAV BAR :
+- Accueil (menus prioritaires uniquement)
+- À propos de Damo Fama
+- Discographie
+- Galerie
+- Concerts & Tournées
+- Festivals
+- Articles de presse
+- Partenaires
+- Contact
+
+PAGE D’ACCUEIL :
+- Hero immersif plein écran
+- Message fort et identitaire
+- Accès rapide aux contenus prioritaires
+- Mise en avant musique / vidéo
+- Call-to-action clair et élégant
+
+BACKEND & API :
+- API REST modulaire
+- Authentification admin sécurisée (JWT)
+- Rôles et permissions
+- Validation des données
+- Séparation stricte public / admin
+
+ADMIN PANEL :
+- Interface moderne et claire
+- Dashboard sur mesure (PAS un admin générique)
+- Édition de contenu flexible
+- Gestion multilingue
+- Upload médias
+- UX pensée pour un artiste non-tech
+
+SÉCURITÉ :
+- Auth sécurisée
+- Protection API
+- Variables d’environnement
+- Bonnes pratiques OWASP
+
+LIVRABLES ATTENDUS :
+1) Architecture complète du projet
+2) Arborescence claire
+3) Backend + API
+4) Frontend original (sans template)
+5) Design system de base
+6) Instructions de lancement
+
+IMPORTANT :
+Si un élément ressemble à un template standard Replit, il doit être remplacé par une solution personnalisée.
+
+Commence par générer l’architecture et le backend, puis le frontend original.
