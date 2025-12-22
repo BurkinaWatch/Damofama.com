@@ -72,12 +72,19 @@ export default function Contact() {
 
                 <div className="pt-8 border-t border-white/10">
                   <h3 className="text-2xl font-display font-bold mb-6">Suivre</h3>
-                  <div className="flex gap-6">
-                    {['Instagram', 'Twitter', 'Facebook', 'TikTok'].map(social => (
-                      <a key={social} href="#" className="text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
-                        {social}
-                      </a>
-                    ))}
+                  <div className="flex flex-wrap gap-6">
+                    <a href="https://www.facebook.com/share/1AHvShS3Qc/" target="_blank" rel="noopener noreferrer" className="text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
+                      Facebook
+                    </a>
+                    <a href="https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu" target="_blank" rel="noopener noreferrer" className="text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
+                      Instagram
+                    </a>
+                    <a href="https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD" target="_blank" rel="noopener noreferrer" className="text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
+                      Youtube
+                    </a>
+                    <a href="https://www.tiktok.com/@damofama" target="_blank" rel="noopener noreferrer" className="text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
+                      TikTok
+                    </a>
                   </div>
                 </div>
               </div>

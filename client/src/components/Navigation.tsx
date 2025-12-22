@@ -101,15 +101,20 @@ export function Navigation() {
                 </Link>
               ))}
               <div className="w-12 h-[1px] bg-border mx-auto my-4" />
-              <a href="#" className="text-sm text-muted-foreground uppercase tracking-widest">
-                Instagram
-              </a>
-              <a href="#" className="text-sm text-muted-foreground uppercase tracking-widest">
-                Spotify
-              </a>
-              <a href="#" className="text-sm text-muted-foreground uppercase tracking-widest">
-                Youtube
-              </a>
+              <div className="flex flex-col gap-6">
+                <a href="https://www.facebook.com/share/1AHvShS3Qc/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                  Facebook
+                </a>
+                <a href="https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                  Instagram
+                </a>
+                <a href="https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                  Youtube
+                </a>
+                <a href="https://www.tiktok.com/@damofama" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                  TikTok
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
