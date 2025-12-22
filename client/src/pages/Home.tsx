@@ -32,7 +32,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <h2 className="text-primary tracking-[0.2em] uppercase text-sm md:text-base font-medium mb-6">Nouvel Album Disponible</h2>
+            <h2 className="text-primary tracking-[0.2em] uppercase text-sm md:text-base font-medium mb-6"></h2>
           </motion.div>
           
           <motion.h1

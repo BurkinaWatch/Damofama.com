@@ -6,7 +6,7 @@ export function AudioPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState({
     title: "Midnight Echoes",
-    artist: "NOIRE",
+    artist: "DamoFama",
     duration: "3:45",
   });
   
