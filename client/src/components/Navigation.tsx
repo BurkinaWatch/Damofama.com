@@ -49,7 +49,7 @@ export function Navigation() {
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 items-center">
           {links.map((link) => (
-            <Link key={link.href} href={link.href}>
+            <Link key={link.href} href={link.href} asChild>
               <a
                 className={clsx(
                   "text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:text-primary relative group drop-shadow-md",
@@ -94,7 +94,7 @@ export function Navigation() {
           >
             <div className="flex flex-col gap-8 text-center">
               {links.map((link) => (
-                <Link key={link.href} href={link.href}>
+                <Link key={link.href} href={link.href} asChild>
                   <a className="text-3xl font-display font-bold hover:text-primary transition-colors">
                     {link.label}
                   </a>

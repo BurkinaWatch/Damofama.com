@@ -53,7 +53,7 @@ export default function Home() {
             <button className="bg-primary text-primary-foreground px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300">
               Écouter Maintenant
             </button>
-            <Link href="/music">
+            <Link href="/music" asChild>
               <a className="text-white uppercase tracking-widest text-sm font-bold border-b border-white/30 pb-1 hover:border-white transition-colors">
                 Voir la Discographie
               </a>
@@ -89,7 +89,7 @@ export default function Home() {
                   Fusionnant les rythmes ancestraux et les sonorités contemporaines.
                   Un voyage émotionnel qui transcende les frontières.
                 </p>
-                <Link href="/about">
+                <Link href="/about" asChild>
                   <a className="inline-flex items-center gap-2 text-white border-b border-primary pb-1 hover:text-primary transition-colors uppercase tracking-widest text-sm">
                     Découvrir la Biographie <ArrowRight size={16} />
                   </a>
@@ -103,7 +103,7 @@ export default function Home() {
             <div className="max-w-4xl mx-auto">
               <div className="flex justify-between items-end mb-12">
                 <h3 className="text-3xl md:text-5xl font-display">Prochaines Dates</h3>
-                <Link href="/events">
+                <Link href="/events" asChild>
                   <a className="hidden md:block text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
                     Toutes les dates
                   </a>
@@ -148,7 +148,7 @@ export default function Home() {
               </div>
 
               <div className="mt-8 md:hidden text-center">
-                <Link href="/events">
+                <Link href="/events" asChild>
                   <a className="text-sm uppercase tracking-widest text-primary border-b border-primary/30 pb-1">
                     Toutes les dates
                   </a>
