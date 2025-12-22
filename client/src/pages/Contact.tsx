@@ -47,7 +47,7 @@ export default function Contact() {
       <div className="pt-32 pb-16 px-6 container mx-auto text-center">
         <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Contact</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          For bookings, press inquiries, and collaborations.
+          Pour les réservations, les demandes de presse et les collaborations.
         </p>
       </div>
 
@@ -60,24 +60,18 @@ export default function Contact() {
               <div className="space-y-12">
                 <div>
                   <h3 className="text-2xl font-display font-bold mb-4">Management</h3>
-                  <p className="text-muted-foreground">Example Management Group</p>
-                  <a href="mailto:mgmt@noire-artist.com" className="text-primary hover:underline">mgmt@noire-artist.com</a>
+                  <p className="text-muted-foreground">DAMO FAMA Management</p>
+                  <a href="mailto:diabatedamofama@gmail.com" className="text-primary hover:underline">diabatedamofama@gmail.com</a>
                 </div>
                 
                 <div>
-                  <h3 className="text-2xl font-display font-bold mb-4">Bookings</h3>
-                  <p className="text-muted-foreground">Worldwide Agency</p>
-                  <a href="mailto:booking@noire-artist.com" className="text-primary hover:underline">booking@noire-artist.com</a>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-display font-bold mb-4">Press</h3>
-                  <p className="text-muted-foreground">Public Relations Co.</p>
-                  <a href="mailto:press@noire-artist.com" className="text-primary hover:underline">press@noire-artist.com</a>
+                  <h3 className="text-2xl font-display font-bold mb-4">Réservations</h3>
+                  <p className="text-muted-foreground">Booking Direct</p>
+                  <a href="tel:+22676338181" className="text-primary hover:underline">+226 76 33 81 81</a>
                 </div>
 
                 <div className="pt-8 border-t border-white/10">
-                  <h3 className="text-2xl font-display font-bold mb-6">Follow</h3>
+                  <h3 className="text-2xl font-display font-bold mb-6">Suivre</h3>
                   <div className="flex gap-6">
                     {['Instagram', 'Twitter', 'Facebook', 'TikTok'].map(social => (
                       <a key={social} href="#" className="text-sm uppercase tracking-widest text-muted-foreground hover:text-white transition-colors">
@@ -94,7 +88,7 @@ export default function Contact() {
               <div className="bg-card border border-white/5 p-8 rounded-lg">
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">Nom</Label>
                     <Input id="name" {...form.register("name")} className="bg-background/50 border-white/10 focus:border-primary" />
                     {form.formState.errors.name && <p className="text-red-500 text-sm">{form.formState.errors.name.message}</p>}
                   </div>
@@ -106,7 +100,7 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
+                    <Label htmlFor="subject">Sujet</Label>
                     <Input id="subject" {...form.register("subject")} className="bg-background/50 border-white/10 focus:border-primary" />
                   </div>
 
@@ -121,7 +115,7 @@ export default function Contact() {
                     className="w-full bg-primary text-black font-bold uppercase tracking-widest hover:bg-white transition-colors"
                     disabled={sendMessage.isPending}
                   >
-                    {sendMessage.isPending ? "Sending..." : "Send Message"}
+                    {sendMessage.isPending ? "Envoi..." : "Envoyer le Message"}
                   </Button>
                 </form>
               </div>

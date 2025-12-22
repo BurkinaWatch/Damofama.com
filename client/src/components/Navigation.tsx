@@ -5,12 +5,12 @@ import { Menu, X } from "lucide-react";
 import { clsx } from "clsx";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/music", label: "Music" },
+  { href: "/", label: "Accueil" },
+  { href: "/music", label: "Musique" },
   { href: "/events", label: "Live" },
   { href: "/about", label: "Bio" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "/press", label: "Press" },
+  { href: "/gallery", label: "Galerie" },
+  { href: "/press", label: "Presse" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -41,8 +41,8 @@ export function Navigation() {
         )}
       >
         <Link href="/">
-          <a className="text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative">
-            NOIRE
+          <a className="text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase">
+            Damo Fama
           </a>
         </Link>
 
@@ -70,7 +70,7 @@ export function Navigation() {
             rel="noopener noreferrer"
             className="ml-4 text-xs border border-primary/50 text-primary px-4 py-2 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300"
           >
-            LISTEN
+            ÉCOUTER
           </a>
         </div>
 

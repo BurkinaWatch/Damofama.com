@@ -9,7 +9,7 @@ export default function Press() {
   return (
     <div className="min-h-screen">
       <div className="pt-32 pb-16 px-6 container mx-auto text-center">
-        <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Press</h1>
+        <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Presse</h1>
       </div>
 
       <PageTransition>

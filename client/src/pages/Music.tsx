@@ -14,9 +14,9 @@ export default function Music() {
     <div className="min-h-screen">
       {/* Header */}
       <div className="pt-32 pb-16 px-6 container mx-auto text-center">
-        <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Discography</h1>
+        <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Discographie</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          A collection of sonic explorations and visual narratives.
+          Une collection d'explorations sonores et de récits visuels.
         </p>
       </div>
 

@@ -12,9 +12,9 @@ export default function Events() {
   return (
     <div className="min-h-screen">
       <div className="pt-32 pb-16 px-6 container mx-auto text-center">
-        <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Tour Dates</h1>
+        <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 text-primary">Dates de Tournée</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Experience the sound live.
+          Vivez l'expérience en direct.
         </p>
       </div>
 
