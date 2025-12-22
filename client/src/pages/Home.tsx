@@ -21,7 +21,7 @@ export default function Home() {
         {/* cinematic dark stage lighting atmosphere */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 scale-105 animate-[pulse_10s_ease-in-out_infinite]"
-          style={{ backgroundImage: 'url("https://pixabay.com/get/g5cc462079358ace8e81a26dd2ff8163278bb68f51fa838da8aa0fcf90c6b010855d484ea6b25b98ef511e0ed6a3d1583e4ee4cd8fb589fdc56d8f0fe5740fa27_1280.jpg")' }}
+          style={{ backgroundImage: 'url("/images/home_hero.jpg")' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-10" />
         
