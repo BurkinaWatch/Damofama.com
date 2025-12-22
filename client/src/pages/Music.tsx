@@ -52,7 +52,7 @@ export default function Music() {
                       <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">
                         {album.releaseDate ? new Date(album.releaseDate).getFullYear() : 'Coming Soon'}
                       </p>
-                      <p className="text-xs text-muted-foreground px-4 mb-4 line-clamp-2">
+                      <p className="text-xs text-muted-foreground px-4 mb-4 whitespace-pre-wrap">
                         {album.description}
                       </p>
                       <div className="flex justify-center gap-4 opacity-50 group-hover:opacity-100 transition-opacity">
@@ -169,7 +169,9 @@ export default function Music() {
                       </a>
                     </div>
                     <h3 className="text-xl font-display font-bold">{video.title}</h3>
-                    <p className="text-sm text-muted-foreground uppercase tracking-widest mt-1">{video.category.replace('_', ' ')}</p>
+                    <p className="text-sm text-muted-foreground uppercase tracking-widest mt-1">
+                      {video.category?.replace('_', ' ') || 'Music Video'}
+                    </p>
                   </div>
                 ))}
               </div>

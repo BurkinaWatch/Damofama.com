@@ -155,7 +155,7 @@ async function seedDatabase() {
       title: "SISSAN",
       coverImage: "/images/LS2C6652_1766230961644.jpg",
       releaseDate: new Date("2021-01-01"),
-      description: "E.P de 4 titres explorant l'amour, l'espoir et la bénédiction.",
+      description: "SISSAN (Maintenant en Dioula) - E.P de 4 titres dont :\n\n-Ma raison : L'amour fait marcher le cœur et maintient en vie. Cette chanson traite de l'amour à l'endroit d'une femme et le bonheur qui en découle.\n\n-Elle : La mère est le socle du fils et de la fille. Elle forge et forme la vie. La chanter, la célébrer, c'est saluer la vie en la replaçant sur son trône de reine. Cette chanson rend allègrement hommage à la mère, à la femme.\n\n-Bam'ba : L'espoir fait vivre. L'espoir apporte de rire. Il est le carburant qui fait tenir sur la grande route de la vie. Il ne faut jamais perdre la flamme de l'espoir.\n\n-Barka : La bénédiction éclaire le chemin et est absolument nécessaire pour grandir l'humain, faciliter son existence et aide à surmonter les obstacles, éviter les chutes qui auraient pu avoir des conséquences fâcheuses. Il faut travailler à avoir des bénédictions des parents, d'autrui à travers des actions bienveillantes.",
     });
 
     await storage.createTrack({
@@ -190,7 +190,7 @@ async function seedDatabase() {
       title: "TOUNGANATA",
       coverImage: "/images/LS2C6668_1766230961644.jpg",
       releaseDate: new Date("2024-07-01"),
-      description: "Single traitant de l'immigration et de la quête d'un lendemain meilleur.",
+      description: "Tounganata traite de l'immigration. La quête d'un lendemain qui chante pousse nombre de jeunes africains surtout, à opter pour le départ de chez eux à destination d'un éventuel eldorado qui parfois se révèle être un mirage. Ils laissent les gens qui les aiment dans le tourment, les incertitudes et l'angoisse. Au-delà, cette chanson interpelle et meuble les esprits dans le sens où il est préférable de créer son paradis chez soi au lieu de l'espérer dans un quelconque ailleurs.",
     });
 
     await storage.createTrack({
