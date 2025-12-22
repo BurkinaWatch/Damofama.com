@@ -23,9 +23,10 @@ export default function Home() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 scale-105 animate-[pulse_10s_ease-in-out_infinite]"
           style={{ backgroundImage: 'url("/images/home_hero.jpg")' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-black/40 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/40 z-20" />
         
-        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto mt-20">
+        <div className="relative z-30 text-center px-4 max-w-5xl mx-auto mt-20">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}

@@ -37,11 +37,11 @@ export function Navigation() {
       <nav
         className={clsx(
           "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out py-6 px-6 md:px-12 flex justify-between items-center",
-          scrolled || isOpen ? "bg-background/90 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent"
+          scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent"
         )}
       >
         <Link href="/">
-          <a className="text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase">
+          <a className="text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase text-white drop-shadow-lg">
             Damo Fama
           </a>
         </Link>
@@ -52,8 +52,8 @@ export function Navigation() {
             <Link key={link.href} href={link.href}>
               <a
                 className={clsx(
-                  "text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:text-primary relative group",
-                  location === link.href ? "text-primary" : "text-muted-foreground"
+                  "text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:text-primary relative group drop-shadow-md",
+                  location === link.href ? "text-primary" : "text-white/90 hover:text-white"
                 )}
               >
                 {link.label}
