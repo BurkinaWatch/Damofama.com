@@ -28,12 +28,12 @@ export default function Music() {
             <SectionReveal>
               <div className="flex items-center gap-4 mb-12">
                 <div className="h-[1px] bg-white/10 flex-1" />
-                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">Albums & EPs</h2>
+                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">En Solo (Albums & EPs)</h2>
                 <div className="h-[1px] bg-white/10 flex-1" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                {albums?.map((album) => (
+                {albums?.filter(a => !["Dembé", "Un jour viendra", "Biko"].includes(a.title)).map((album) => (
                   <div key={album.id} className="group cursor-pointer">
                     <div className="aspect-square overflow-hidden mb-6 relative">
                       <img 
@@ -49,8 +49,11 @@ export default function Music() {
                     </div>
                     <div className="text-center">
                       <h3 className="text-2xl font-display font-bold mb-1 group-hover:text-primary transition-colors">{album.title}</h3>
-                      <p className="text-sm text-muted-foreground uppercase tracking-widest mb-4">
+                      <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">
                         {album.releaseDate ? new Date(album.releaseDate).getFullYear() : 'Coming Soon'}
+                      </p>
+                      <p className="text-xs text-muted-foreground px-4 mb-4 line-clamp-2">
+                        {album.description}
                       </p>
                       <div className="flex justify-center gap-4 opacity-50 group-hover:opacity-100 transition-opacity">
                         <a href={album.spotifyUrl || '#'} className="text-xs border-b border-transparent hover:border-primary hover:text-primary transition-all">Spotify</a>
@@ -59,11 +62,40 @@ export default function Music() {
                     </div>
                   </div>
                 ))}
-                {(!albums || albums.length === 0) && (
-                  <div className="col-span-full text-center py-12 text-muted-foreground">
-                    No albums released yet.
+              </div>
+            </SectionReveal>
+          </section>
+
+          {/* Group Discography Section */}
+          <section>
+            <SectionReveal delay={0.1}>
+              <div className="flex items-center gap-4 mb-12">
+                <div className="h-[1px] bg-white/10 flex-1" />
+                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">En Groupe (KILÉ)</h2>
+                <div className="h-[1px] bg-white/10 flex-1" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                {albums?.filter(a => ["Dembé", "Un jour viendra", "Biko"].includes(a.title)).map((album) => (
+                  <div key={album.id} className="group">
+                    <div className="aspect-square overflow-hidden mb-6 relative">
+                      <img 
+                        src={album.coverImage} 
+                        alt={album.title}
+                        className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                      />
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-2xl font-display font-bold mb-1">{album.title}</h3>
+                      <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">
+                        {album.releaseDate ? new Date(album.releaseDate).getFullYear() : ''}
+                      </p>
+                      <p className="text-xs text-muted-foreground px-4">
+                        {album.description}
+                      </p>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
             </SectionReveal>
           </section>

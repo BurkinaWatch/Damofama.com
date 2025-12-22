@@ -151,25 +151,75 @@ async function seedDatabase() {
       section: "about",
     });
 
-    const album = await storage.createAlbum({
-      title: "ECHOES OF ANCESTORS",
+    const sissanEP = await storage.createAlbum({
+      title: "SISSAN",
       coverImage: "/images/LS2C6652_1766230961644.jpg",
-      releaseDate: new Date("2024-01-01"),
-      description: "A journey through time and sound, blending traditional rhythms with modern synths.",
+      releaseDate: new Date("2021-01-01"),
+      description: "E.P de 4 titres explorant l'amour, l'espoir et la bénédiction.",
     });
 
     await storage.createTrack({
-      albumId: album.id,
-      title: "Midnight in Dakar",
+      albumId: sissanEP.id,
+      title: "Ma raison",
       audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
       duration: "3:45",
     });
 
     await storage.createTrack({
-      albumId: album.id,
-      title: "Desert Winds",
+      albumId: sissanEP.id,
+      title: "Elle",
       audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
       duration: "4:12",
+    });
+
+    await storage.createTrack({
+      albumId: sissanEP.id,
+      title: "Bam'ba",
+      audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      duration: "3:58",
+    });
+
+    await storage.createTrack({
+      albumId: sissanEP.id,
+      title: "Barka",
+      audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+      duration: "4:05",
+    });
+
+    const tounganata = await storage.createAlbum({
+      title: "TOUNGANATA",
+      coverImage: "/images/LS2C6668_1766230961644.jpg",
+      releaseDate: new Date("2024-07-01"),
+      description: "Single traitant de l'immigration et de la quête d'un lendemain meilleur.",
+    });
+
+    await storage.createTrack({
+      albumId: tounganata.id,
+      title: "Tounganata",
+      audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+      duration: "4:30",
+    });
+
+    // Group Discography (KILÉ)
+    await storage.createAlbum({
+      title: "Dembé",
+      coverImage: "/images/LS2C6667_1766230961644.jpg",
+      releaseDate: new Date("2010-01-01"),
+      description: "Album de 10 titres avec le groupe KILÉ.",
+    });
+
+    await storage.createAlbum({
+      title: "Un jour viendra",
+      coverImage: "/images/LS2C6669_1766230961645.jpg",
+      releaseDate: new Date("2013-01-01"),
+      description: "Album de 13 titres avec le groupe KILÉ.",
+    });
+
+    await storage.createAlbum({
+      title: "Biko",
+      coverImage: "/images/LS2C6649_1766230961643.jpg",
+      releaseDate: new Date("2018-01-01"),
+      description: "Album de 8 titres avec le groupe KILÉ.",
     });
 
     await storage.createVideo({
