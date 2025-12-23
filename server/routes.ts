@@ -176,10 +176,8 @@ export async function registerRoutes(
       }
 
       const fileId = randomUUID();
-      // Use absolute URL by constructing from request
-      const protocol = req.protocol;
-      const host = req.get("host");
-      const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
+      // Use relative URL that works in both frontend and backend
+      const uploadURL = `/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
 
       res.json({
