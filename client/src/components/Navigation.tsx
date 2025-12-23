@@ -64,14 +64,11 @@ export function Navigation() {
               </a>
             </Link>
           ))}
-          <a
-            href="https://open.spotify.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-4 text-xs border border-primary/50 text-primary px-4 py-2 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-          >
-            ÉCOUTER
-          </a>
+          <Link href="/live" asChild>
+            <a className="ml-4 text-xs border border-primary/50 text-primary px-4 py-2 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300">
+              LIVE
+            </a>
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
