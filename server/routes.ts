@@ -3,8 +3,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { api } from "@shared/routes";
-import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { z } from "zod";
+import { randomUUID } from "crypto";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -164,8 +164,31 @@ export async function registerRoutes(
     res.json(messages);
   });
 
-  // Register object storage routes
-  registerObjectStorageRoutes(app);
+  // Upload URL endpoint (local storage)
+  app.post("/api/uploads/request-url", requireAuth, async (req, res) => {
+    try {
+      const { name, size, contentType } = req.body;
+
+      if (!name) {
+        return res.status(400).json({
+          error: "Missing required field: name",
+        });
+      }
+
+      const fileId = randomUUID();
+      const uploadURL = `/api/uploads/${fileId}`;
+      const objectPath = `/uploads/${fileId}`;
+
+      res.json({
+        uploadURL,
+        objectPath,
+        metadata: { name, size, contentType },
+      });
+    } catch (error) {
+      console.error("Error generating upload URL:", error);
+      res.status(500).json({ error: "Failed to generate upload URL" });
+    }
+  });
 
   // Seed data
   await seedDatabase();

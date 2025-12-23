@@ -2,9 +2,17 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 const httpServer = createServer(app);
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(process.cwd(), "public", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 declare module "http" {
   interface IncomingMessage {
@@ -33,9 +41,35 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
+// Serve uploaded files statically
+app.use("/uploads", express.static(uploadsDir));
+
+// Handle file uploads
+app.put("/api/uploads/:fileId", async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const filePath = path.join(uploadsDir, fileId);
+    
+    const writeStream = fs.createWriteStream(filePath);
+    req.pipe(writeStream);
+    
+    writeStream.on("finish", () => {
+      res.json({ success: true, objectPath: `/uploads/${fileId}` });
+    });
+    
+    writeStream.on("error", (err) => {
+      console.error("Upload error:", err);
+      res.status(500).json({ error: "Upload failed" });
+    });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({ error: "Upload failed" });
+  }
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
+  const pathname = req.path;
   let capturedJsonResponse: Record<string, any> | undefined = undefined;
 
   const originalResJson = res.json;
@@ -46,8 +80,8 @@ app.use((req, res, next) => {
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
+    if (pathname.startsWith("/api")) {
+      let logLine = `${req.method} ${pathname} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       }
