@@ -8,7 +8,7 @@ export default function Live() {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   const { data: videos = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/videos", "live"],
+    queryKey: ["/api/videos"],
   });
 
   const liveVideos = videos.filter((v) => v.category === "live");
