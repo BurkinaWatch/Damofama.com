@@ -51,19 +51,39 @@ app.put("/api/uploads/:fileId", async (req, res) => {
     const filePath = path.join(uploadsDir, fileId);
     
     const writeStream = fs.createWriteStream(filePath);
-    req.pipe(writeStream);
-    
+    let uploadCompleted = false;
+    let uploadError = false;
+
+    req.on("error", (err) => {
+      console.error("Request error during upload:", err);
+      uploadError = true;
+      writeStream.destroy();
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Request failed" });
+      }
+    });
+
     writeStream.on("finish", () => {
-      res.json({ success: true, objectPath: `/uploads/${fileId}` });
+      uploadCompleted = true;
+      if (!uploadError && !res.headersSent) {
+        res.status(200).json({ success: true, objectPath: `/uploads/${fileId}` });
+      }
     });
     
     writeStream.on("error", (err) => {
-      console.error("Upload error:", err);
-      res.status(500).json({ error: "Upload failed" });
+      console.error("Write stream error during upload:", err);
+      uploadError = true;
+      if (!res.headersSent) {
+        res.status(500).json({ error: "File write failed" });
+      }
     });
+
+    req.pipe(writeStream);
   } catch (error) {
     console.error("Upload error:", error);
-    res.status(500).json({ error: "Upload failed" });
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Upload failed" });
+    }
   }
 });
 
