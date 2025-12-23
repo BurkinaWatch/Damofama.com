@@ -1,6 +1,34 @@
 import { Link } from "wouter";
+import { Facebook, Instagram, Youtube, Music } from "lucide-react";
 
 export function Footer() {
+  const socialLinks = [
+    {
+      name: "Facebook",
+      href: "https://www.facebook.com/share/1AHvShS3Qc/",
+      icon: Facebook,
+      color: "text-blue-600"
+    },
+    {
+      name: "Instagram",
+      href: "https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu",
+      icon: Instagram,
+      color: "text-pink-500"
+    },
+    {
+      name: "YouTube",
+      href: "https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD",
+      icon: Youtube,
+      color: "text-red-600"
+    },
+    {
+      name: "TikTok",
+      href: "https://www.tiktok.com/@damofama",
+      icon: Music,
+      color: "text-black dark:text-white"
+    }
+  ];
+
   return (
     <footer className="py-20 bg-black border-t border-white/5 relative z-10">
       <div className="container mx-auto px-6">
@@ -27,12 +55,24 @@ export function Footer() {
 
           <div>
             <h4 className="font-display font-semibold mb-6 text-lg">Connect</h4>
-            <ul className="space-y-4">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Instagram</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Spotify</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Apple Music</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">YouTube</a></li>
-            </ul>
+            <div className="flex flex-col gap-4">
+              {socialLinks.map((social) => {
+                const IconComponent = social.icon;
+                return (
+                  <a 
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 group hover-elevate"
+                    data-testid={`link-${social.name.toLowerCase()}`}
+                  >
+                    <IconComponent size={20} className={`${social.color} group-hover:scale-110 transition-transform`} />
+                    <span className="text-muted-foreground group-hover:text-white transition-colors">{social.name}</span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </div>
 
