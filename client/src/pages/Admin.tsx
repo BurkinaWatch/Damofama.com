@@ -97,7 +97,9 @@ function AlbumsManager() {
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
                     const files = result.successful ?? [];
                     if (files.length > 0) {
-                      form.setValue("coverImage", `/objects/${files[0].meta.name}`);
+                      const uploadURL = files[0].meta?.uploadURL as string || "";
+                      const fileId = uploadURL.split('/').pop();
+                      form.setValue("coverImage", fileId ? `/uploads/${fileId}` : "");
                     }
                   }}>
                     <Upload size={16} />
@@ -228,7 +230,9 @@ function TracksManager() {
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
                     const files = result.successful ?? [];
                     if (files.length > 0) {
-                      form.setValue("audioUrl", `/objects/${files[0].meta.name}`);
+                      const uploadURL = files[0].meta?.uploadURL as string || "";
+                      const fileId = uploadURL.split('/').pop();
+                      form.setValue("audioUrl", fileId ? `/uploads/${fileId}` : "");
                     }
                   }}>
                     <Upload size={16} />
@@ -242,7 +246,9 @@ function TracksManager() {
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
                     const files = result.successful ?? [];
                     if (files.length > 0) {
-                      form.setValue("photoUrl", `/objects/${files[0].meta.name}`);
+                      const uploadURL = files[0].meta?.uploadURL as string || "";
+                      const fileId = uploadURL.split('/').pop();
+                      form.setValue("photoUrl", fileId ? `/uploads/${fileId}` : "");
                     }
                   }}>
                     <Upload size={16} />
@@ -366,7 +372,9 @@ function VideosManager() {
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
                     const files = result.successful ?? [];
                     if (files.length > 0) {
-                      form.setValue("thumbnailUrl", `/objects/${files[0].meta.name}`);
+                      const uploadURL = files[0].meta?.uploadURL as string || "";
+                      const fileId = uploadURL.split('/').pop();
+                      form.setValue("thumbnailUrl", fileId ? `/uploads/${fileId}` : "");
                     }
                   }}>
                     <Upload size={16} />

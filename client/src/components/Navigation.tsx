@@ -40,7 +40,7 @@ export function Navigation() {
           scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent"
         )}
       >
-        <Link href="/">
+        <Link href="/" asChild>
           <a className="text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase text-white drop-shadow-lg">
             Damo Fama
           </a>

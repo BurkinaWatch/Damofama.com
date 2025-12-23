@@ -160,6 +160,7 @@ export function useUpload(options: UseUploadOptions = {}) {
       method: "PUT";
       url: string;
       headers?: Record<string, string>;
+      fields?: Record<string, string>;
     }> => {
       // Use the actual file properties to request a per-file presigned URL
       const response = await fetch("/api/uploads/request-url", {
@@ -175,7 +176,8 @@ export function useUpload(options: UseUploadOptions = {}) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get upload URL");
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(errorData.error || "Failed to get upload URL");
       }
 
       const data = await response.json();
@@ -183,6 +185,10 @@ export function useUpload(options: UseUploadOptions = {}) {
         method: "PUT",
         url: data.uploadURL,
         headers: { "Content-Type": file.type || "application/octet-stream" },
+        fields: {
+          // Pass objectPath as a field so we can retrieve it in onComplete
+          objectPath: data.objectPath,
+        },
       };
     },
     []
