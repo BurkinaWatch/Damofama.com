@@ -170,21 +170,14 @@ export async function registerRoutes(
       const { name, size, contentType } = req.body;
 
       if (!name) {
-        console.error("Upload request missing name field");
         return res.status(400).json({
           error: "Missing required field: name",
         });
       }
 
       const fileId = randomUUID();
-      
-      // Construct absolute URL for Uppy AWS S3 plugin (requires full URL, not relative)
-      const protocol = req.protocol || "http";
-      const host = req.get("host") || "localhost:5000";
-      const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
+      const uploadURL = `/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
-
-      console.log(`Generated upload URL: ${uploadURL} for file: ${name} (${size} bytes)`);
 
       res.json({
         uploadURL,
