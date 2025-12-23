@@ -30,6 +30,23 @@ export function useCreateAlbum() {
   });
 }
 
+export function useUpdateAlbum() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: InsertAlbum }) => {
+      const url = buildUrl(api.albums.update.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update album");
+      return api.albums.update.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.albums.list.path] }),
+  });
+}
+
 export function useDeleteAlbum() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -70,6 +87,23 @@ export function useCreateTrack() {
   });
 }
 
+export function useUpdateTrack() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: InsertTrack }) => {
+      const url = buildUrl(api.tracks.update.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update track");
+      return api.tracks.update.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.tracks.list.path] }),
+  });
+}
+
 export function useDeleteTrack() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -105,6 +139,23 @@ export function useCreateVideo() {
       });
       if (!res.ok) throw new Error("Failed to create video");
       return api.videos.create.responses[201].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.videos.list.path] }),
+  });
+}
+
+export function useUpdateVideo() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: InsertVideo }) => {
+      const url = buildUrl(api.videos.update.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update video");
+      return api.videos.update.responses[200].parse(await res.json());
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.videos.list.path] }),
   });
@@ -155,6 +206,23 @@ export function useCreateEvent() {
   });
 }
 
+export function useUpdateEvent() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: InsertEvent }) => {
+      const url = buildUrl(api.events.update.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update event");
+      return api.events.update.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.events.list.path] }),
+  });
+}
+
 export function useDeleteEvent() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -194,6 +262,23 @@ export function useCreatePress() {
       });
       if (!res.ok) throw new Error("Failed to create press item");
       return api.press.create.responses[201].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.press.list.path] }),
+  });
+}
+
+export function useUpdatePress() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: InsertPress }) => {
+      const url = buildUrl(api.press.update.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update press item");
+      return api.press.update.responses[200].parse(await res.json());
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.press.list.path] }),
   });
