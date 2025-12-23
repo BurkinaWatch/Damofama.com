@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 type LoginForm = z.infer<typeof api.auth.login.input>;
 
@@ -15,10 +16,11 @@ export default function Login() {
   const { login, isLoggingIn, user } = useAuth();
   const [, setLocation] = useLocation();
 
-  if (user) {
-    setLocation("/admin");
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      setLocation("/admin");
+    }
+  }, [user, setLocation]);
 
   const form = useForm<LoginForm>({
     defaultValues: { username: "", password: "" }
@@ -79,9 +81,9 @@ export default function Login() {
         </form>
         
         <div className="text-center">
-          <Button variant="link" className="text-muted-foreground" onClick={() => setLocation("/")}>
+          <button onClick={() => setLocation("/")} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Back to Home
-          </Button>
+          </button>
         </div>
       </motion.div>
     </div>
