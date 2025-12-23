@@ -180,41 +180,41 @@ export default function Home() {
                     href="https://www.facebook.com/share/1AHvShS3Qc/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    className="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-blue-600/20 border border-blue-600/30 hover:border-blue-600 rounded-lg transition-all duration-300 group"
                     data-testid="link-facebook"
                   >
-                    <Facebook size={16} />
-                    Facebook
+                    <Facebook size={20} className="text-blue-600 group-hover:scale-110 transition-transform" />
+                    <span className="uppercase tracking-widest text-xs font-bold text-white group-hover:text-blue-400">Facebook</span>
                   </a>
                   <a 
                     href="https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    className="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-pink-600/20 border border-pink-500/30 hover:border-pink-500 rounded-lg transition-all duration-300 group"
                     data-testid="link-instagram"
                   >
-                    <Instagram size={16} />
-                    Instagram
+                    <Instagram size={20} className="text-pink-500 group-hover:scale-110 transition-transform" />
+                    <span className="uppercase tracking-widest text-xs font-bold text-white group-hover:text-pink-400">Instagram</span>
                   </a>
                   <a 
                     href="https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    className="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-red-600/20 border border-red-600/30 hover:border-red-600 rounded-lg transition-all duration-300 group"
                     data-testid="link-youtube"
                   >
-                    <Youtube size={16} />
-                    YouTube
+                    <Youtube size={20} className="text-red-600 group-hover:scale-110 transition-transform" />
+                    <span className="uppercase tracking-widest text-xs font-bold text-white group-hover:text-red-400">YouTube</span>
                   </a>
                   <a 
                     href="https://www.tiktok.com/@damofama" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    className="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 rounded-lg transition-all duration-300 group"
                     data-testid="link-tiktok"
                   >
-                    <Music size={16} />
-                    TikTok
+                    <Music size={20} className="text-white/80 group-hover:text-white group-hover:scale-110 transition-all" />
+                    <span className="uppercase tracking-widest text-xs font-bold text-white">TikTok</span>
                   </a>
                 </div>
               </div>
