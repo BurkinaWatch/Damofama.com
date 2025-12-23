@@ -448,7 +448,7 @@ function MessagesManager() {
               </div>
               <div className="text-sm font-semibold mb-2">{msg.subject}</div>
               <div className="text-sm text-muted-foreground whitespace-pre-wrap">{msg.message}</div>
-              <div className="text-xs text-muted-foreground mt-2">{new Date(msg.createdAt).toLocaleString()}</div>
+              <div className="text-xs text-muted-foreground mt-2">{msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'N/A'}</div>
             </div>
           ))
         ) : (
