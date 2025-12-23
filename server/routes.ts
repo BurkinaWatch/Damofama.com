@@ -197,7 +197,8 @@ async function seedDatabase() {
       albumId: tounganata.id,
       title: "Tounganata",
       audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-      duration: "4:30",
+      duration: "4:19",
+      isSingle: true,
     });
 
     // Group Discography (KILÉ)
