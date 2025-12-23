@@ -44,3 +44,9 @@ outputType = "webview"
 [agent]
 expertMode = true
 integrations = ["javascript_object_storage:2.0.0"]
+
+[userenv]
+
+[userenv.shared]
+PUBLIC_OBJECT_SEARCH_PATHS = "/damo-fama-public"
+PRIVATE_OBJECT_DIR = "/damo-fama-private"
