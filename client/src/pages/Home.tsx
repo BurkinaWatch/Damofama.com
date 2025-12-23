@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Calendar, Music } from "lucide-react";
+import { ArrowRight, Calendar, Music, Facebook, Instagram, Youtube, TrendingUp } from "lucide-react";
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useEvents } from "@/hooks/use-content";
 import { format } from "date-fns";
@@ -157,7 +157,7 @@ export default function Home() {
             </div>
           </SectionReveal>
 
-          {/* Latest Release */}
+          {/* Social Media */}
           <SectionReveal>
             <div className="relative overflow-hidden bg-card rounded-lg border border-white/5 p-8 md:p-16 text-center">
               <div className="absolute inset-0 opacity-20 pointer-events-none">
@@ -170,20 +170,52 @@ export default function Home() {
               </div>
               
               <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-                <Music className="w-12 h-12 text-primary mx-auto mb-4" />
-                <h3 className="text-4xl md:text-5xl font-display">Écouter la Collection</h3>
+                <TrendingUp className="w-12 h-12 text-primary mx-auto mb-4" />
+                <h3 className="text-4xl md:text-5xl font-display">Suivez Damo Fama</h3>
                 <p className="text-muted-foreground">
-                  Disponible sur toutes les plateformes de streaming.
+                  Connectez-vous sur les réseaux sociaux pour rester à jour.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 pt-4">
-                  {['Spotify', 'Apple Music', 'YouTube', 'Deezer'].map((platform) => (
-                    <button 
-                      key={platform}
-                      className="px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
-                    >
-                      {platform}
-                    </button>
-                  ))}
+                  <a 
+                    href="https://www.facebook.com/share/1AHvShS3Qc/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    data-testid="link-facebook"
+                  >
+                    <Facebook size={16} />
+                    Facebook
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    data-testid="link-instagram"
+                  >
+                    <Instagram size={16} />
+                    Instagram
+                  </a>
+                  <a 
+                    href="https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    data-testid="link-youtube"
+                  >
+                    <Youtube size={16} />
+                    YouTube
+                  </a>
+                  <a 
+                    href="https://www.tiktok.com/@damofama" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-primary hover:text-black border border-white/10 rounded transition-all duration-300 uppercase tracking-widest text-xs font-bold"
+                    data-testid="link-tiktok"
+                  >
+                    <Music size={16} />
+                    TikTok
+                  </a>
                 </div>
               </div>
             </div>
