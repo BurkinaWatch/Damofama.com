@@ -197,43 +197,41 @@ export async function registerRoutes(
   app.put("/api/uploads/:fileId", async (req, res) => {
     try {
       const { fileId } = req.params;
-      const chunks: Buffer[] = [];
+      const fs = await import("fs").then(m => m.promises);
+      const path = await import("path");
 
-      // Collect file chunks from the request stream
-      req.on("data", (chunk: Buffer) => {
-        chunks.push(chunk);
+      // Store in public/uploads directory
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+
+      // Create uploads directory if it doesn't exist
+      const fsSync = require("fs");
+      if (!fsSync.existsSync(uploadsDir)) {
+        fsSync.mkdirSync(uploadsDir, { recursive: true });
+      }
+
+      const filePath = path.join(uploadsDir, fileId);
+
+      // Pipe request directly to file
+      const writeStream = fsSync.createWriteStream(filePath);
+
+      req.pipe(writeStream);
+
+      writeStream.on("finish", () => {
+        res.status(200).json({
+          success: true,
+          objectPath: `/uploads/${fileId}`,
+          fileId,
+        });
       });
 
-      req.on("end", async () => {
-        try {
-          const fileBuffer = Buffer.concat(chunks);
-          
-          // Store in public/uploads directory
-          const fs = await import("fs");
-          const path = await import("path");
-          const uploadsDir = path.join(process.cwd(), "public", "uploads");
-          
-          // Create uploads directory if it doesn't exist
-          if (!fs.existsSync(uploadsDir)) {
-            fs.mkdirSync(uploadsDir, { recursive: true });
-          }
-
-          const filePath = path.join(uploadsDir, fileId);
-          fs.writeFileSync(filePath, fileBuffer);
-
-          res.json({ 
-            success: true,
-            objectPath: `/uploads/${fileId}`,
-            fileId,
-          });
-        } catch (error) {
-          console.error("Error saving file:", error);
-          res.status(500).json({ error: "Failed to save file" });
-        }
+      writeStream.on("error", (error: any) => {
+        console.error("Error writing file:", error);
+        res.status(500).json({ error: "Failed to save file" });
       });
 
-      req.on("error", (error) => {
+      req.on("error", (error: any) => {
         console.error("Error receiving file:", error);
+        writeStream.destroy();
         res.status(500).json({ error: "Failed to receive file" });
       });
     } catch (error) {
