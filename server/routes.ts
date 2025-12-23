@@ -196,7 +196,7 @@ async function seedDatabase() {
     await storage.createTrack({
       albumId: tounganata.id,
       title: "Tounganata",
-      audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+      audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
       duration: "4:19",
       isSingle: true,
     });
