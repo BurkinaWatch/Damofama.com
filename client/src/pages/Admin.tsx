@@ -95,7 +95,7 @@ function AlbumsManager() {
                 <div className="flex gap-2">
                   <Input {...form.register("coverImage")} placeholder="Or upload..." className="flex-1" />
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful;
+                    const files = result.successful ?? [];
                     if (files.length > 0) {
                       form.setValue("coverImage", `/objects/${files[0].meta.name}`);
                     }
@@ -226,7 +226,7 @@ function TracksManager() {
                 <div className="flex gap-2">
                   <Input {...form.register("audioUrl")} placeholder="Or upload..." className="flex-1" />
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful;
+                    const files = result.successful ?? [];
                     if (files.length > 0) {
                       form.setValue("audioUrl", `/objects/${files[0].meta.name}`);
                     }
@@ -240,7 +240,7 @@ function TracksManager() {
                 <div className="flex gap-2">
                   <Input {...form.register("photoUrl")} placeholder="Or upload..." className="flex-1" />
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful;
+                    const files = result.successful ?? [];
                     if (files.length > 0) {
                       form.setValue("photoUrl", `/objects/${files[0].meta.name}`);
                     }
@@ -364,7 +364,7 @@ function VideosManager() {
                 <div className="flex gap-2">
                   <Input {...form.register("thumbnailUrl")} placeholder="Or upload..." className="flex-1" />
                   <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful;
+                    const files = result.successful ?? [];
                     if (files.length > 0) {
                       form.setValue("thumbnailUrl", `/objects/${files[0].meta.name}`);
                     }
@@ -547,6 +547,7 @@ function PressManager() {
   const deletePress = useDeletePress();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertPress>({
     resolver: zodResolver(insertPressSchema),
@@ -591,8 +592,10 @@ function PressManager() {
           if (!isOpen) {
             setEditingId(null);
             form.reset();
+            setOpen(false);
+          } else {
+            setOpen(true);
           }
-          setOpen(isOpen);
         }}>
           <DialogTrigger asChild>
             <Button><Plus size={16} className="mr-2" /> Add Press Item</Button>
