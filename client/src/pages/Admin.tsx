@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, LogOut, CheckCircle2, Edit2 } from "lucide-react";
+import { Trash2, Plus, LogOut, CheckCircle2, Edit2, Upload } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { 
@@ -20,6 +20,8 @@ import {
 } from "@shared/schema";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { ObjectUploader } from "@/components/ObjectUploader";
+import { useUpload } from "@/hooks/use-upload";
 
 // Simple CRUD for Albums
 function AlbumsManager() {
@@ -29,6 +31,7 @@ function AlbumsManager() {
   const deleteAlbum = useDeleteAlbum();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertAlbum>({
     resolver: zodResolver(insertAlbumSchema),
@@ -88,8 +91,18 @@ function AlbumsManager() {
                 <Input {...form.register("title")} />
               </div>
               <div className="space-y-2">
-                <Label>Cover Image URL</Label>
-                <Input {...form.register("coverImage")} />
+                <Label>Cover Image</Label>
+                <div className="flex gap-2">
+                  <Input {...form.register("coverImage")} placeholder="Or upload..." className="flex-1" />
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
+                    const files = result.successful;
+                    if (files.length > 0) {
+                      form.setValue("coverImage", `/objects/${files[0].meta.name}`);
+                    }
+                  }}>
+                    <Upload size={16} />
+                  </ObjectUploader>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label>Description</Label>
@@ -141,6 +154,7 @@ function TracksManager() {
   const deleteTrack = useDeleteTrack();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertTrack>({
     resolver: zodResolver(insertTrackSchema),
@@ -208,8 +222,32 @@ function TracksManager() {
                 <Input {...form.register("title")} />
               </div>
               <div className="space-y-2">
-                <Label>Audio URL</Label>
-                <Input {...form.register("audioUrl")} placeholder="https://..." />
+                <Label>Audio</Label>
+                <div className="flex gap-2">
+                  <Input {...form.register("audioUrl")} placeholder="Or upload..." className="flex-1" />
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
+                    const files = result.successful;
+                    if (files.length > 0) {
+                      form.setValue("audioUrl", `/objects/${files[0].meta.name}`);
+                    }
+                  }}>
+                    <Upload size={16} />
+                  </ObjectUploader>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Photo (Optional)</Label>
+                <div className="flex gap-2">
+                  <Input {...form.register("photoUrl")} placeholder="Or upload..." className="flex-1" />
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
+                    const files = result.successful;
+                    if (files.length > 0) {
+                      form.setValue("photoUrl", `/objects/${files[0].meta.name}`);
+                    }
+                  }}>
+                    <Upload size={16} />
+                  </ObjectUploader>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label>Duration (MM:SS)</Label>
@@ -257,6 +295,7 @@ function VideosManager() {
   const deleteVideo = useDeleteVideo();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertVideo>({
     resolver: zodResolver(insertVideoSchema),
@@ -321,8 +360,18 @@ function VideosManager() {
                 <Input {...form.register("youtubeUrl")} placeholder="https://youtube.com/watch?v=..." />
               </div>
               <div className="space-y-2">
-                <Label>Thumbnail URL</Label>
-                <Input {...form.register("thumbnailUrl")} placeholder="https://..." />
+                <Label>Thumbnail</Label>
+                <div className="flex gap-2">
+                  <Input {...form.register("thumbnailUrl")} placeholder="Or upload..." className="flex-1" />
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
+                    const files = result.successful;
+                    if (files.length > 0) {
+                      form.setValue("thumbnailUrl", `/objects/${files[0].meta.name}`);
+                    }
+                  }}>
+                    <Upload size={16} />
+                  </ObjectUploader>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label>Category</Label>
