@@ -21,24 +21,29 @@ export interface IStorage {
   // Albums & Tracks
   getAlbums(): Promise<Album[]>;
   createAlbum(album: InsertAlbum): Promise<Album>;
+  updateAlbum(id: number, album: InsertAlbum): Promise<Album>;
   deleteAlbum(id: number): Promise<void>;
   getTracks(): Promise<Track[]>;
   createTrack(track: InsertTrack): Promise<Track>;
+  updateTrack(id: number, track: InsertTrack): Promise<Track>;
   deleteTrack(id: number): Promise<void>;
 
   // Videos
   getVideos(): Promise<Video[]>;
   createVideo(video: InsertVideo): Promise<Video>;
+  updateVideo(id: number, video: InsertVideo): Promise<Video>;
   deleteVideo(id: number): Promise<void>;
 
   // Events
   getEvents(): Promise<Event[]>;
   createEvent(event: InsertEvent): Promise<Event>;
+  updateEvent(id: number, event: InsertEvent): Promise<Event>;
   deleteEvent(id: number): Promise<void>;
 
   // Press
   getPress(): Promise<Press[]>;
   createPress(item: InsertPress): Promise<Press>;
+  updatePress(id: number, item: InsertPress): Promise<Press>;
   deletePress(id: number): Promise<void>;
 
   // Messages
@@ -88,6 +93,11 @@ export class DatabaseStorage implements IStorage {
     return newAlbum;
   }
 
+  async updateAlbum(id: number, album: InsertAlbum): Promise<Album> {
+    const [updated] = await db.update(albums).set(album).where(eq(albums.id, id)).returning();
+    return updated;
+  }
+
   async deleteAlbum(id: number): Promise<void> {
     await db.delete(albums).where(eq(albums.id, id));
   }
@@ -99,6 +109,11 @@ export class DatabaseStorage implements IStorage {
   async createTrack(track: InsertTrack): Promise<Track> {
     const [newTrack] = await db.insert(tracks).values(track).returning();
     return newTrack;
+  }
+
+  async updateTrack(id: number, track: InsertTrack): Promise<Track> {
+    const [updated] = await db.update(tracks).set(track).where(eq(tracks.id, id)).returning();
+    return updated;
   }
 
   async deleteTrack(id: number): Promise<void> {
@@ -114,6 +129,11 @@ export class DatabaseStorage implements IStorage {
     return newVideo;
   }
 
+  async updateVideo(id: number, video: InsertVideo): Promise<Video> {
+    const [updated] = await db.update(videos).set(video).where(eq(videos.id, id)).returning();
+    return updated;
+  }
+
   async deleteVideo(id: number): Promise<void> {
     await db.delete(videos).where(eq(videos.id, id));
   }
@@ -127,6 +147,11 @@ export class DatabaseStorage implements IStorage {
     return newEvent;
   }
 
+  async updateEvent(id: number, event: InsertEvent): Promise<Event> {
+    const [updated] = await db.update(events).set(event).where(eq(events.id, id)).returning();
+    return updated;
+  }
+
   async deleteEvent(id: number): Promise<void> {
     await db.delete(events).where(eq(events.id, id));
   }
@@ -138,6 +163,11 @@ export class DatabaseStorage implements IStorage {
   async createPress(item: InsertPress): Promise<Press> {
     const [newPress] = await db.insert(press).values(item).returning();
     return newPress;
+  }
+
+  async updatePress(id: number, item: InsertPress): Promise<Press> {
+    const [updated] = await db.update(press).set(item).where(eq(press.id, id)).returning();
+    return updated;
   }
 
   async deletePress(id: number): Promise<void> {

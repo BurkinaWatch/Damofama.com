@@ -83,6 +83,14 @@ export const api = {
         201: z.custom<typeof albums.$inferSelect>(),
       },
     },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/albums/:id',
+      input: insertAlbumSchema,
+      responses: {
+        200: z.custom<typeof albums.$inferSelect>(),
+      },
+    },
     delete: {
       method: 'DELETE' as const,
       path: '/api/albums/:id',
@@ -105,6 +113,14 @@ export const api = {
       input: insertTrackSchema,
       responses: {
         201: z.custom<typeof tracks.$inferSelect>(),
+      },
+    },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/tracks/:id',
+      input: insertTrackSchema,
+      responses: {
+        200: z.custom<typeof tracks.$inferSelect>(),
       },
     },
     delete: {
@@ -131,6 +147,14 @@ export const api = {
         201: z.custom<typeof videos.$inferSelect>(),
       },
     },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/videos/:id',
+      input: insertVideoSchema,
+      responses: {
+        200: z.custom<typeof videos.$inferSelect>(),
+      },
+    },
     delete: {
       method: 'DELETE' as const,
       path: '/api/videos/:id',
@@ -155,6 +179,14 @@ export const api = {
         201: z.custom<typeof events.$inferSelect>(),
       },
     },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/events/:id',
+      input: insertEventSchema,
+      responses: {
+        200: z.custom<typeof events.$inferSelect>(),
+      },
+    },
     delete: {
       method: 'DELETE' as const,
       path: '/api/events/:id',
@@ -177,6 +209,14 @@ export const api = {
       input: insertPressSchema,
       responses: {
         201: z.custom<typeof press.$inferSelect>(),
+      },
+    },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/press/:id',
+      input: insertPressSchema,
+      responses: {
+        200: z.custom<typeof press.$inferSelect>(),
       },
     },
     delete: {

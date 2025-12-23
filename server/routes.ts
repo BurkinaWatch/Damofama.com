@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { api } from "@shared/routes";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { z } from "zod";
 
 export async function registerRoutes(
@@ -71,6 +72,12 @@ export async function registerRoutes(
     res.status(201).json(album);
   });
 
+  app.patch(api.albums.update.path, requireAuth, async (req, res) => {
+    const input = api.albums.update.input.parse(req.body);
+    const album = await storage.updateAlbum(Number(req.params.id), input);
+    res.json(album);
+  });
+
   app.delete(api.albums.delete.path, requireAuth, async (req, res) => {
     await storage.deleteAlbum(Number(req.params.id));
     res.status(204).send();
@@ -82,6 +89,12 @@ export async function registerRoutes(
     res.status(201).json(track);
   });
 
+  app.patch(api.tracks.update.path, requireAuth, async (req, res) => {
+    const input = api.tracks.update.input.parse(req.body);
+    const track = await storage.updateTrack(Number(req.params.id), input);
+    res.json(track);
+  });
+
   app.delete(api.tracks.delete.path, requireAuth, async (req, res) => {
     await storage.deleteTrack(Number(req.params.id));
     res.status(204).send();
@@ -91,6 +104,12 @@ export async function registerRoutes(
     const input = api.videos.create.input.parse(req.body);
     const video = await storage.createVideo(input);
     res.status(201).json(video);
+  });
+
+  app.patch(api.videos.update.path, requireAuth, async (req, res) => {
+    const input = api.videos.update.input.parse(req.body);
+    const video = await storage.updateVideo(Number(req.params.id), input);
+    res.json(video);
   });
 
   app.delete(api.videos.delete.path, requireAuth, async (req, res) => {
@@ -106,6 +125,14 @@ export async function registerRoutes(
     res.status(201).json(event);
   });
 
+  app.patch(api.events.update.path, requireAuth, async (req, res) => {
+    const input = api.events.update.input.extend({
+      date: z.coerce.date(),
+    }).parse(req.body);
+    const event = await storage.updateEvent(Number(req.params.id), input);
+    res.json(event);
+  });
+
   app.delete(api.events.delete.path, requireAuth, async (req, res) => {
     await storage.deleteEvent(Number(req.params.id));
     res.status(204).send();
@@ -119,6 +146,14 @@ export async function registerRoutes(
     res.status(201).json(item);
   });
 
+  app.patch(api.press.update.path, requireAuth, async (req, res) => {
+    const input = api.press.update.input.extend({
+      date: z.coerce.date(),
+    }).parse(req.body);
+    const item = await storage.updatePress(Number(req.params.id), input);
+    res.json(item);
+  });
+
   app.delete(api.press.delete.path, requireAuth, async (req, res) => {
     await storage.deletePress(Number(req.params.id));
     res.status(204).send();
@@ -128,6 +163,9 @@ export async function registerRoutes(
     const messages = await storage.getMessages();
     res.json(messages);
   });
+
+  // Register object storage routes
+  registerObjectStorageRoutes(app);
 
   // Seed data
   await seedDatabase();
