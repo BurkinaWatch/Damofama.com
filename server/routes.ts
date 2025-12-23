@@ -176,7 +176,10 @@ export async function registerRoutes(
       }
 
       const fileId = randomUUID();
-      const uploadURL = `/api/uploads/${fileId}`;
+      // Use absolute URL by constructing from request
+      const protocol = req.protocol;
+      const host = req.get("host");
+      const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
 
       res.json({
@@ -187,6 +190,55 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error generating upload URL:", error);
       res.status(500).json({ error: "Failed to generate upload URL" });
+    }
+  });
+
+  // Handle file uploads to presigned URL
+  app.put("/api/uploads/:fileId", requireAuth, async (req, res) => {
+    try {
+      const { fileId } = req.params;
+      const chunks: Buffer[] = [];
+
+      // Collect file chunks from the request stream
+      req.on("data", (chunk: Buffer) => {
+        chunks.push(chunk);
+      });
+
+      req.on("end", async () => {
+        try {
+          const fileBuffer = Buffer.concat(chunks);
+          
+          // Store in public/uploads directory
+          const fs = await import("fs");
+          const path = await import("path");
+          const uploadsDir = path.join(process.cwd(), "public", "uploads");
+          
+          // Create uploads directory if it doesn't exist
+          if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+          }
+
+          const filePath = path.join(uploadsDir, fileId);
+          fs.writeFileSync(filePath, fileBuffer);
+
+          res.json({ 
+            success: true,
+            objectPath: `/uploads/${fileId}`,
+            fileId,
+          });
+        } catch (error) {
+          console.error("Error saving file:", error);
+          res.status(500).json({ error: "Failed to save file" });
+        }
+      });
+
+      req.on("error", (error) => {
+        console.error("Error receiving file:", error);
+        res.status(500).json({ error: "Failed to receive file" });
+      });
+    } catch (error) {
+      console.error("Error handling file upload:", error);
+      res.status(500).json({ error: "Failed to process upload" });
     }
   });
 
