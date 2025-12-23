@@ -39,9 +39,13 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="font-display text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-tight tracking-tight text-white mix-blend-overlay"
+            className="font-display text-8xl md:text-9xl lg:text-9xl font-bold mb-8 leading-tight tracking-tight text-white drop-shadow-2xl"
+            style={{
+              textShadow: "0 0 30px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.15)",
+              filter: "brightness(1.1)"
+            }}
           >
-            DAMO <br/> FAMA
+            DAMO FAMA
           </motion.h1>
 
           <motion.div
