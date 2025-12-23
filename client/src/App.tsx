@@ -10,6 +10,7 @@ import { Navigation } from "@/components/Navigation";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { Footer } from "@/components/Footer";
 import NotFound from "@/pages/not-found";
+import { AudioProvider } from "@/contexts/AudioContext";
 
 // Pages
 import Home from "@/pages/Home";
@@ -58,10 +59,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AudioProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AudioProvider>
     </QueryClientProvider>
   );
 }

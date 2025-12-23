@@ -1,14 +1,22 @@
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useAlbums, useTracks, useVideos } from "@/hooks/use-content";
 import { Play, Share2 } from "lucide-react";
+import { useAudio } from "@/contexts/AudioContext";
 
 export default function Music() {
   const { data: albums } = useAlbums();
   const { data: tracks } = useTracks();
   const { data: videos } = useVideos();
+  const { play, currentTrack } = useAudio();
 
   // Group tracks by album if needed, for now flat list
   const singles = tracks?.filter(t => t.isSingle) || [];
+
+  const handlePlayTrack = (track: typeof singles[0]) => {
+    if (tracks) {
+      play(track, tracks);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -110,10 +118,16 @@ export default function Music() {
               </div>
 
               <div className="space-y-2">
-                {singles.map((track, i) => (
+                {tracks?.map((track, i) => (
                   <div 
                     key={track.id} 
-                    className="group flex items-center justify-between p-4 border border-transparent hover:border-white/10 hover:bg-white/5 rounded transition-all"
+                    className={`group flex items-center justify-between p-4 border rounded transition-all cursor-pointer ${
+                      currentTrack?.id === track.id 
+                        ? 'border-primary/50 bg-white/10' 
+                        : 'border-transparent hover:border-white/10 hover:bg-white/5'
+                    }`}
+                    onClick={() => handlePlayTrack(track)}
+                    data-testid={`track-row-${track.id}`}
                   >
                     <div className="flex items-center gap-6">
                       <span className="text-muted-foreground font-mono text-sm w-6">{(i + 1).toString().padStart(2, '0')}</span>
@@ -123,7 +137,14 @@ export default function Music() {
                     </div>
                     <div className="flex items-center gap-6">
                       <span className="text-sm text-muted-foreground font-mono">{track.duration}</span>
-                      <button className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePlayTrack(track);
+                        }}
+                        className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
+                        data-testid={`button-play-track-${track.id}`}
+                      >
                         <Play size={12} fill="currentColor" className="ml-0.5" />
                       </button>
                     </div>
