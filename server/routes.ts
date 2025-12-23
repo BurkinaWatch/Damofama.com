@@ -194,7 +194,7 @@ export async function registerRoutes(
   });
 
   // Handle file uploads to presigned URL
-  app.put("/api/uploads/:fileId", requireAuth, async (req, res) => {
+  app.put("/api/uploads/:fileId", async (req, res) => {
     try {
       const { fileId } = req.params;
       const chunks: Buffer[] = [];
