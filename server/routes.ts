@@ -176,8 +176,10 @@ export async function registerRoutes(
       }
 
       const fileId = randomUUID();
-      // Use relative URL that works in both frontend and backend
-      const uploadURL = `/api/uploads/${fileId}`;
+      // Construct absolute URL for Uppy's AwsS3 plugin
+      const protocol = req.protocol || 'https';
+      const host = req.get('host') || 'localhost:5000';
+      const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
 
       res.json({
