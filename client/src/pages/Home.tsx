@@ -3,10 +3,25 @@ import { Link } from "wouter";
 import { ArrowRight, Calendar, Music, Facebook, Instagram, Youtube, TrendingUp } from "lucide-react";
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useEvents } from "@/hooks/use-content";
+import { useAudio } from "@/contexts/AudioContext";
 import { format } from "date-fns";
 
 export default function Home() {
   const { data: events, isLoading: eventsLoading } = useEvents();
+  const { play } = useAudio();
+
+  const handlePlayFeaturedTrack = () => {
+    const track = {
+      id: 0,
+      albumId: 2,
+      title: "Tounganata",
+      audioUrl: "/uploads/damo-fama-tounganata.mp3",
+      photoUrl: null,
+      duration: "4:19",
+      isSingle: true,
+    };
+    play(track);
+  };
 
   // Sort events by date and take top 3
   const upcomingEvents = events
@@ -54,7 +69,11 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <button className="bg-primary text-primary-foreground px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300">
+            <button 
+              onClick={handlePlayFeaturedTrack}
+              className="bg-primary text-primary-foreground px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+              data-testid="button-play-featured"
+            >
               Écouter Maintenant
             </button>
             <Link href="/music" asChild>
