@@ -3,10 +3,10 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  useAlbums, useTracks, useEvents, useVideos, usePress, useMessages,
-  useCreateAlbum, useCreateTrack, useCreateEvent, useCreateVideo, useCreatePress,
-  useUpdateAlbum, useUpdateTrack, useUpdateEvent, useUpdateVideo, useUpdatePress,
-  useDeleteAlbum, useDeleteTrack, useDeleteEvent, useDeleteVideo, useDeletePress
+  useAlbums, useTracks, useEvents, useVideos, usePress, usePhotos, useMessages,
+  useCreateAlbum, useCreateTrack, useCreateEvent, useCreateVideo, useCreatePress, useCreatePhoto,
+  useUpdateAlbum, useUpdateTrack, useUpdateEvent, useUpdateVideo, useUpdatePress, useUpdatePhoto,
+  useDeleteAlbum, useDeleteTrack, useDeleteEvent, useDeleteVideo, useDeletePress, useDeletePhoto
 } from "@/hooks/use-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,8 @@ import { Trash2, Plus, LogOut, Edit2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  insertAlbumSchema, insertTrackSchema, insertEventSchema, insertVideoSchema, insertPressSchema,
-  type InsertAlbum, type InsertTrack, type InsertEvent, type InsertVideo, type InsertPress
+  insertAlbumSchema, insertTrackSchema, insertEventSchema, insertVideoSchema, insertPressSchema, insertPhotoSchema,
+  type InsertAlbum, type InsertTrack, type InsertEvent, type InsertVideo, type InsertPress, type InsertPhoto
 } from "@shared/schema";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -814,6 +814,159 @@ function PressManager() {
   );
 }
 
+// Photos Manager
+function PhotosManager() {
+  const { data: photos = [] } = usePhotos();
+  const createPhoto = useCreatePhoto();
+  const updatePhoto = useUpdatePhoto();
+  const deletePhoto = useDeletePhoto();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const form = useForm<InsertPhoto>({
+    resolver: zodResolver(insertPhotoSchema),
+    defaultValues: {
+      imageUrl: "",
+      title: "",
+      category: "concert",
+      displayOrder: 0,
+    },
+  });
+
+  const onSubmit = (data: InsertPhoto) => {
+    if (editingId) {
+      updatePhoto.mutate({ id: editingId, data }, {
+        onSuccess: () => {
+          setOpen(false);
+          setEditingId(null);
+          form.reset();
+          toast({ title: "Photo updated" });
+        },
+        onError: () => toast({ title: "Error updating photo", variant: "destructive" }),
+      });
+    } else {
+      createPhoto.mutate(data, {
+        onSuccess: () => {
+          setOpen(false);
+          form.reset();
+          toast({ title: "Photo added" });
+        },
+        onError: () => toast({ title: "Error adding photo", variant: "destructive" }),
+      });
+    }
+  };
+
+  const handleEdit = (photo: any) => {
+    setEditingId(photo.id);
+    form.reset({
+      imageUrl: photo.imageUrl,
+      title: photo.title,
+      category: photo.category || "concert",
+      displayOrder: photo.displayOrder || 0,
+    });
+    setOpen(true);
+  };
+
+  const handleDelete = (id: number) => {
+    if (confirm("Delete this photo?")) {
+      deletePhoto.mutate(id, {
+        onSuccess: () => toast({ title: "Photo deleted" }),
+        onError: () => toast({ title: "Error deleting photo", variant: "destructive" }),
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-xl md:text-2xl font-bold">Photos</h2>
+        <Dialog open={open} onOpenChange={(o) => {
+          setOpen(o);
+          if (!o) { setEditingId(null); form.reset(); }
+        }}>
+          <DialogTrigger asChild>
+            <Button data-testid="button-add-photo"><Plus size={16} className="mr-2" /> Add Photo</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{editingId ? "Edit Photo" : "Add New Photo"}</DialogTitle>
+              <DialogDescription>
+                {editingId ? "Update the photo details below" : "Add a new photo to the gallery"}
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="photo-title">Title / Description</Label>
+                <Input id="photo-title" {...form.register("title")} placeholder="Damo Fama en concert" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="photo-image">Image</Label>
+                <div className="flex gap-2">
+                  <Input id="photo-image" {...form.register("imageUrl")} placeholder="URL de l'image" className="flex-1" readOnly />
+                  <FileUploadButton
+                    onUploadComplete={(url) => form.setValue("imageUrl", url)}
+                    accept="image/*"
+                  />
+                </div>
+                {form.watch("imageUrl") && (
+                  <img src={form.watch("imageUrl")} alt="Preview" className="w-full max-h-48 object-cover rounded mt-2" />
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="photo-category">Category</Label>
+                <select
+                  id="photo-category"
+                  {...form.register("category")}
+                  className="w-full h-9 px-3 border rounded-md bg-background"
+                >
+                  <option value="concert">Concert</option>
+                  <option value="portrait">Portrait</option>
+                  <option value="studio">Studio</option>
+                  <option value="backstage">Backstage</option>
+                  <option value="event">Event</option>
+                  <option value="promo">Promo</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="photo-order">Display Order</Label>
+                <Input id="photo-order" type="number" {...form.register("displayOrder", { valueAsNumber: true })} />
+              </div>
+              <Button type="submit" disabled={createPhoto.isPending || updatePhoto.isPending} data-testid="button-submit-photo">
+                {editingId ? (updatePhoto.isPending ? "Updating..." : "Update") : (createPhoto.isPending ? "Adding..." : "Add Photo")}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {photos.map(photo => (
+          <div key={photo.id} className="relative group border rounded overflow-hidden bg-card">
+            <img src={photo.imageUrl} alt={photo.title} className="w-full h-32 object-cover" />
+            <div className="p-2">
+              <div className="text-sm font-medium truncate">{photo.title}</div>
+              <div className="text-xs text-muted-foreground">{photo.category}</div>
+            </div>
+            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button variant="secondary" size="icon" onClick={() => handleEdit(photo)} data-testid={`button-edit-photo-${photo.id}`}>
+                <Edit2 size={14} />
+              </Button>
+              <Button variant="destructive" size="icon" onClick={() => handleDelete(photo.id)} data-testid={`button-delete-photo-${photo.id}`}>
+                <Trash2 size={14} />
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {photos.length === 0 && (
+        <p className="text-center text-muted-foreground py-8">Aucune photo. Ajoutez des photos pour la galerie.</p>
+      )}
+    </div>
+  );
+}
+
 // Messages Manager
 function MessagesManager() {
   const { data: messages = [] } = useMessages();
@@ -865,12 +1018,13 @@ export default function Admin() {
         </div>
 
         <Tabs defaultValue="albums" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 gap-1 h-auto">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 gap-1 h-auto">
             <TabsTrigger value="albums" className="text-xs sm:text-sm">Albums</TabsTrigger>
             <TabsTrigger value="tracks" className="text-xs sm:text-sm">Tracks</TabsTrigger>
             <TabsTrigger value="videos" className="text-xs sm:text-sm">Videos</TabsTrigger>
             <TabsTrigger value="events" className="text-xs sm:text-sm">Events</TabsTrigger>
             <TabsTrigger value="press" className="text-xs sm:text-sm">Press</TabsTrigger>
+            <TabsTrigger value="photos" className="text-xs sm:text-sm">Photos</TabsTrigger>
             <TabsTrigger value="messages" className="text-xs sm:text-sm">Messages</TabsTrigger>
           </TabsList>
           <TabsContent value="albums" className="mt-4 md:mt-6"><AlbumsManager /></TabsContent>
@@ -878,6 +1032,7 @@ export default function Admin() {
           <TabsContent value="videos" className="mt-4 md:mt-6"><VideosManager /></TabsContent>
           <TabsContent value="events" className="mt-4 md:mt-6"><EventsManager /></TabsContent>
           <TabsContent value="press" className="mt-4 md:mt-6"><PressManager /></TabsContent>
+          <TabsContent value="photos" className="mt-4 md:mt-6"><PhotosManager /></TabsContent>
           <TabsContent value="messages" className="mt-4 md:mt-6"><MessagesManager /></TabsContent>
         </Tabs>
       </div>

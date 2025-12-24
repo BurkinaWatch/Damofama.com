@@ -72,6 +72,15 @@ export const press = pgTable("press", {
   date: timestamp("date"),
 });
 
+// === PHOTOS (Gallery) ===
+export const photos = pgTable("photos", {
+  id: serial("id").primaryKey(),
+  imageUrl: text("image_url").notNull(),
+  title: text("title").notNull(),
+  category: text("category").default("concert"),
+  displayOrder: integer("display_order").default(0),
+});
+
 // === MESSAGES (Contact) ===
 export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),
@@ -91,6 +100,7 @@ export const insertTrackSchema = createInsertSchema(tracks).omit({ id: true });
 export const insertVideoSchema = createInsertSchema(videos).omit({ id: true });
 export const insertEventSchema = createInsertSchema(events).omit({ id: true });
 export const insertPressSchema = createInsertSchema(press).omit({ id: true });
+export const insertPhotoSchema = createInsertSchema(photos).omit({ id: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, read: true, createdAt: true });
 
 // === TYPES ===
@@ -101,6 +111,7 @@ export type Track = typeof tracks.$inferSelect;
 export type Video = typeof videos.$inferSelect;
 export type Event = typeof events.$inferSelect;
 export type Press = typeof press.$inferSelect;
+export type Photo = typeof photos.$inferSelect;
 export type Message = typeof messages.$inferSelect;
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -110,4 +121,5 @@ export type InsertTrack = z.infer<typeof insertTrackSchema>;
 export type InsertVideo = z.infer<typeof insertVideoSchema>;
 export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type InsertPress = z.infer<typeof insertPressSchema>;
+export type InsertPhoto = z.infer<typeof insertPhotoSchema>;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;

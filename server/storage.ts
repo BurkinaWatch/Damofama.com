@@ -1,12 +1,13 @@
 import { db } from "./db";
 import {
-  users, contentBlocks, albums, tracks, videos, events, press, messages,
+  users, contentBlocks, albums, tracks, videos, events, press, photos, messages,
   type User, type InsertUser, type ContentBlock, type InsertContentBlock,
   type Album, type InsertAlbum, type Track, type InsertTrack,
   type Video, type InsertVideo, type Event, type InsertEvent,
-  type Press, type InsertPress, type Message, type InsertMessage
+  type Press, type InsertPress, type Photo, type InsertPhoto,
+  type Message, type InsertMessage
 } from "@shared/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, asc } from "drizzle-orm";
 
 export interface IStorage {
   // User
@@ -45,6 +46,12 @@ export interface IStorage {
   createPress(item: InsertPress): Promise<Press>;
   updatePress(id: number, item: InsertPress): Promise<Press>;
   deletePress(id: number): Promise<void>;
+
+  // Photos
+  getPhotos(): Promise<Photo[]>;
+  createPhoto(photo: InsertPhoto): Promise<Photo>;
+  updatePhoto(id: number, photo: InsertPhoto): Promise<Photo>;
+  deletePhoto(id: number): Promise<void>;
 
   // Messages
   createMessage(message: InsertMessage): Promise<Message>;
@@ -172,6 +179,24 @@ export class DatabaseStorage implements IStorage {
 
   async deletePress(id: number): Promise<void> {
     await db.delete(press).where(eq(press.id, id));
+  }
+
+  async getPhotos(): Promise<Photo[]> {
+    return await db.select().from(photos).orderBy(asc(photos.displayOrder));
+  }
+
+  async createPhoto(photo: InsertPhoto): Promise<Photo> {
+    const [newPhoto] = await db.insert(photos).values(photo).returning();
+    return newPhoto;
+  }
+
+  async updatePhoto(id: number, photo: InsertPhoto): Promise<Photo> {
+    const [updated] = await db.update(photos).set(photo).where(eq(photos.id, id)).returning();
+    return updated;
+  }
+
+  async deletePhoto(id: number): Promise<void> {
+    await db.delete(photos).where(eq(photos.id, id));
   }
 
   async createMessage(message: InsertMessage): Promise<Message> {

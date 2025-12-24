@@ -173,6 +173,29 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
+  // Photos (Gallery)
+  app.get(api.photos.list.path, async (req, res) => {
+    const photos = await storage.getPhotos();
+    res.json(photos);
+  });
+
+  app.post(api.photos.create.path, requireAuth, async (req, res) => {
+    const input = api.photos.create.input.parse(req.body);
+    const photo = await storage.createPhoto(input);
+    res.status(201).json(photo);
+  });
+
+  app.patch(api.photos.update.path, requireAuth, async (req, res) => {
+    const input = api.photos.update.input.parse(req.body);
+    const photo = await storage.updatePhoto(Number(req.params.id), input);
+    res.json(photo);
+  });
+
+  app.delete(api.photos.delete.path, requireAuth, async (req, res) => {
+    await storage.deletePhoto(Number(req.params.id));
+    res.status(204).send();
+  });
+
   app.get(api.contact.list.path, requireAuth, async (req, res) => {
     const messages = await storage.getMessages();
     res.json(messages);

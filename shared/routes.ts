@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { 
   insertUserSchema, insertContentBlockSchema, insertAlbumSchema, 
   insertTrackSchema, insertVideoSchema, insertEventSchema, 
-  insertPressSchema, insertMessageSchema,
-  users, contentBlocks, albums, tracks, videos, events, press, messages 
+  insertPressSchema, insertPhotoSchema, insertMessageSchema,
+  users, contentBlocks, albums, tracks, videos, events, press, photos, messages 
 } from './schema';
 
 export const errorSchemas = {
@@ -227,6 +227,38 @@ export const api = {
       },
     },
   },
+  photos: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/photos',
+      responses: {
+        200: z.array(z.custom<typeof photos.$inferSelect>()),
+      },
+    },
+    create: {
+      method: 'POST' as const,
+      path: '/api/photos',
+      input: insertPhotoSchema,
+      responses: {
+        201: z.custom<typeof photos.$inferSelect>(),
+      },
+    },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/photos/:id',
+      input: insertPhotoSchema,
+      responses: {
+        200: z.custom<typeof photos.$inferSelect>(),
+      },
+    },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/photos/:id',
+      responses: {
+        204: z.void(),
+      },
+    },
+  },
   contact: {
     send: {
       method: 'POST' as const,
@@ -238,7 +270,7 @@ export const api = {
     },
     list: {
       method: 'GET' as const,
-      path: '/api/contact', // Admin only
+      path: '/api/contact',
       responses: {
         200: z.array(z.custom<typeof messages.$inferSelect>()),
       },

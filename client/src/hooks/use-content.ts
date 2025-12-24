@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
-import { type InsertAlbum, type InsertTrack, type InsertVideo, type InsertEvent, type InsertPress, type InsertMessage } from "@shared/schema";
+import { type InsertAlbum, type InsertTrack, type InsertVideo, type InsertEvent, type InsertPress, type InsertPhoto, type InsertMessage } from "@shared/schema";
 
 // === ALBUMS ===
 export function useAlbums() {
@@ -297,6 +297,65 @@ export function useDeletePress() {
       if (!res.ok) throw new Error("Failed to delete press item");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.press.list.path] }),
+  });
+}
+
+// === PHOTOS ===
+export function usePhotos() {
+  return useQuery({
+    queryKey: [api.photos.list.path],
+    queryFn: async () => {
+      const res = await fetch(api.photos.list.path);
+      if (!res.ok) throw new Error("Failed to fetch photos");
+      return api.photos.list.responses[200].parse(await res.json());
+    },
+  });
+}
+
+export function useCreatePhoto() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: InsertPhoto) => {
+      const res = await fetch(api.photos.create.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to create photo");
+      return api.photos.create.responses[201].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.photos.list.path] }),
+  });
+}
+
+export function useUpdatePhoto() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: InsertPhoto }) => {
+      const url = buildUrl(api.photos.update.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update photo");
+      return api.photos.update.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.photos.list.path] }),
+  });
+}
+
+export function useDeletePhoto() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const url = buildUrl(api.photos.delete.path, { id });
+      const res = await fetch(url, { method: "DELETE", credentials: "include" });
+      if (!res.ok) throw new Error("Failed to delete photo");
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.photos.list.path] }),
   });
 }
 
