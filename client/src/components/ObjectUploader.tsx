@@ -38,6 +38,7 @@ export function ObjectUploader({
   const [showModal, setShowModal] = useState(false);
   const { toast } = useToast();
   const uploadedPathsRef = useRef<{ [fileId: string]: string }>({});
+  const uploadErrorRef = useRef<string | null>(null);
   const [uppy] = useState(() => {
     const uppyInstance = new Uppy({
       restrictions: {
@@ -50,24 +51,39 @@ export function ObjectUploader({
     uppyInstance.use(AwsS3, {
       shouldUseMultipart: false,
       getUploadParameters: async (file) => {
-        const params = await onGetUploadParameters(file);
-        // Extract the fileId from the URL and track it
-        const fileId = params.url.split('/').pop();
-        if (fileId) {
-          uploadedPathsRef.current[file.id] = `/uploads/${fileId}`;
+        try {
+          const params = await onGetUploadParameters(file);
+          // Extract the fileId from the URL and track it
+          const fileId = params.url.split('/').pop();
+          if (fileId) {
+            uploadedPathsRef.current[file.id] = `/uploads/${fileId}`;
+          }
+          return params;
+        } catch (err) {
+          const errorMessage = err instanceof Error ? err.message : "Failed to get upload URL";
+          uploadErrorRef.current = errorMessage;
+          throw err;
         }
-        return params;
       },
     });
 
     uppyInstance.on("complete", (result) => {
-      if (result.failed && result.failed.length > 0) {
+      // Handle errors that occurred during upload
+      if (uploadErrorRef.current) {
+        toast({
+          title: "Upload error",
+          description: uploadErrorRef.current,
+          variant: "destructive",
+        });
+        uploadErrorRef.current = null;
+      } else if (result.failed && result.failed.length > 0) {
         toast({
           title: "Upload failed",
           description: "Some files failed to upload",
           variant: "destructive",
         });
       }
+      
       // Pass the uploaded paths mapping as second parameter
       onComplete?.(result, uploadedPathsRef.current);
       uploadedPathsRef.current = {};
@@ -76,11 +92,7 @@ export function ObjectUploader({
 
     uppyInstance.on("upload-error", (file, error) => {
       console.error("Upload error:", error);
-      toast({
-        title: "Upload error",
-        description: error?.message || "Failed to upload file",
-        variant: "destructive",
-      });
+      uploadErrorRef.current = error?.message || "Failed to upload file";
     });
 
     return uppyInstance;
