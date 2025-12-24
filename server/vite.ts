@@ -33,6 +33,11 @@ export async function setupVite(server: Server, app: Express) {
 
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
+    
+    // Don't serve HTML for static assets
+    if (url.startsWith("/uploads") || url.startsWith("/api")) {
+      return next();
+    }
 
     try {
       const clientTemplate = path.resolve(
