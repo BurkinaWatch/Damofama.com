@@ -28,7 +28,6 @@ export const albums = pgTable("albums", {
   spotifyUrl: text("spotify_url"),
   appleMusicUrl: text("apple_music_url"),
   description: text("description"), // Multilingual JSON could be used, or simple text
-  order: integer("order").default(0).notNull(),
 });
 
 // === TRACKS ===
@@ -40,7 +39,6 @@ export const tracks = pgTable("tracks", {
   photoUrl: text("photo_url"),
   duration: text("duration"),
   isSingle: boolean("is_single").default(false),
-  order: integer("order").default(0).notNull(),
 });
 
 // === VIDEOS ===
@@ -51,7 +49,6 @@ export const videos = pgTable("videos", {
   thumbnailUrl: text("thumbnail_url"),
   category: text("category").default("music_video"), // music_video, live, interview
   isFeatured: boolean("is_featured").default(false),
-  order: integer("order").default(0).notNull(),
 });
 
 // === EVENTS (Tour / Concerts) ===
@@ -63,7 +60,6 @@ export const events = pgTable("events", {
   venue: text("venue"),
   ticketUrl: text("ticket_url"),
   type: text("type").default("concert"), // concert, festival
-  order: integer("order").default(0).notNull(),
 });
 
 // === PRESS ===
@@ -74,7 +70,6 @@ export const press = pgTable("press", {
   url: text("url").notNull(),
   snippet: text("snippet"),
   date: timestamp("date"),
-  order: integer("order").default(0).notNull(),
 });
 
 // === MESSAGES (Contact) ===

@@ -90,12 +90,6 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
-  app.post(api.albums.reorder.path, requireAuth, async (req, res) => {
-    const input = api.albums.reorder.input.parse(req.body);
-    const albums = await storage.reorderAlbums(input.id, input.direction);
-    res.json(albums);
-  });
-
   app.post(api.tracks.create.path, requireAuth, async (req, res) => {
     try {
       const input = api.tracks.create.input.parse(req.body);
@@ -120,12 +114,6 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
-  app.post(api.tracks.reorder.path, requireAuth, async (req, res) => {
-    const input = api.tracks.reorder.input.parse(req.body);
-    const tracks = await storage.reorderTracks(input.id, input.direction);
-    res.json(tracks);
-  });
-
   app.post(api.videos.create.path, requireAuth, async (req, res) => {
     const input = api.videos.create.input.parse(req.body);
     const video = await storage.createVideo(input);
@@ -141,12 +129,6 @@ export async function registerRoutes(
   app.delete(api.videos.delete.path, requireAuth, async (req, res) => {
     await storage.deleteVideo(Number(req.params.id));
     res.status(204).send();
-  });
-
-  app.post(api.videos.reorder.path, requireAuth, async (req, res) => {
-    const input = api.videos.reorder.input.parse(req.body);
-    const videos = await storage.reorderVideos(input.id, input.direction);
-    res.json(videos);
   });
 
   app.post(api.events.create.path, requireAuth, async (req, res) => {
@@ -170,12 +152,6 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
-  app.post(api.events.reorder.path, requireAuth, async (req, res) => {
-    const input = api.events.reorder.input.parse(req.body);
-    const events = await storage.reorderEvents(input.id, input.direction);
-    res.json(events);
-  });
-
   app.post(api.press.create.path, requireAuth, async (req, res) => {
     const input = api.press.create.input.extend({
       date: z.coerce.date(),
@@ -195,12 +171,6 @@ export async function registerRoutes(
   app.delete(api.press.delete.path, requireAuth, async (req, res) => {
     await storage.deletePress(Number(req.params.id));
     res.status(204).send();
-  });
-
-  app.post(api.press.reorder.path, requireAuth, async (req, res) => {
-    const input = api.press.reorder.input.parse(req.body);
-    const press = await storage.reorderPress(input.id, input.direction);
-    res.json(press);
   });
 
   app.get(api.contact.list.path, requireAuth, async (req, res) => {
