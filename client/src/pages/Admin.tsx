@@ -784,17 +784,17 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-6 md:mb-8 gap-2 flex-wrap">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Admin Dashboard</h1>
-          <Button variant="outline" size="icon" onClick={() => logout()} data-testid="button-logout" title="Logout">
+    <div className="min-h-screen bg-background p-2 sm:p-4 md:p-8 overflow-x-hidden">
+      <div className="max-w-6xl mx-auto w-full">
+        <div className="flex justify-between items-center mb-4 sm:mb-6 md:mb-8 gap-2">
+          <h1 className="text-lg sm:text-2xl md:text-4xl font-bold truncate">Admin Dashboard</h1>
+          <Button variant="outline" size="icon" onClick={() => logout()} data-testid="button-logout" title="Logout" className="flex-shrink-0">
             <LogOut size={16} />
           </Button>
         </div>
 
         <Tabs defaultValue="albums" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6 h-auto">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 gap-1 h-auto">
             <TabsTrigger value="albums" className="text-xs sm:text-sm">Albums</TabsTrigger>
             <TabsTrigger value="tracks" className="text-xs sm:text-sm">Tracks</TabsTrigger>
             <TabsTrigger value="videos" className="text-xs sm:text-sm">Videos</TabsTrigger>
