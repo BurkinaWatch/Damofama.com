@@ -252,13 +252,6 @@ function TracksManager() {
             </DialogHeader>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4 max-h-96 overflow-y-auto">
               <div className="space-y-2">
-                <Label htmlFor="track-album">Album</Label>
-                <select {...form.register("albumId", { valueAsNumber: true })} id="track-album" className="w-full px-3 py-2 border rounded">
-                  <option value="">Select Album</option>
-                  {albums.map(a => <option key={a.id} value={a.id}>{a.title}</option>)}
-                </select>
-              </div>
-              <div className="space-y-2">
                 <Label htmlFor="track-title">Title</Label>
                 <Input id="track-title" {...form.register("title")} />
               </div>
