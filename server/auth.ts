@@ -18,7 +18,10 @@ export function setupAuth(app: Express) {
     secret: process.env.SESSION_SECRET || "r3pl1t_s3cr3t_k3y",
     resave: false,
     saveUninitialized: false,
-    cookie: {},
+    cookie: {
+      sameSite: "lax",
+      httpOnly: true,
+    },
     store: new MemoryStore({
       checkPeriod: 86400000,
     }),
@@ -28,6 +31,8 @@ export function setupAuth(app: Express) {
     app.set("trust proxy", 1);
     sessionSettings.cookie = {
       secure: true,
+      sameSite: "lax",
+      httpOnly: true,
     };
   }
 

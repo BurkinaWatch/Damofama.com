@@ -177,8 +177,10 @@ export async function registerRoutes(
 
       const fileId = randomUUID();
       // Construct absolute URL for Uppy's AwsS3 plugin
-      const protocol = req.protocol || 'https';
-      const host = req.get('host') || 'localhost:5000';
+      // Use localhost:5000 for development, req.get('host') for production
+      const isDev = process.env.NODE_ENV === 'development';
+      const protocol = isDev ? 'http' : (req.protocol || 'https');
+      const host = isDev ? 'localhost:5000' : (req.get('host') || 'localhost:5000');
       const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
 
