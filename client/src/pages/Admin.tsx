@@ -117,12 +117,10 @@ function AlbumsManager() {
                 <Label htmlFor="album-cover">Cover Image</Label>
                 <div className="flex gap-2">
                   <Input id="album-cover" {...form.register("coverImage")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful ?? [];
-                    if (files.length > 0) {
-                      const uploadURL = files[0].meta?.uploadURL as string || "";
-                      const fileId = uploadURL.split('/').pop();
-                      form.setValue("coverImage", fileId ? `/uploads/${fileId}` : "");
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
+                    const paths = Object.values(uploadedPaths || {});
+                    if (paths.length > 0) {
+                      form.setValue("coverImage", paths[0]);
                     }
                   }}>
                     <Upload size={16} />
@@ -275,12 +273,10 @@ function TracksManager() {
                 <Label htmlFor="track-audio">Audio</Label>
                 <div className="flex gap-2">
                   <Input id="track-audio" {...form.register("audioUrl")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful ?? [];
-                    if (files.length > 0) {
-                      const uploadURL = files[0].meta?.uploadURL as string || "";
-                      const fileId = uploadURL.split('/').pop();
-                      form.setValue("audioUrl", fileId ? `/uploads/${fileId}` : "");
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
+                    const paths = Object.values(uploadedPaths || {});
+                    if (paths.length > 0) {
+                      form.setValue("audioUrl", paths[0]);
                     }
                   }}>
                     <Upload size={16} />
@@ -291,12 +287,10 @@ function TracksManager() {
                 <Label htmlFor="track-photo">Photo (Optional)</Label>
                 <div className="flex gap-2">
                   <Input id="track-photo" {...form.register("photoUrl")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful ?? [];
-                    if (files.length > 0) {
-                      const uploadURL = files[0].meta?.uploadURL as string || "";
-                      const fileId = uploadURL.split('/').pop();
-                      form.setValue("photoUrl", fileId ? `/uploads/${fileId}` : "");
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
+                    const paths = Object.values(uploadedPaths || {});
+                    if (paths.length > 0) {
+                      form.setValue("photoUrl", paths[0]);
                     }
                   }}>
                     <Upload size={16} />
@@ -441,12 +435,10 @@ function VideosManager() {
                 <Label htmlFor="video-thumbnail">Thumbnail</Label>
                 <div className="flex gap-2">
                   <Input id="video-thumbnail" {...form.register("thumbnailUrl")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(result) => {
-                    const files = result.successful ?? [];
-                    if (files.length > 0) {
-                      const uploadURL = files[0].meta?.uploadURL as string || "";
-                      const fileId = uploadURL.split('/').pop();
-                      form.setValue("thumbnailUrl", fileId ? `/uploads/${fileId}` : "");
+                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
+                    const paths = Object.values(uploadedPaths || {});
+                    if (paths.length > 0) {
+                      form.setValue("thumbnailUrl", paths[0]);
                     }
                   }}>
                     <Upload size={16} />

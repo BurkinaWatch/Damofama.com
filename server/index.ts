@@ -42,30 +42,15 @@ export function log(message: string, source = "express") {
 }
 
 // Serve uploaded files statically
-app.use("/uploads", express.static(uploadsDir));
-
-// Handle file uploads
-app.put("/api/uploads/:fileId", async (req, res) => {
-  try {
-    const { fileId } = req.params;
-    const filePath = path.join(uploadsDir, fileId);
-    
-    const writeStream = fs.createWriteStream(filePath);
-    req.pipe(writeStream);
-    
-    writeStream.on("finish", () => {
-      res.json({ success: true, objectPath: `/uploads/${fileId}` });
-    });
-    
-    writeStream.on("error", (err) => {
-      console.error("Upload error:", err);
-      res.status(500).json({ error: "Upload failed" });
-    });
-  } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).json({ error: "Upload failed" });
+app.use("/uploads", express.static(uploadsDir, {
+  maxAge: 0,
+  etag: false,
+  lastModified: false,
+  cacheControl: false,
+  setHeaders: (res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   }
-});
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();

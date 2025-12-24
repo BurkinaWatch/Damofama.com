@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { ReactNode } from "react";
 import Uppy from "@uppy/core";
 import type { UppyFile, UploadResult } from "@uppy/core";
@@ -20,7 +20,8 @@ interface ObjectUploaderProps {
     headers?: Record<string, string>;
   }>;
   onComplete?: (
-    result: UploadResult<Record<string, unknown>, Record<string, unknown>>
+    result: UploadResult<Record<string, unknown>, Record<string, unknown>>,
+    uploadedPaths?: { [fileId: string]: string }
   ) => void;
   buttonClassName?: string;
   children: ReactNode;
@@ -36,38 +37,54 @@ export function ObjectUploader({
 }: ObjectUploaderProps) {
   const [showModal, setShowModal] = useState(false);
   const { toast } = useToast();
-  const [uppy] = useState(() =>
-    new Uppy({
+  const uploadedPathsRef = useRef<{ [fileId: string]: string }>({});
+  const [uppy] = useState(() => {
+    const uppyInstance = new Uppy({
       restrictions: {
         maxNumberOfFiles,
         maxFileSize,
       },
       autoProceed: false,
-    })
-      .use(AwsS3, {
-        shouldUseMultipart: false,
-        getUploadParameters: onGetUploadParameters,
-      })
-      .on("complete", (result) => {
-        if (result.failed && result.failed.length > 0) {
-          toast({
-            title: "Upload failed",
-            description: "Some files failed to upload",
-            variant: "destructive",
-          });
+    });
+
+    uppyInstance.use(AwsS3, {
+      shouldUseMultipart: false,
+      getUploadParameters: async (file) => {
+        const params = await onGetUploadParameters(file);
+        // Extract the fileId from the URL and track it
+        const fileId = params.url.split('/').pop();
+        if (fileId) {
+          uploadedPathsRef.current[file.id] = `/uploads/${fileId}`;
         }
-        onComplete?.(result);
-        setShowModal(false);
-      })
-      .on("upload-error", (file, error) => {
-        console.error("Upload error:", error);
+        return params;
+      },
+    });
+
+    uppyInstance.on("complete", (result) => {
+      if (result.failed && result.failed.length > 0) {
         toast({
-          title: "Upload error",
-          description: error?.message || "Failed to upload file",
+          title: "Upload failed",
+          description: "Some files failed to upload",
           variant: "destructive",
         });
-      })
-  );
+      }
+      // Pass the uploaded paths mapping as second parameter
+      onComplete?.(result, uploadedPathsRef.current);
+      uploadedPathsRef.current = {};
+      setShowModal(false);
+    });
+
+    uppyInstance.on("upload-error", (file, error) => {
+      console.error("Upload error:", error);
+      toast({
+        title: "Upload error",
+        description: error?.message || "Failed to upload file",
+        variant: "destructive",
+      });
+    });
+
+    return uppyInstance;
+  });
 
   return (
     <div>
