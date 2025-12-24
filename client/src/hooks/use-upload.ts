@@ -185,13 +185,9 @@ export function useUpload(options: UseUploadOptions = {}) {
 
       const data = await response.json();
       return {
-        method: "PUT",
+        method: "PUT" as const,
         url: data.uploadURL,
         headers: { "Content-Type": file.type || "application/octet-stream" },
-        fields: {
-          // Pass objectPath as a field so we can retrieve it in onComplete
-          objectPath: data.objectPath,
-        },
       };
     },
     []
