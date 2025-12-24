@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -313,6 +313,25 @@ function TracksManager() {
   );
 }
 
+// Helper function to extract YouTube video ID from various URL formats
+function getYouTubeVideoId(url: string): string | null {
+  if (!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
+    /^([a-zA-Z0-9_-]{11})$/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+// Generate YouTube thumbnail URL from video ID
+function getYouTubeThumbnail(videoId: string): string {
+  return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+}
+
 // Videos Manager
 function VideosManager() {
   const { data: videos = [] } = useVideos();
@@ -322,6 +341,7 @@ function VideosManager() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
 
   const form = useForm<InsertVideo>({
     resolver: zodResolver(insertVideoSchema),
@@ -333,6 +353,21 @@ function VideosManager() {
       isFeatured: false,
     },
   });
+
+  // Watch YouTube URL and auto-generate thumbnail
+  const youtubeUrl = form.watch("youtubeUrl");
+  const thumbnailUrl = form.watch("thumbnailUrl");
+  
+  useEffect(() => {
+    const videoId = getYouTubeVideoId(youtubeUrl || "");
+    if (videoId && !thumbnailUrl) {
+      const ytThumb = getYouTubeThumbnail(videoId);
+      form.setValue("thumbnailUrl", ytThumb);
+      setThumbnailPreview(ytThumb);
+    } else if (thumbnailUrl) {
+      setThumbnailPreview(thumbnailUrl);
+    }
+  }, [youtubeUrl, thumbnailUrl, form]);
 
   const onSubmit = (data: InsertVideo) => {
     if (editingId) {
@@ -366,6 +401,7 @@ function VideosManager() {
       category: video.category,
       isFeatured: video.isFeatured,
     });
+    setThumbnailPreview(video.thumbnailUrl || "");
     setOpen(true);
   };
 
@@ -386,6 +422,7 @@ function VideosManager() {
           if (!isOpen) {
             setEditingId(null);
             form.reset();
+            setThumbnailPreview("");
           }
           setOpen(isOpen);
         }}>
@@ -410,13 +447,47 @@ function VideosManager() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="video-thumbnail">Thumbnail</Label>
-                <div className="flex gap-2">
-                  <Input id="video-thumbnail" {...form.register("thumbnailUrl")} placeholder="Or upload..." className="flex-1" />
+                {thumbnailPreview && (
+                  <div className="mb-2">
+                    <img 
+                      src={thumbnailPreview} 
+                      alt="Thumbnail preview" 
+                      className="w-full max-w-xs h-auto rounded border"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="flex gap-2 flex-wrap">
+                  <Input id="video-thumbnail" {...form.register("thumbnailUrl")} placeholder="Auto-generated from YouTube" className="flex-1 min-w-0" readOnly />
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const videoId = getYouTubeVideoId(youtubeUrl || "");
+                      if (videoId) {
+                        const ytThumb = getYouTubeThumbnail(videoId);
+                        form.setValue("thumbnailUrl", ytThumb);
+                        setThumbnailPreview(ytThumb);
+                        toast({ title: "Thumbnail generated from YouTube" });
+                      } else {
+                        toast({ title: "Enter a valid YouTube URL first", variant: "destructive" });
+                      }
+                    }}
+                  >
+                    Auto
+                  </Button>
                   <FileUploadButton
                     accept="image/*"
-                    onUploadComplete={(path) => form.setValue("thumbnailUrl", path)}
+                    onUploadComplete={(path) => {
+                      form.setValue("thumbnailUrl", path);
+                      setThumbnailPreview(path);
+                    }}
                   />
                 </div>
+                <p className="text-xs text-muted-foreground">Thumbnail is auto-generated from YouTube URL, or upload your own</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="video-category">Category</Label>
