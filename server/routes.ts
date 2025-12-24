@@ -176,11 +176,10 @@ export async function registerRoutes(
       }
 
       const fileId = randomUUID();
-      // Construct absolute URL for Uppy's AwsS3 plugin
-      // Use localhost:5000 for development, req.get('host') for production
-      const isDev = process.env.NODE_ENV === 'development';
-      const protocol = isDev ? 'http' : (req.protocol || 'https');
-      const host = isDev ? 'localhost:5000' : (req.get('host') || 'localhost:5000');
+      // Construct absolute URL for Uppy's upload plugin
+      // Always use the current request's host/protocol for correct CORS and accessibility
+      const protocol = req.protocol || 'https';
+      const host = req.get('host') || 'localhost:5000';
       const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
 
@@ -201,6 +200,11 @@ export async function registerRoutes(
       const { fileId } = req.params;
       const fs = await import("fs");
       const path = await import("path");
+
+      // Set CORS headers for file uploads
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+      res.header("Access-Control-Allow-Headers", "Content-Type");
 
       // Store in public/uploads directory
       const uploadsDir = path.default.join(process.cwd(), "public", "uploads");
@@ -239,6 +243,14 @@ export async function registerRoutes(
       console.error("Error handling file upload:", error);
       res.status(500).json({ error: "Failed to process upload" });
     }
+  });
+
+  // Handle OPTIONS requests for CORS
+  app.options("/api/uploads/:fileId", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.sendStatus(200);
   });
 
   // Seed data
