@@ -13,7 +13,7 @@ export async function registerRoutes(
   // Set up authentication first
   setupAuth(app);
 
-  // === PUBLIC API ===
+  // === PUBLIC API (filters hidden items) ===
 
   app.get(api.content.list.path, async (req, res) => {
     const content = await storage.getContentBlocks();
@@ -21,28 +21,33 @@ export async function registerRoutes(
   });
 
   app.get(api.albums.list.path, async (req, res) => {
+    const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const albums = await storage.getAlbums();
-    res.json(albums);
+    res.json(includeHidden ? albums : albums.filter(a => !a.hidden));
   });
 
   app.get(api.tracks.list.path, async (req, res) => {
+    const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const tracks = await storage.getTracks();
-    res.json(tracks);
+    res.json(includeHidden ? tracks : tracks.filter(t => !t.hidden));
   });
 
   app.get(api.videos.list.path, async (req, res) => {
+    const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const videos = await storage.getVideos();
-    res.json(videos);
+    res.json(includeHidden ? videos : videos.filter(v => !v.hidden));
   });
 
   app.get(api.events.list.path, async (req, res) => {
+    const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const events = await storage.getEvents();
-    res.json(events);
+    res.json(includeHidden ? events : events.filter(e => !e.hidden));
   });
 
   app.get(api.press.list.path, async (req, res) => {
+    const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const press = await storage.getPress();
-    res.json(press);
+    res.json(includeHidden ? press : press.filter(p => !p.hidden));
   });
 
   app.post(api.contact.send.path, async (req, res) => {
@@ -175,8 +180,9 @@ export async function registerRoutes(
 
   // Photos (Gallery)
   app.get(api.photos.list.path, async (req, res) => {
+    const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const photos = await storage.getPhotos();
-    res.json(photos);
+    res.json(includeHidden ? photos : photos.filter(p => !p.hidden));
   });
 
   app.post(api.photos.create.path, requireAuth, async (req, res) => {

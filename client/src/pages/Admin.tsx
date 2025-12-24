@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, LogOut, Edit2 } from "lucide-react";
+import { Trash2, Plus, LogOut, Edit2, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -25,10 +25,14 @@ import { useToast } from "@/hooks/use-toast";
 
 // Simple CRUD for Albums
 function AlbumsManager() {
-  const { data: albums = [] } = useAlbums();
+  const { data: albums = [] } = useAlbums(true);
   const createAlbum = useCreateAlbum();
   const updateAlbum = useUpdateAlbum();
   const deleteAlbum = useDeleteAlbum();
+  
+  const handleToggleHidden = (album: any) => {
+    updateAlbum.mutate({ id: album.id, data: { ...album, hidden: !album.hidden } });
+  };
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -139,15 +143,21 @@ function AlbumsManager() {
 
       <div className="grid gap-3 md:gap-4">
         {albums.map(album => (
-          <div key={album.id} className="flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap">
+          <div key={album.id} className={`flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap ${album.hidden ? 'opacity-50' : ''}`}>
             <div className="flex items-center gap-3 min-w-0 flex-1">
               <img src={album.coverImage} className="w-10 h-10 md:w-12 md:h-12 rounded object-cover flex-shrink-0" alt={album.title} />
               <div className="min-w-0">
                 <div className="font-bold text-sm md:text-base truncate">{album.title}</div>
-                <div className="text-xs md:text-sm text-muted-foreground">{album.releaseDate ? new Date(album.releaseDate).toLocaleDateString() : 'N/A'}</div>
+                <div className="text-xs md:text-sm text-muted-foreground">
+                  {album.releaseDate ? new Date(album.releaseDate).toLocaleDateString() : 'N/A'}
+                  {album.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+                </div>
               </div>
             </div>
             <div className="flex gap-1 md:gap-2 flex-shrink-0">
+              <Button variant="outline" size="icon" onClick={() => handleToggleHidden(album)} title={album.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-album-${album.id}`}>
+                {album.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
+              </Button>
               <Button variant="outline" size="icon" onClick={() => handleEdit(album)} data-testid={`button-edit-album-${album.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -164,12 +174,16 @@ function AlbumsManager() {
 
 // Tracks Manager
 function TracksManager() {
-  const { data: tracks = [] } = useTracks();
-  const { data: albums = [] } = useAlbums();
+  const { data: tracks = [] } = useTracks(true);
+  const { data: albums = [] } = useAlbums(true);
   const createTrack = useCreateTrack();
   const updateTrack = useUpdateTrack();
   const deleteTrack = useDeleteTrack();
   const { toast } = useToast();
+  
+  const handleToggleHidden = (track: any) => {
+    updateTrack.mutate({ id: track.id, data: { ...track, hidden: !track.hidden } });
+  };
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -293,12 +307,18 @@ function TracksManager() {
 
       <div className="grid gap-3 md:gap-4">
         {tracks.map(track => (
-          <div key={track.id} className="flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap">
+          <div key={track.id} className={`flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap ${track.hidden ? 'opacity-50' : ''}`}>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm md:text-base truncate">{track.title}</div>
-              <div className="text-xs md:text-sm text-muted-foreground">{track.duration} {track.isSingle && '• Single'}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">
+                {track.duration} {track.isSingle && '• Single'}
+                {track.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+              </div>
             </div>
             <div className="flex gap-1 md:gap-2 flex-shrink-0">
+              <Button variant="outline" size="icon" onClick={() => handleToggleHidden(track)} title={track.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-track-${track.id}`}>
+                {track.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
+              </Button>
               <Button variant="outline" size="icon" onClick={() => handleEdit(track)} data-testid={`button-edit-track-${track.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -334,7 +354,7 @@ function getYouTubeThumbnail(videoId: string): string {
 
 // Videos Manager
 function VideosManager() {
-  const { data: videos = [] } = useVideos();
+  const { data: videos = [] } = useVideos(true);
   const createVideo = useCreateVideo();
   const updateVideo = useUpdateVideo();
   const deleteVideo = useDeleteVideo();
@@ -342,6 +362,10 @@ function VideosManager() {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
+  
+  const handleToggleHidden = (video: any) => {
+    updateVideo.mutate({ id: video.id, data: { ...video, hidden: !video.hidden } });
+  };
 
   const form = useForm<InsertVideo>({
     resolver: zodResolver(insertVideoSchema),
@@ -511,15 +535,21 @@ function VideosManager() {
 
       <div className="grid gap-4">
         {videos.map(video => (
-          <div key={video.id} className="flex items-center justify-between p-4 border rounded bg-card">
+          <div key={video.id} className={`flex items-center justify-between p-4 border rounded bg-card ${video.hidden ? 'opacity-50' : ''}`}>
             <div className="flex items-center gap-4">
               <img src={video.thumbnailUrl || ""} alt={video.title} className="w-16 h-9 object-cover rounded" />
               <div>
                 <div className="font-bold">{video.title}</div>
-                <div className="text-sm text-muted-foreground">{video.category} {video.isFeatured && '• Featured'}</div>
+                <div className="text-sm text-muted-foreground">
+                  {video.category} {video.isFeatured && '• Featured'}
+                  {video.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+                </div>
               </div>
             </div>
             <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={() => handleToggleHidden(video)} title={video.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-video-${video.id}`}>
+                {video.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
+              </Button>
               <Button variant="outline" size="icon" onClick={() => handleEdit(video)} data-testid={`button-edit-video-${video.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -536,11 +566,15 @@ function VideosManager() {
 
 // Events Manager
 function EventsManager() {
-  const { data: events = [] } = useEvents();
+  const { data: events = [] } = useEvents(true);
   const createEvent = useCreateEvent();
   const updateEvent = useUpdateEvent();
   const deleteEvent = useDeleteEvent();
   const { toast } = useToast();
+  
+  const handleToggleHidden = (event: any) => {
+    updateEvent.mutate({ id: event.id, data: { ...event, hidden: !event.hidden } });
+  };
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -658,12 +692,18 @@ function EventsManager() {
 
       <div className="grid gap-4">
         {events.map(event => (
-          <div key={event.id} className="flex items-center justify-between p-4 border rounded bg-card">
+          <div key={event.id} className={`flex items-center justify-between p-4 border rounded bg-card ${event.hidden ? 'opacity-50' : ''}`}>
             <div>
               <div className="font-bold">{event.title}</div>
-              <div className="text-sm text-muted-foreground">{new Date(event.date).toLocaleDateString()} • {event.location}</div>
+              <div className="text-sm text-muted-foreground">
+                {new Date(event.date).toLocaleDateString()} • {event.location}
+                {event.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+              </div>
             </div>
             <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={() => handleToggleHidden(event)} title={event.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-event-${event.id}`}>
+                {event.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
+              </Button>
               <Button variant="outline" size="icon" onClick={() => handleEdit(event)} data-testid={`button-edit-event-${event.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -680,11 +720,15 @@ function EventsManager() {
 
 // Press Manager
 function PressManager() {
-  const { data: press = [] } = usePress();
+  const { data: press = [] } = usePress(true);
   const createPress = useCreatePress();
   const updatePress = useUpdatePress();
   const deletePress = useDeletePress();
   const { toast } = useToast();
+  
+  const handleToggleHidden = (item: any) => {
+    updatePress.mutate({ id: item.id, data: { ...item, hidden: !item.hidden } });
+  };
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -794,12 +838,18 @@ function PressManager() {
 
       <div className="grid gap-4">
         {press.map(item => (
-          <div key={item.id} className="flex items-center justify-between p-4 border rounded bg-card">
+          <div key={item.id} className={`flex items-center justify-between p-4 border rounded bg-card ${item.hidden ? 'opacity-50' : ''}`}>
             <div>
               <div className="font-bold">{item.title}</div>
-              <div className="text-sm text-muted-foreground">{item.source} • {item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</div>
+              <div className="text-sm text-muted-foreground">
+                {item.source} • {item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}
+                {item.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+              </div>
             </div>
             <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={() => handleToggleHidden(item)} title={item.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-press-${item.id}`}>
+                {item.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
+              </Button>
               <Button variant="outline" size="icon" onClick={() => handleEdit(item)} data-testid={`button-edit-press-${item.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -816,11 +866,15 @@ function PressManager() {
 
 // Photos Manager
 function PhotosManager() {
-  const { data: photos = [] } = usePhotos();
+  const { data: photos = [] } = usePhotos(true);
   const createPhoto = useCreatePhoto();
   const updatePhoto = useUpdatePhoto();
   const deletePhoto = useDeletePhoto();
   const { toast } = useToast();
+  
+  const handleToggleHidden = (photo: any) => {
+    updatePhoto.mutate({ id: photo.id, data: { ...photo, hidden: !photo.hidden } });
+  };
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -942,13 +996,19 @@ function PhotosManager() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {photos.map(photo => (
-          <div key={photo.id} className="relative group border rounded overflow-hidden bg-card">
+          <div key={photo.id} className={`relative group border rounded overflow-hidden bg-card ${photo.hidden ? 'opacity-50' : ''}`}>
             <img src={photo.imageUrl} alt={photo.title} className="w-full h-32 object-cover" />
             <div className="p-2">
               <div className="text-sm font-medium truncate">{photo.title}</div>
-              <div className="text-xs text-muted-foreground">{photo.category}</div>
+              <div className="text-xs text-muted-foreground">
+                {photo.category}
+                {photo.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+              </div>
             </div>
             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button variant="secondary" size="icon" onClick={() => handleToggleHidden(photo)} title={photo.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-photo-${photo.id}`}>
+                {photo.hidden ? <Eye size={14} /> : <EyeOff size={14} />}
+              </Button>
               <Button variant="secondary" size="icon" onClick={() => handleEdit(photo)} data-testid={`button-edit-photo-${photo.id}`}>
                 <Edit2 size={14} />
               </Button>

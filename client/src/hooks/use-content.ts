@@ -3,11 +3,12 @@ import { api, buildUrl } from "@shared/routes";
 import { type InsertAlbum, type InsertTrack, type InsertVideo, type InsertEvent, type InsertPress, type InsertPhoto, type InsertMessage } from "@shared/schema";
 
 // === ALBUMS ===
-export function useAlbums() {
+export function useAlbums(includeHidden = false) {
   return useQuery({
-    queryKey: [api.albums.list.path],
+    queryKey: [api.albums.list.path, { includeHidden }],
     queryFn: async () => {
-      const res = await fetch(api.albums.list.path);
+      const url = includeHidden ? `${api.albums.list.path}?includeHidden=true` : api.albums.list.path;
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch albums");
       return api.albums.list.responses[200].parse(await res.json());
     },
@@ -62,11 +63,12 @@ export function useDeleteAlbum() {
 }
 
 // === TRACKS ===
-export function useTracks() {
+export function useTracks(includeHidden = false) {
   return useQuery({
-    queryKey: [api.tracks.list.path],
+    queryKey: [api.tracks.list.path, { includeHidden }],
     queryFn: async () => {
-      const res = await fetch(api.tracks.list.path);
+      const url = includeHidden ? `${api.tracks.list.path}?includeHidden=true` : api.tracks.list.path;
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch tracks");
       return api.tracks.list.responses[200].parse(await res.json());
     },
@@ -121,11 +123,12 @@ export function useDeleteTrack() {
 }
 
 // === VIDEOS ===
-export function useVideos() {
+export function useVideos(includeHidden = false) {
   return useQuery({
-    queryKey: [api.videos.list.path],
+    queryKey: [api.videos.list.path, { includeHidden }],
     queryFn: async () => {
-      const res = await fetch(api.videos.list.path);
+      const url = includeHidden ? `${api.videos.list.path}?includeHidden=true` : api.videos.list.path;
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch videos");
       return api.videos.list.responses[200].parse(await res.json());
     },
@@ -178,14 +181,14 @@ export function useDeleteVideo() {
 }
 
 // === EVENTS ===
-export function useEvents() {
+export function useEvents(includeHidden = false) {
   return useQuery({
-    queryKey: [api.events.list.path],
+    queryKey: [api.events.list.path, { includeHidden }],
     queryFn: async () => {
-      const res = await fetch(api.events.list.path);
+      const url = includeHidden ? `${api.events.list.path}?includeHidden=true` : api.events.list.path;
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch events");
       const data = await res.json();
-      // Parse dates from strings to Date objects for frontend use
       return api.events.list.responses[200].parse(data).map(e => ({
         ...e,
         date: new Date(e.date)
@@ -240,11 +243,12 @@ export function useDeleteEvent() {
 }
 
 // === PRESS ===
-export function usePress() {
+export function usePress(includeHidden = false) {
   return useQuery({
-    queryKey: [api.press.list.path],
+    queryKey: [api.press.list.path, { includeHidden }],
     queryFn: async () => {
-      const res = await fetch(api.press.list.path);
+      const url = includeHidden ? `${api.press.list.path}?includeHidden=true` : api.press.list.path;
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch press");
       const data = await res.json();
       return api.press.list.responses[200].parse(data).map(p => ({
@@ -301,11 +305,12 @@ export function useDeletePress() {
 }
 
 // === PHOTOS ===
-export function usePhotos() {
+export function usePhotos(includeHidden = false) {
   return useQuery({
-    queryKey: [api.photos.list.path],
+    queryKey: [api.photos.list.path, { includeHidden }],
     queryFn: async () => {
-      const res = await fetch(api.photos.list.path);
+      const url = includeHidden ? `${api.photos.list.path}?includeHidden=true` : api.photos.list.path;
+      const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch photos");
       return api.photos.list.responses[200].parse(await res.json());
     },
