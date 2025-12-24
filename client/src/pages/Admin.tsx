@@ -86,9 +86,9 @@ function AlbumsManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Albums</h2>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex justify-between items-center gap-2 flex-wrap">
+        <h2 className="text-xl md:text-2xl font-bold">Albums</h2>
         <Dialog open={open} onOpenChange={(isOpen) => {
           if (!isOpen) {
             setEditingId(null);
@@ -137,17 +137,17 @@ function AlbumsManager() {
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-3 md:gap-4">
         {albums.map(album => (
-          <div key={album.id} className="flex items-center justify-between p-4 border rounded bg-card">
-            <div className="flex items-center gap-4">
-              <img src={album.coverImage} className="w-12 h-12 rounded object-cover" alt={album.title} />
-              <div>
-                <div className="font-bold">{album.title}</div>
-                <div className="text-sm text-muted-foreground">{album.releaseDate ? new Date(album.releaseDate).toLocaleDateString() : 'N/A'}</div>
+          <div key={album.id} className="flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <img src={album.coverImage} className="w-10 h-10 md:w-12 md:h-12 rounded object-cover flex-shrink-0" alt={album.title} />
+              <div className="min-w-0">
+                <div className="font-bold text-sm md:text-base truncate">{album.title}</div>
+                <div className="text-xs md:text-sm text-muted-foreground">{album.releaseDate ? new Date(album.releaseDate).toLocaleDateString() : 'N/A'}</div>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2 flex-shrink-0">
               <Button variant="outline" size="icon" onClick={() => handleEdit(album)} data-testid={`button-edit-album-${album.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -230,9 +230,9 @@ function TracksManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Tracks</h2>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex justify-between items-center gap-2 flex-wrap">
+        <h2 className="text-xl md:text-2xl font-bold">Tracks</h2>
         <Dialog open={open} onOpenChange={(isOpen) => {
           if (!isOpen) {
             setEditingId(null);
@@ -291,14 +291,14 @@ function TracksManager() {
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-3 md:gap-4">
         {tracks.map(track => (
-          <div key={track.id} className="flex items-center justify-between p-4 border rounded bg-card">
-            <div>
-              <div className="font-bold">{track.title}</div>
-              <div className="text-sm text-muted-foreground">{track.duration} {track.isSingle && '• Single'}</div>
+          <div key={track.id} className="flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap">
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-sm md:text-base truncate">{track.title}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">{track.duration} {track.isSingle && '• Single'}</div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2 flex-shrink-0">
               <Button variant="outline" size="icon" onClick={() => handleEdit(track)} data-testid={`button-edit-track-${track.id}`}>
                 <Edit2 size={16} />
               </Button>
@@ -379,9 +379,9 @@ function VideosManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Videos</h2>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex justify-between items-center gap-2 flex-wrap">
+        <h2 className="text-xl md:text-2xl font-bold">Videos</h2>
         <Dialog open={open} onOpenChange={(isOpen) => {
           if (!isOpen) {
             setEditingId(null);
@@ -529,9 +529,9 @@ function EventsManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Events</h2>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex justify-between items-center gap-2 flex-wrap">
+        <h2 className="text-xl md:text-2xl font-bold">Events</h2>
         <Dialog open={open} onOpenChange={(isOpen) => {
           if (!isOpen) {
             setEditingId(null);
@@ -672,9 +672,9 @@ function PressManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Press & Media</h2>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex justify-between items-center gap-2 flex-wrap">
+        <h2 className="text-xl md:text-2xl font-bold">Press & Media</h2>
         <Dialog open={open} onOpenChange={(isOpen) => {
           if (!isOpen) {
             setEditingId(null);
@@ -748,8 +748,8 @@ function MessagesManager() {
   const { data: messages = [] } = useMessages();
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Contact Messages</h2>
+    <div className="space-y-4 md:space-y-6">
+      <h2 className="text-xl md:text-2xl font-bold">Contact Messages</h2>
       <div className="grid gap-4">
         {messages.length === 0 ? (
           <p className="text-muted-foreground">No messages yet</p>
@@ -784,30 +784,30 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-          <Button variant="outline" size="icon" onClick={() => logout()} data-testid="button-logout">
+        <div className="flex justify-between items-center mb-6 md:mb-8 gap-2 flex-wrap">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Admin Dashboard</h1>
+          <Button variant="outline" size="icon" onClick={() => logout()} data-testid="button-logout" title="Logout">
             <LogOut size={16} />
           </Button>
         </div>
 
         <Tabs defaultValue="albums" className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="albums">Albums</TabsTrigger>
-            <TabsTrigger value="tracks">Tracks</TabsTrigger>
-            <TabsTrigger value="videos">Videos</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="press">Press</TabsTrigger>
-            <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6 h-auto">
+            <TabsTrigger value="albums" className="text-xs sm:text-sm">Albums</TabsTrigger>
+            <TabsTrigger value="tracks" className="text-xs sm:text-sm">Tracks</TabsTrigger>
+            <TabsTrigger value="videos" className="text-xs sm:text-sm">Videos</TabsTrigger>
+            <TabsTrigger value="events" className="text-xs sm:text-sm">Events</TabsTrigger>
+            <TabsTrigger value="press" className="text-xs sm:text-sm">Press</TabsTrigger>
+            <TabsTrigger value="messages" className="text-xs sm:text-sm">Messages</TabsTrigger>
           </TabsList>
-          <TabsContent value="albums" className="mt-6"><AlbumsManager /></TabsContent>
-          <TabsContent value="tracks" className="mt-6"><TracksManager /></TabsContent>
-          <TabsContent value="videos" className="mt-6"><VideosManager /></TabsContent>
-          <TabsContent value="events" className="mt-6"><EventsManager /></TabsContent>
-          <TabsContent value="press" className="mt-6"><PressManager /></TabsContent>
-          <TabsContent value="messages" className="mt-6"><MessagesManager /></TabsContent>
+          <TabsContent value="albums" className="mt-4 md:mt-6"><AlbumsManager /></TabsContent>
+          <TabsContent value="tracks" className="mt-4 md:mt-6"><TracksManager /></TabsContent>
+          <TabsContent value="videos" className="mt-4 md:mt-6"><VideosManager /></TabsContent>
+          <TabsContent value="events" className="mt-4 md:mt-6"><EventsManager /></TabsContent>
+          <TabsContent value="press" className="mt-4 md:mt-6"><PressManager /></TabsContent>
+          <TabsContent value="messages" className="mt-4 md:mt-6"><MessagesManager /></TabsContent>
         </Tabs>
       </div>
     </div>
