@@ -190,11 +190,8 @@ export async function registerRoutes(
       }
 
       const fileId = randomUUID();
-      // Construct absolute URL for Uppy's upload plugin
-      // Always use the current request's host/protocol for correct CORS and accessibility
-      const protocol = req.protocol || 'https';
-      const host = req.get('host') || 'localhost:5000';
-      const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
+      // Use relative URL for upload endpoint (works better in Replit iframe)
+      const uploadURL = `/api/uploads/${fileId}`;
       const objectPath = `/uploads/${fileId}`;
 
       res.json({
