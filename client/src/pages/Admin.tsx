@@ -6,12 +6,13 @@ import {
   useAlbums, useTracks, useEvents, useVideos, usePress, useMessages,
   useCreateAlbum, useCreateTrack, useCreateEvent, useCreateVideo, useCreatePress,
   useUpdateAlbum, useUpdateTrack, useUpdateEvent, useUpdateVideo, useUpdatePress,
-  useDeleteAlbum, useDeleteTrack, useDeleteEvent, useDeleteVideo, useDeletePress
+  useDeleteAlbum, useDeleteTrack, useDeleteEvent, useDeleteVideo, useDeletePress,
+  useReorderAlbum, useReorderTrack, useReorderVideo, useReorderEvent, useReorderPress
 } from "@/hooks/use-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, LogOut, Edit2 } from "lucide-react";
+import { Trash2, Plus, LogOut, Edit2, ChevronUp, ChevronDown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -29,6 +30,7 @@ function AlbumsManager() {
   const createAlbum = useCreateAlbum();
   const updateAlbum = useUpdateAlbum();
   const deleteAlbum = useDeleteAlbum();
+  const reorderAlbum = useReorderAlbum();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -138,9 +140,29 @@ function AlbumsManager() {
       </div>
 
       <div className="grid gap-4">
-        {albums.map(album => (
+        {albums.map((album, index) => (
           <div key={album.id} className="flex items-center justify-between p-4 border rounded bg-card">
             <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === 0}
+                  onClick={() => reorderAlbum.mutate({ id: album.id, direction: "up" })}
+                >
+                  <ChevronUp size={14} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === albums.length - 1}
+                  onClick={() => reorderAlbum.mutate({ id: album.id, direction: "down" })}
+                >
+                  <ChevronDown size={14} />
+                </Button>
+              </div>
               <img src={album.coverImage} className="w-12 h-12 rounded object-cover" alt={album.title} />
               <div>
                 <div className="font-bold">{album.title}</div>
@@ -169,6 +191,7 @@ function TracksManager() {
   const createTrack = useCreateTrack();
   const updateTrack = useUpdateTrack();
   const deleteTrack = useDeleteTrack();
+  const reorderTrack = useReorderTrack();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -292,11 +315,33 @@ function TracksManager() {
       </div>
 
       <div className="grid gap-4">
-        {tracks.map(track => (
+        {tracks.map((track, index) => (
           <div key={track.id} className="flex items-center justify-between p-4 border rounded bg-card">
-            <div>
-              <div className="font-bold">{track.title}</div>
-              <div className="text-sm text-muted-foreground">{track.duration} {track.isSingle && '• Single'}</div>
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === 0}
+                  onClick={() => reorderTrack.mutate({ id: track.id, direction: "up" })}
+                >
+                  <ChevronUp size={14} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === tracks.length - 1}
+                  onClick={() => reorderTrack.mutate({ id: track.id, direction: "down" })}
+                >
+                  <ChevronDown size={14} />
+                </Button>
+              </div>
+              <div>
+                <div className="font-bold">{track.title}</div>
+                <div className="text-sm text-muted-foreground">{track.duration} {track.isSingle && '• Single'}</div>
+              </div>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => handleEdit(track)} data-testid={`button-edit-track-${track.id}`}>
@@ -319,6 +364,7 @@ function VideosManager() {
   const createVideo = useCreateVideo();
   const updateVideo = useUpdateVideo();
   const deleteVideo = useDeleteVideo();
+  const reorderVideo = useReorderVideo();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -439,9 +485,29 @@ function VideosManager() {
       </div>
 
       <div className="grid gap-4">
-        {videos.map(video => (
+        {videos.map((video, index) => (
           <div key={video.id} className="flex items-center justify-between p-4 border rounded bg-card">
             <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === 0}
+                  onClick={() => reorderVideo.mutate({ id: video.id, direction: "up" })}
+                >
+                  <ChevronUp size={14} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === videos.length - 1}
+                  onClick={() => reorderVideo.mutate({ id: video.id, direction: "down" })}
+                >
+                  <ChevronDown size={14} />
+                </Button>
+              </div>
               <img src={video.thumbnailUrl || ""} alt={video.title} className="w-16 h-9 object-cover rounded" />
               <div>
                 <div className="font-bold">{video.title}</div>
@@ -469,6 +535,7 @@ function EventsManager() {
   const createEvent = useCreateEvent();
   const updateEvent = useUpdateEvent();
   const deleteEvent = useDeleteEvent();
+  const reorderEvent = useReorderEvent();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -586,11 +653,33 @@ function EventsManager() {
       </div>
 
       <div className="grid gap-4">
-        {events.map(event => (
+        {events.map((event, index) => (
           <div key={event.id} className="flex items-center justify-between p-4 border rounded bg-card">
-            <div>
-              <div className="font-bold">{event.title}</div>
-              <div className="text-sm text-muted-foreground">{new Date(event.date).toLocaleDateString()} • {event.location}</div>
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === 0}
+                  onClick={() => reorderEvent.mutate({ id: event.id, direction: "up" })}
+                >
+                  <ChevronUp size={14} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === events.length - 1}
+                  onClick={() => reorderEvent.mutate({ id: event.id, direction: "down" })}
+                >
+                  <ChevronDown size={14} />
+                </Button>
+              </div>
+              <div>
+                <div className="font-bold">{event.title}</div>
+                <div className="text-sm text-muted-foreground">{new Date(event.date).toLocaleDateString()} • {event.location}</div>
+              </div>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => handleEdit(event)} data-testid={`button-edit-event-${event.id}`}>
@@ -613,6 +702,7 @@ function PressManager() {
   const createPress = useCreatePress();
   const updatePress = useUpdatePress();
   const deletePress = useDeletePress();
+  const reorderPress = useReorderPress();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -722,11 +812,33 @@ function PressManager() {
       </div>
 
       <div className="grid gap-4">
-        {press.map(item => (
+        {press.map((item, index) => (
           <div key={item.id} className="flex items-center justify-between p-4 border rounded bg-card">
-            <div>
-              <div className="font-bold">{item.title}</div>
-              <div className="text-sm text-muted-foreground">{item.source} • {item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</div>
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === 0}
+                  onClick={() => reorderPress.mutate({ id: item.id, direction: "up" })}
+                >
+                  <ChevronUp size={14} />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6"
+                  disabled={index === press.length - 1}
+                  onClick={() => reorderPress.mutate({ id: item.id, direction: "down" })}
+                >
+                  <ChevronDown size={14} />
+                </Button>
+              </div>
+              <div>
+                <div className="font-bold">{item.title}</div>
+                <div className="text-sm text-muted-foreground">{item.source} • {item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</div>
+              </div>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => handleEdit(item)} data-testid={`button-edit-press-${item.id}`}>

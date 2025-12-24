@@ -6,7 +6,7 @@ import {
   type Video, type InsertVideo, type Event, type InsertEvent,
   type Press, type InsertPress, type Message, type InsertMessage
 } from "@shared/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, asc } from "drizzle-orm";
 
 export interface IStorage {
   // User
@@ -23,10 +23,12 @@ export interface IStorage {
   createAlbum(album: InsertAlbum): Promise<Album>;
   updateAlbum(id: number, album: InsertAlbum): Promise<Album>;
   deleteAlbum(id: number): Promise<void>;
+  reorderAlbums(id: number, direction: "up" | "down"): Promise<Album[]>;
   getTracks(): Promise<Track[]>;
   createTrack(track: InsertTrack): Promise<Track>;
   updateTrack(id: number, track: InsertTrack): Promise<Track>;
   deleteTrack(id: number): Promise<void>;
+  reorderTracks(id: number, direction: "up" | "down"): Promise<Track[]>;
 
   // Videos
   getVideos(): Promise<Video[]>;
@@ -85,7 +87,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAlbums(): Promise<Album[]> {
-    return await db.select().from(albums).orderBy(desc(albums.releaseDate));
+    return await db.select().from(albums).orderBy(asc(albums.order));
   }
 
   async createAlbum(album: InsertAlbum): Promise<Album> {
@@ -102,8 +104,45 @@ export class DatabaseStorage implements IStorage {
     await db.delete(albums).where(eq(albums.id, id));
   }
 
+  async reorderAlbums(id: number, direction: "up" | "down"): Promise<Album[]> {
+    const album = await db.query.albums.findFirst({ where: eq(albums.id, id) });
+    if (!album) {
+      throw new Error("Album not found");
+    }
+
+    const currentOrder = album.order;
+    let targetOrder;
+
+    if (direction === "up") {
+      targetOrder = currentOrder - 1;
+    } else {
+      targetOrder = currentOrder + 1;
+    }
+
+    // Find the album to swap with
+    const swapAlbum = await db.query.albums.findFirst({
+      where: (albs, { and, eq }) => and(eq(albs.order, targetOrder), ne(albs.id, id)),
+    });
+
+    if (swapAlbum) {
+      // Swap orders
+      await db.transaction(async (tx) => {
+        await tx
+          .update(albums)
+          .set({ order: targetOrder })
+          .where(eq(albums.id, id));
+        await tx
+          .update(albums)
+          .set({ order: currentOrder })
+          .where(eq(albums.id, swapAlbum.id));
+      });
+    }
+
+    return await this.getAlbums();
+  }
+
   async getTracks(): Promise<Track[]> {
-    return await db.select().from(tracks);
+    return await db.select().from(tracks).orderBy(asc(tracks.order));
   }
 
   async createTrack(track: InsertTrack): Promise<Track> {
@@ -120,8 +159,45 @@ export class DatabaseStorage implements IStorage {
     await db.delete(tracks).where(eq(tracks.id, id));
   }
 
+  async reorderTracks(id: number, direction: "up" | "down"): Promise<Track[]> {
+    const track = await db.query.tracks.findFirst({ where: eq(tracks.id, id) });
+    if (!track) {
+      throw new Error("Track not found");
+    }
+
+    const currentOrder = track.order;
+    let targetOrder;
+
+    if (direction === "up") {
+      targetOrder = currentOrder - 1;
+    } else {
+      targetOrder = currentOrder + 1;
+    }
+
+    // Find the track to swap with
+    const swapTrack = await db.query.tracks.findFirst({
+      where: (trks, { and, eq }) => and(eq(trks.order, targetOrder), ne(trks.id, id)),
+    });
+
+    if (swapTrack) {
+      // Swap orders
+      await db.transaction(async (tx) => {
+        await tx
+          .update(tracks)
+          .set({ order: targetOrder })
+          .where(eq(tracks.id, id));
+        await tx
+          .update(tracks)
+          .set({ order: currentOrder })
+          .where(eq(tracks.id, swapTrack.id));
+      });
+    }
+
+    return await this.getTracks();
+  }
+
   async getVideos(): Promise<Video[]> {
-    return await db.select().from(videos).orderBy(desc(videos.id));
+    return await db.select().from(videos).orderBy(asc(videos.order));
   }
 
   async createVideo(video: InsertVideo): Promise<Video> {

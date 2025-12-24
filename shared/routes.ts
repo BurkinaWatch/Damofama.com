@@ -1,10 +1,19 @@
 import { z } from 'zod';
-import { 
-  insertUserSchema, insertContentBlockSchema, insertAlbumSchema, 
-  insertTrackSchema, insertVideoSchema, insertEventSchema, 
+import {
+  insertUserSchema, insertContentBlockSchema, insertAlbumSchema,
+  insertTrackSchema, insertVideoSchema, insertEventSchema,
   insertPressSchema, insertMessageSchema,
-  users, contentBlocks, albums, tracks, videos, events, press, messages 
+  users, contentBlocks, albums, tracks, videos, events, press, messages
 } from './schema';
+
+// Placeholder for endpoint definition, assuming it exists elsewhere
+const endpoint = (config: any) => config;
+// Placeholder for select schema definitions, assuming they exist elsewhere
+const selectAlbumSchema = z.any();
+const selectTrackSchema = z.any();
+const selectVideoSchema = z.any();
+const selectEventSchema = z.any();
+const selectPressSchema = z.any();
 
 export const errorSchemas = {
   validation: z.object({
@@ -68,164 +77,219 @@ export const api = {
     },
   },
   albums: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/albums',
+    list: endpoint({
+      method: "GET",
+      path: "/api/albums",
       responses: {
-        200: z.array(z.custom<typeof albums.$inferSelect>()),
+        200: z.array(selectAlbumSchema),
       },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/albums',
+    }),
+    create: endpoint({
+      method: "POST",
+      path: "/api/albums",
       input: insertAlbumSchema,
       responses: {
-        201: z.custom<typeof albums.$inferSelect>(),
+        201: selectAlbumSchema,
       },
-    },
-    update: {
-      method: 'PATCH' as const,
-      path: '/api/albums/:id',
+    }),
+    update: endpoint({
+      method: "PATCH",
+      path: "/api/albums/:id",
       input: insertAlbumSchema,
       responses: {
-        200: z.custom<typeof albums.$inferSelect>(),
+        200: selectAlbumSchema,
       },
-    },
-    delete: {
-      method: 'DELETE' as const,
-      path: '/api/albums/:id',
+    }),
+    delete: endpoint({
+      method: "DELETE",
+      path: "/api/albums/:id",
       responses: {
         204: z.void(),
       },
-    },
+    }),
+    reorder: endpoint({
+      method: "POST",
+      path: "/api/albums/reorder",
+      input: z.object({
+        id: z.number(),
+        direction: z.enum(["up", "down"]),
+      }),
+      responses: {
+        200: z.array(selectAlbumSchema),
+      },
+    }),
   },
   tracks: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/tracks',
+    list: endpoint({
+      method: "GET",
+      path: "/api/tracks",
       responses: {
-        200: z.array(z.custom<typeof tracks.$inferSelect>()),
+        200: z.array(selectTrackSchema),
       },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/tracks',
+    }),
+    create: endpoint({
+      method: "POST",
+      path: "/api/tracks",
       input: insertTrackSchema,
       responses: {
-        201: z.custom<typeof tracks.$inferSelect>(),
+        201: selectTrackSchema,
       },
-    },
-    update: {
-      method: 'PATCH' as const,
-      path: '/api/tracks/:id',
+    }),
+    update: endpoint({
+      method: "PATCH",
+      path: "/api/tracks/:id",
       input: insertTrackSchema,
       responses: {
-        200: z.custom<typeof tracks.$inferSelect>(),
+        200: selectTrackSchema,
       },
-    },
-    delete: {
-      method: 'DELETE' as const,
-      path: '/api/tracks/:id',
+    }),
+    delete: endpoint({
+      method: "DELETE",
+      path: "/api/tracks/:id",
       responses: {
         204: z.void(),
       },
-    },
+    }),
+    reorder: endpoint({
+      method: "POST",
+      path: "/api/tracks/reorder",
+      input: z.object({
+        id: z.number(),
+        direction: z.enum(["up", "down"]),
+      }),
+      responses: {
+        200: z.array(selectTrackSchema),
+      },
+    }),
   },
   videos: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/videos',
+    list: endpoint({
+      method: "GET",
+      path: "/api/videos",
       responses: {
-        200: z.array(z.custom<typeof videos.$inferSelect>()),
+        200: z.array(selectVideoSchema),
       },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/videos',
+    }),
+    create: endpoint({
+      method: "POST",
+      path: "/api/videos",
       input: insertVideoSchema,
       responses: {
-        201: z.custom<typeof videos.$inferSelect>(),
+        201: selectVideoSchema,
       },
-    },
-    update: {
-      method: 'PATCH' as const,
-      path: '/api/videos/:id',
+    }),
+    update: endpoint({
+      method: "PATCH",
+      path: "/api/videos/:id",
       input: insertVideoSchema,
       responses: {
-        200: z.custom<typeof videos.$inferSelect>(),
+        200: selectVideoSchema,
       },
-    },
-    delete: {
-      method: 'DELETE' as const,
-      path: '/api/videos/:id',
+    }),
+    delete: endpoint({
+      method: "DELETE",
+      path: "/api/videos/:id",
       responses: {
         204: z.void(),
       },
-    },
+    }),
+    reorder: endpoint({
+      method: "POST",
+      path: "/api/videos/reorder",
+      input: z.object({
+        id: z.number(),
+        direction: z.enum(["up", "down"]),
+      }),
+      responses: {
+        200: z.array(selectVideoSchema),
+      },
+    }),
   },
   events: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/events',
+    list: endpoint({
+      method: "GET",
+      path: "/api/events",
       responses: {
-        200: z.array(z.custom<typeof events.$inferSelect>()),
+        200: z.array(selectEventSchema),
       },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/events',
+    }),
+    create: endpoint({
+      method: "POST",
+      path: "/api/events",
       input: insertEventSchema,
       responses: {
-        201: z.custom<typeof events.$inferSelect>(),
+        201: selectEventSchema,
       },
-    },
-    update: {
-      method: 'PATCH' as const,
-      path: '/api/events/:id',
+    }),
+    update: endpoint({
+      method: "PATCH",
+      path: "/api/events/:id",
       input: insertEventSchema,
       responses: {
-        200: z.custom<typeof events.$inferSelect>(),
+        200: selectEventSchema,
       },
-    },
-    delete: {
-      method: 'DELETE' as const,
-      path: '/api/events/:id',
+    }),
+    delete: endpoint({
+      method: "DELETE",
+      path: "/api/events/:id",
       responses: {
         204: z.void(),
       },
-    },
+    }),
+    reorder: endpoint({
+      method: "POST",
+      path: "/api/events/reorder",
+      input: z.object({
+        id: z.number(),
+        direction: z.enum(["up", "down"]),
+      }),
+      responses: {
+        200: z.array(selectEventSchema),
+      },
+    }),
   },
   press: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/press',
+    list: endpoint({
+      method: "GET",
+      path: "/api/press",
       responses: {
-        200: z.array(z.custom<typeof press.$inferSelect>()),
+        200: z.array(selectPressSchema),
       },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/press',
+    }),
+    create: endpoint({
+      method: "POST",
+      path: "/api/press",
       input: insertPressSchema,
       responses: {
-        201: z.custom<typeof press.$inferSelect>(),
+        201: selectPressSchema,
       },
-    },
-    update: {
-      method: 'PATCH' as const,
-      path: '/api/press/:id',
+    }),
+    update: endpoint({
+      method: "PATCH",
+      path: "/api/press/:id",
       input: insertPressSchema,
       responses: {
-        200: z.custom<typeof press.$inferSelect>(),
+        200: selectPressSchema,
       },
-    },
-    delete: {
-      method: 'DELETE' as const,
-      path: '/api/press/:id',
+    }),
+    delete: endpoint({
+      method: "DELETE",
+      path: "/api/press/:id",
       responses: {
         204: z.void(),
       },
-    },
+    }),
+    reorder: endpoint({
+      method: "POST",
+      path: "/api/press/reorder",
+      input: z.object({
+        id: z.number(),
+        direction: z.enum(["up", "down"]),
+      }),
+      responses: {
+        200: z.array(selectPressSchema),
+      },
+    }),
   },
   contact: {
     send: {

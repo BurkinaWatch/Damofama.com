@@ -61,6 +61,23 @@ export function useDeleteAlbum() {
   });
 }
 
+export function useReorderAlbum() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, direction }: { id: number; direction: "up" | "down" }) => {
+      const res = await fetch(api.albums.reorder.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id, direction }),
+      });
+      if (!res.ok) throw new Error("Failed to reorder album");
+      return api.albums.reorder.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.albums.list.path] }),
+  });
+}
+
 // === TRACKS ===
 export function useTracks() {
   return useQuery({
@@ -120,6 +137,23 @@ export function useDeleteTrack() {
   });
 }
 
+export function useReorderTrack() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, direction }: { id: number; direction: "up" | "down" }) => {
+      const res = await fetch(api.tracks.reorder.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id, direction }),
+      });
+      if (!res.ok) throw new Error("Failed to reorder track");
+      return api.tracks.reorder.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.tracks.list.path] }),
+  });
+}
+
 // === VIDEOS ===
 export function useVideos() {
   return useQuery({
@@ -172,6 +206,23 @@ export function useDeleteVideo() {
       const url = buildUrl(api.videos.delete.path, { id });
       const res = await fetch(url, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete video");
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.videos.list.path] }),
+  });
+}
+
+export function useReorderVideo() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, direction }: { id: number; direction: "up" | "down" }) => {
+      const res = await fetch(api.videos.reorder.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id, direction }),
+      });
+      if (!res.ok) throw new Error("Failed to reorder video");
+      return api.videos.reorder.responses[200].parse(await res.json());
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.videos.list.path] }),
   });
@@ -239,6 +290,23 @@ export function useDeleteEvent() {
   });
 }
 
+export function useReorderEvent() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, direction }: { id: number; direction: "up" | "down" }) => {
+      const res = await fetch(api.events.reorder.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id, direction }),
+      });
+      if (!res.ok) throw new Error("Failed to reorder event");
+      return api.events.reorder.responses[200].parse(await res.json());
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.events.list.path] }),
+  });
+}
+
 // === PRESS ===
 export function usePress() {
   return useQuery({
@@ -295,6 +363,23 @@ export function useDeletePress() {
       const url = buildUrl(api.press.delete.path, { id });
       const res = await fetch(url, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete press item");
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.press.list.path] }),
+  });
+}
+
+export function useReorderPress() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, direction }: { id: number; direction: "up" | "down" }) => {
+      const res = await fetch(api.press.reorder.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id, direction }),
+      });
+      if (!res.ok) throw new Error("Failed to reorder press item");
+      return api.press.reorder.responses[200].parse(await res.json());
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.press.list.path] }),
   });
