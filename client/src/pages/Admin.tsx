@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, LogOut, Edit2, Upload } from "lucide-react";
+import { Trash2, Plus, LogOut, Edit2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,8 +20,7 @@ import {
 } from "@shared/schema";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { ObjectUploader } from "@/components/ObjectUploader";
-import { useUpload } from "@/hooks/use-upload";
+import { FileUploadButton } from "@/components/FileUploadButton";
 import { useToast } from "@/hooks/use-toast";
 
 // Simple CRUD for Albums
@@ -33,7 +32,6 @@ function AlbumsManager() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertAlbum>({
     resolver: zodResolver(insertAlbumSchema),
@@ -117,14 +115,10 @@ function AlbumsManager() {
                 <Label htmlFor="album-cover">Cover Image</Label>
                 <div className="flex gap-2">
                   <Input id="album-cover" {...form.register("coverImage")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
-                    const paths = Object.values(uploadedPaths || {});
-                    if (paths.length > 0) {
-                      form.setValue("coverImage", paths[0]);
-                    }
-                  }}>
-                    <Upload size={16} />
-                  </ObjectUploader>
+                  <FileUploadButton
+                    accept="image/*"
+                    onUploadComplete={(path) => form.setValue("coverImage", path)}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
@@ -178,7 +172,6 @@ function TracksManager() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertTrack>({
     resolver: zodResolver(insertTrackSchema),
@@ -273,28 +266,20 @@ function TracksManager() {
                 <Label htmlFor="track-audio">Audio</Label>
                 <div className="flex gap-2">
                   <Input id="track-audio" {...form.register("audioUrl")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
-                    const paths = Object.values(uploadedPaths || {});
-                    if (paths.length > 0) {
-                      form.setValue("audioUrl", paths[0]);
-                    }
-                  }}>
-                    <Upload size={16} />
-                  </ObjectUploader>
+                  <FileUploadButton
+                    accept="audio/*"
+                    onUploadComplete={(path) => form.setValue("audioUrl", path)}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="track-photo">Photo (Optional)</Label>
                 <div className="flex gap-2">
                   <Input id="track-photo" {...form.register("photoUrl")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
-                    const paths = Object.values(uploadedPaths || {});
-                    if (paths.length > 0) {
-                      form.setValue("photoUrl", paths[0]);
-                    }
-                  }}>
-                    <Upload size={16} />
-                  </ObjectUploader>
+                  <FileUploadButton
+                    accept="image/*"
+                    onUploadComplete={(path) => form.setValue("photoUrl", path)}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
@@ -344,7 +329,6 @@ function VideosManager() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertVideo>({
     resolver: zodResolver(insertVideoSchema),
@@ -435,14 +419,10 @@ function VideosManager() {
                 <Label htmlFor="video-thumbnail">Thumbnail</Label>
                 <div className="flex gap-2">
                   <Input id="video-thumbnail" {...form.register("thumbnailUrl")} placeholder="Or upload..." className="flex-1" />
-                  <ObjectUploader onGetUploadParameters={getUploadParameters} onComplete={(_result, uploadedPaths) => {
-                    const paths = Object.values(uploadedPaths || {});
-                    if (paths.length > 0) {
-                      form.setValue("thumbnailUrl", paths[0]);
-                    }
-                  }}>
-                    <Upload size={16} />
-                  </ObjectUploader>
+                  <FileUploadButton
+                    accept="image/*"
+                    onUploadComplete={(path) => form.setValue("thumbnailUrl", path)}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
@@ -643,7 +623,6 @@ function PressManager() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const { getUploadParameters } = useUpload();
 
   const form = useForm<InsertPress>({
     resolver: zodResolver(insertPressSchema),
