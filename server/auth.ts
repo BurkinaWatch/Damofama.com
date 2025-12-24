@@ -45,6 +45,7 @@ export function setupAuth(app: Express) {
       try {
         const user = await storage.getUserByUsername(username);
         // In a real app, use bcrypt.compare here
+        // For development, plain text comparison is used
         if (!user || user.password !== password) {
           return done(null, false, { message: "Invalid username or password" });
         }

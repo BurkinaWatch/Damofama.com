@@ -21,6 +21,7 @@ export function useCreateAlbum() {
       const res = await fetch(api.albums.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to create album");
@@ -38,6 +39,7 @@ export function useUpdateAlbum() {
       const res = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update album");
@@ -52,7 +54,7 @@ export function useDeleteAlbum() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.albums.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetch(url, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Failed to delete album");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.albums.list.path] }),
@@ -78,6 +80,7 @@ export function useCreateTrack() {
       const res = await fetch(api.tracks.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to create track");
@@ -95,6 +98,7 @@ export function useUpdateTrack() {
       const res = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update track");
@@ -109,7 +113,7 @@ export function useDeleteTrack() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.tracks.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetch(url, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Failed to delete track");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.tracks.list.path] }),

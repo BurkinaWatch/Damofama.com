@@ -67,9 +67,16 @@ export async function registerRoutes(
   });
 
   app.post(api.albums.create.path, requireAuth, async (req, res) => {
-    const input = api.albums.create.input.parse(req.body);
-    const album = await storage.createAlbum(input);
-    res.status(201).json(album);
+    try {
+      const input = api.albums.create.input.parse(req.body);
+      const album = await storage.createAlbum(input);
+      res.status(201).json(album);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      throw error;
+    }
   });
 
   app.patch(api.albums.update.path, requireAuth, async (req, res) => {
@@ -84,9 +91,16 @@ export async function registerRoutes(
   });
 
   app.post(api.tracks.create.path, requireAuth, async (req, res) => {
-    const input = api.tracks.create.input.parse(req.body);
-    const track = await storage.createTrack(input);
-    res.status(201).json(track);
+    try {
+      const input = api.tracks.create.input.parse(req.body);
+      const track = await storage.createTrack(input);
+      res.status(201).json(track);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      throw error;
+    }
   });
 
   app.patch(api.tracks.update.path, requireAuth, async (req, res) => {
