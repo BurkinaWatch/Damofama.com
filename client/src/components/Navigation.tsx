@@ -36,18 +36,18 @@ export function Navigation() {
     <>
       <nav
         className={clsx(
-          "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out py-6 px-6 md:px-12 flex justify-between items-center",
-          scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5 py-4" : "bg-transparent"
+          "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out py-3 px-3 sm:px-6 md:px-12 flex justify-between items-center gap-4",
+          scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5 py-2" : "bg-transparent"
         )}
       >
         <Link href="/" asChild>
-          <a className="text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase text-white drop-shadow-lg">
+          <a className="text-base sm:text-lg md:text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase text-white drop-shadow-lg whitespace-nowrap flex-shrink-0">
             Damo Fama
           </a>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden md:flex gap-6 lg:gap-8 items-center flex-shrink-0">
           {links.map((link) => (
             <Link key={link.href} href={link.href} asChild>
               <a
@@ -73,10 +73,11 @@ export function Navigation() {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden z-50 relative text-foreground hover:text-primary transition-colors"
+          className="md:hidden z-50 relative text-foreground hover:text-primary transition-colors flex-shrink-0 p-1"
           onClick={() => setIsOpen(!isOpen)}
+          data-testid="button-menu-toggle"
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
@@ -89,26 +90,26 @@ export function Navigation() {
             exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 z-40 bg-background flex flex-col justify-center items-center md:hidden"
           >
-            <div className="flex flex-col gap-8 text-center">
+            <div className="flex flex-col gap-6 sm:gap-8 text-center w-full px-4 max-w-sm mx-auto">
               {links.map((link) => (
                 <Link key={link.href} href={link.href} asChild>
-                  <a className="text-3xl font-display font-bold hover:text-primary transition-colors">
+                  <a className="text-xl sm:text-2xl md:text-3xl font-display font-bold hover:text-primary transition-colors">
                     {link.label}
                   </a>
                 </Link>
               ))}
-              <div className="w-12 h-[1px] bg-border mx-auto my-4" />
-              <div className="flex flex-col gap-6">
-                <a href="https://www.facebook.com/share/1AHvShS3Qc/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+              <div className="w-12 h-[1px] bg-border mx-auto my-2 sm:my-4" />
+              <div className="flex flex-col gap-4 sm:gap-6">
+                <a href="https://www.facebook.com/share/1AHvShS3Qc/" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-primary uppercase tracking-widest font-medium hover:text-primary/80 transition-colors">
                   Facebook
                 </a>
-                <a href="https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                <a href="https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-primary uppercase tracking-widest font-medium hover:text-primary/80 transition-colors">
                   Instagram
                 </a>
-                <a href="https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                <a href="https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-primary uppercase tracking-widest font-medium hover:text-primary/80 transition-colors">
                   Youtube
                 </a>
-                <a href="https://www.tiktok.com/@damofama" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground uppercase tracking-widest hover:text-primary transition-colors">
+                <a href="https://www.tiktok.com/@damofama" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-primary uppercase tracking-widest font-medium hover:text-primary/80 transition-colors">
                   TikTok
                 </a>
               </div>
