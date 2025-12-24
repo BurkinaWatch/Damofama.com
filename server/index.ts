@@ -52,6 +52,12 @@ app.use("/uploads", express.static(uploadsDir, {
   }
 }));
 
+// Serve attached assets statically (for gallery photos from database)
+const attachedAssetsDir = path.join(process.cwd(), "attached_assets");
+app.use("/attached_assets", express.static(attachedAssetsDir, {
+  maxAge: '1d'
+}));
+
 app.use((req, res, next) => {
   const start = Date.now();
   const pathname = req.path;
