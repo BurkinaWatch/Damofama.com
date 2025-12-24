@@ -53,26 +53,30 @@ export function FileUploadButton({
       });
 
       if (!urlResponse.ok) {
+        const errorText = await urlResponse.text();
+        console.error("URL request failed:", urlResponse.status, errorText);
         const error = await urlResponse.json().catch(() => ({ error: "Failed to request upload URL" }));
-        throw new Error(error.error || "Failed to request upload URL");
+        throw new Error(error.error || `Failed to request upload URL: ${urlResponse.status}`);
       }
 
       const { uploadURL, objectPath } = await urlResponse.json();
+      console.log("Got upload URL:", uploadURL);
 
       // Step 2: Upload file to the URL
+      // Don't include Content-Type header for PUT request - let browser set it automatically
       const uploadResponse = await fetch(uploadURL, {
         method: "PUT",
         body: file,
         credentials: "include",
-        headers: {
-          "Content-Type": file.type || "application/octet-stream",
-        },
       });
 
       if (!uploadResponse.ok) {
-        throw new Error("Failed to upload file");
+        const errorText = await uploadResponse.text();
+        console.error("Upload failed:", uploadResponse.status, errorText);
+        throw new Error(`Upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`);
       }
 
+      console.log("Upload successful:", objectPath);
       toast({
         title: "Upload successful",
         description: `${file.name} uploaded successfully`,
@@ -86,12 +90,12 @@ export function FileUploadButton({
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Upload failed";
+      console.error("Upload error:", error);
       toast({
         title: "Upload error",
         description: message,
         variant: "destructive",
       });
-      console.error("Upload error:", error);
     } finally {
       setIsUploading(false);
     }
