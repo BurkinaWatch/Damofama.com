@@ -199,22 +199,21 @@ export async function registerRoutes(
   app.put("/api/uploads/:fileId", async (req, res) => {
     try {
       const { fileId } = req.params;
-      const fs = await import("fs").then(m => m.promises);
+      const fs = await import("fs");
       const path = await import("path");
 
       // Store in public/uploads directory
-      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      const uploadsDir = path.default.join(process.cwd(), "public", "uploads");
 
       // Create uploads directory if it doesn't exist
-      const fsSync = require("fs");
-      if (!fsSync.existsSync(uploadsDir)) {
-        fsSync.mkdirSync(uploadsDir, { recursive: true });
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
       }
 
-      const filePath = path.join(uploadsDir, fileId);
+      const filePath = path.default.join(uploadsDir, fileId);
 
       // Pipe request directly to file
-      const writeStream = fsSync.createWriteStream(filePath);
+      const writeStream = fs.createWriteStream(filePath);
 
       req.pipe(writeStream);
 
