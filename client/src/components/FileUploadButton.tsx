@@ -63,11 +63,9 @@ export function FileUploadButton({
       console.log("Got upload URL:", uploadURL);
 
       // Step 2: Upload file to the URL
-      // Don't include Content-Type header for PUT request - let browser set it automatically
       const uploadResponse = await fetch(uploadURL, {
         method: "PUT",
         body: file,
-        credentials: "include",
       });
 
       if (!uploadResponse.ok) {

@@ -194,6 +194,17 @@ export async function registerRoutes(
     }
   });
 
+  // Handle OPTIONS requests for CORS preflight
+  app.options("/api/uploads/:fileId", (req, res) => {
+    const origin = req.get('origin') || "*";
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Max-Age", "3600");
+    res.sendStatus(204);
+  });
+
   // Handle file uploads to presigned URL
   app.put("/api/uploads/:fileId", async (req, res) => {
     try {
@@ -202,9 +213,11 @@ export async function registerRoutes(
       const path = await import("path");
 
       // Set CORS headers for file uploads
-      res.header("Access-Control-Allow-Origin", "*");
+      const origin = req.get('origin') || "*";
+      res.header("Access-Control-Allow-Origin", origin);
       res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
       res.header("Access-Control-Allow-Headers", "Content-Type");
+      res.header("Access-Control-Allow-Credentials", "true");
 
       // Store in public/uploads directory
       const uploadsDir = path.default.join(process.cwd(), "public", "uploads");
@@ -243,14 +256,6 @@ export async function registerRoutes(
       console.error("Error handling file upload:", error);
       res.status(500).json({ error: "Failed to process upload" });
     }
-  });
-
-  // Handle OPTIONS requests for CORS
-  app.options("/api/uploads/:fileId", (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    res.sendStatus(200);
   });
 
   // Seed data
