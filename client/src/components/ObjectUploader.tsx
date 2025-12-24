@@ -5,7 +5,7 @@ import type { UppyFile, UploadResult } from "@uppy/core";
 import DashboardModal from "@uppy/react/dashboard-modal";
 import "@uppy/core/css/style.min.css";
 import "@uppy/dashboard/css/style.min.css";
-import AwsS3 from "@uppy/aws-s3";
+import XHRUpload from "@uppy/xhr-upload";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -48,8 +48,10 @@ export function ObjectUploader({
       autoProceed: false,
     });
 
-    uppyInstance.use(AwsS3, {
-      shouldUseMultipart: false,
+    uppyInstance.use(XHRUpload, {
+      endpoint: "", // Endpoint not used since we get presigned URL from onGetUploadParameters
+      formData: false,
+      headers: {},
       getUploadParameters: async (file) => {
         try {
           const params = await onGetUploadParameters(file);
