@@ -159,7 +159,7 @@ export default function Music() {
             <SectionReveal delay={0.4}>
               <div className="flex items-center gap-4 mb-12">
                 <div className="h-[1px] bg-white/10 flex-1" />
-                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">Visuals</h2>
+                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">Clips Vidéo</h2>
                 <div className="h-[1px] bg-white/10 flex-1" />
               </div>
 
