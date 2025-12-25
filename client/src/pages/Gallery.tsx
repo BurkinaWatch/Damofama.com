@@ -65,7 +65,7 @@ export default function Gallery() {
                     <img 
                       src={item.src} 
                       alt={item.alt}
-                      className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                      className="w-full h-auto object-cover transition-all duration-700"
                       loading="lazy"
                       data-testid={`img-gallery-${idx}`}
                     />
