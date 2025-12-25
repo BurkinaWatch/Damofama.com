@@ -1,6 +1,6 @@
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useAlbums, useTracks, useVideos } from "@/hooks/use-content";
-import { Play, Share2 } from "lucide-react";
+import { Play } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
 
 export default function Music() {
@@ -9,10 +9,7 @@ export default function Music() {
   const { data: videos } = useVideos();
   const { play, currentTrack } = useAudio();
 
-  // Group tracks by album if needed, for now flat list
-  const singles = tracks?.filter(t => t.isSingle) || [];
-
-  const handlePlayTrack = (track: typeof singles[0]) => {
+  const handlePlayTrack = (track: NonNullable<typeof tracks>[0]) => {
     if (tracks) {
       play(track, tracks);
     }

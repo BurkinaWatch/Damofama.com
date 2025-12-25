@@ -64,9 +64,9 @@ export function Navigation() {
               </a>
             </Link>
           ))}
-          <Link href="/live" asChild>
+          <Link href="/events" asChild>
             <a className="ml-4 text-xs border border-primary/50 text-primary px-4 py-2 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-              LIVE
+              DATES
             </a>
           </Link>
         </div>
@@ -94,7 +94,10 @@ export function Navigation() {
             <div className="flex flex-col gap-4 sm:gap-6 text-center w-full px-3 sm:px-4">
               {links.map((link) => (
                 <Link key={link.href} href={link.href} asChild>
-                  <a className="text-lg sm:text-xl font-display font-bold hover:text-primary transition-colors">
+                  <a className={clsx(
+                    "text-lg sm:text-xl font-display font-bold transition-colors",
+                    location === link.href ? "text-primary" : "hover:text-primary"
+                  )}>
                     {link.label}
                   </a>
                 </Link>

@@ -5,6 +5,7 @@ import { setupAuth } from "./auth";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { randomUUID } from "crypto";
+import sharp from "sharp";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -269,17 +270,59 @@ export async function registerRoutes(
 
       const filePath = path.default.join(uploadsDir, fileId);
 
-      // Pipe request directly to file
+      // First save the file using streaming
       const writeStream = fs.createWriteStream(filePath);
-
       req.pipe(writeStream);
 
-      writeStream.on("finish", () => {
-        res.status(200).json({
-          success: true,
-          objectPath: `/uploads/${fileId}`,
-          fileId,
-        });
+      writeStream.on("finish", async () => {
+        try {
+          const contentType = req.get("content-type") || "";
+          
+          // Check if it's an image that should be optimized
+          const isImage = contentType.startsWith("image/") && !contentType.includes("gif");
+          
+          if (isImage) {
+            // Read the saved file and optimize it
+            const optimizedFileId = fileId + '.webp';
+            const optimizedPath = path.default.join(uploadsDir, optimizedFileId);
+            
+            try {
+              await sharp(filePath)
+                .resize(1600, null, { withoutEnlargement: true })
+                .webp({ quality: 85 })
+                .toFile(optimizedPath);
+              
+              // Remove original file
+              fs.unlinkSync(filePath);
+              
+              console.log(`Image optimized: ${fileId} -> ${optimizedFileId}`);
+              
+              res.status(200).json({
+                success: true,
+                objectPath: `/uploads/${optimizedFileId}`,
+                fileId: optimizedFileId,
+              });
+            } catch (sharpError) {
+              console.error("Sharp optimization failed, keeping original:", sharpError);
+              // Keep original file if Sharp fails
+              res.status(200).json({
+                success: true,
+                objectPath: `/uploads/${fileId}`,
+                fileId,
+              });
+            }
+          } else {
+            // Non-image files saved as-is
+            res.status(200).json({
+              success: true,
+              objectPath: `/uploads/${fileId}`,
+              fileId,
+            });
+          }
+        } catch (error) {
+          console.error("Error processing file:", error);
+          res.status(500).json({ error: "Failed to process file" });
+        }
       });
 
       writeStream.on("error", (error: any) => {

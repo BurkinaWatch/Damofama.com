@@ -533,20 +533,20 @@ function VideosManager() {
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-3 md:gap-4">
         {videos.map(video => (
-          <div key={video.id} className={`flex items-center justify-between p-4 border rounded bg-card ${video.hidden ? 'opacity-50' : ''}`}>
-            <div className="flex items-center gap-4">
-              <img src={video.thumbnailUrl || ""} alt={video.title} className="w-16 h-9 object-cover rounded" />
-              <div>
-                <div className="font-bold">{video.title}</div>
-                <div className="text-sm text-muted-foreground">
+          <div key={video.id} className={`flex items-center justify-between p-3 md:p-4 border rounded bg-card gap-2 flex-wrap ${video.hidden ? 'opacity-50' : ''}`}>
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <img src={video.thumbnailUrl || ""} alt={video.title} className="w-14 h-8 md:w-16 md:h-9 object-cover rounded flex-shrink-0" />
+              <div className="min-w-0">
+                <div className="font-bold text-sm md:text-base truncate">{video.title}</div>
+                <div className="text-xs md:text-sm text-muted-foreground">
                   {video.category} {video.isFeatured && '• Featured'}
                   {video.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2 flex-shrink-0">
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(video)} title={video.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-video-${video.id}`}>
                 {video.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
               </Button>
@@ -994,27 +994,29 @@ function PhotosManager() {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
         {photos.map(photo => (
-          <div key={photo.id} className={`relative group border rounded overflow-hidden bg-card ${photo.hidden ? 'opacity-50' : ''}`}>
+          <div key={photo.id} className={`relative border rounded overflow-hidden bg-card ${photo.hidden ? 'opacity-50' : ''}`}>
             <img src={photo.imageUrl} alt={photo.title} className="w-full h-32 object-cover" />
-            <div className="p-2">
-              <div className="text-sm font-medium truncate">{photo.title}</div>
-              <div className="text-xs text-muted-foreground">
-                {photo.category}
-                {photo.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
+            <div className="p-2 flex items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-medium truncate">{photo.title}</div>
+                <div className="text-xs text-muted-foreground">
+                  {photo.category}
+                  {photo.hidden && <span className="ml-1 text-yellow-500">(Masqué)</span>}
+                </div>
               </div>
-            </div>
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button variant="secondary" size="icon" onClick={() => handleToggleHidden(photo)} title={photo.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-photo-${photo.id}`}>
-                {photo.hidden ? <Eye size={14} /> : <EyeOff size={14} />}
-              </Button>
-              <Button variant="secondary" size="icon" onClick={() => handleEdit(photo)} data-testid={`button-edit-photo-${photo.id}`}>
-                <Edit2 size={14} />
-              </Button>
-              <Button variant="destructive" size="icon" onClick={() => handleDelete(photo.id)} data-testid={`button-delete-photo-${photo.id}`}>
-                <Trash2 size={14} />
-              </Button>
+              <div className="flex gap-1 flex-shrink-0">
+                <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => handleToggleHidden(photo)} title={photo.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-photo-${photo.id}`}>
+                  {photo.hidden ? <Eye size={12} /> : <EyeOff size={12} />}
+                </Button>
+                <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => handleEdit(photo)} data-testid={`button-edit-photo-${photo.id}`}>
+                  <Edit2 size={12} />
+                </Button>
+                <Button variant="destructive" size="icon" className="h-7 w-7" onClick={() => handleDelete(photo.id)} data-testid={`button-delete-photo-${photo.id}`}>
+                  <Trash2 size={12} />
+                </Button>
+              </div>
             </div>
           </div>
         ))}
@@ -1078,15 +1080,17 @@ export default function Admin() {
         </div>
 
         <Tabs defaultValue="albums" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 gap-1 h-auto">
-            <TabsTrigger value="albums" className="text-xs sm:text-sm">Albums</TabsTrigger>
-            <TabsTrigger value="tracks" className="text-xs sm:text-sm">Tracks</TabsTrigger>
-            <TabsTrigger value="videos" className="text-xs sm:text-sm">Videos</TabsTrigger>
-            <TabsTrigger value="events" className="text-xs sm:text-sm">Events</TabsTrigger>
-            <TabsTrigger value="press" className="text-xs sm:text-sm">Press</TabsTrigger>
-            <TabsTrigger value="photos" className="text-xs sm:text-sm">Photos</TabsTrigger>
-            <TabsTrigger value="messages" className="text-xs sm:text-sm">Messages</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-2 px-2 pb-2">
+            <TabsList className="inline-flex w-auto min-w-full md:w-full md:grid md:grid-cols-7 gap-1 h-auto">
+              <TabsTrigger value="albums" className="text-xs sm:text-sm whitespace-nowrap px-3">Albums</TabsTrigger>
+              <TabsTrigger value="tracks" className="text-xs sm:text-sm whitespace-nowrap px-3">Tracks</TabsTrigger>
+              <TabsTrigger value="videos" className="text-xs sm:text-sm whitespace-nowrap px-3">Videos</TabsTrigger>
+              <TabsTrigger value="events" className="text-xs sm:text-sm whitespace-nowrap px-3">Events</TabsTrigger>
+              <TabsTrigger value="press" className="text-xs sm:text-sm whitespace-nowrap px-3">Press</TabsTrigger>
+              <TabsTrigger value="photos" className="text-xs sm:text-sm whitespace-nowrap px-3">Photos</TabsTrigger>
+              <TabsTrigger value="messages" className="text-xs sm:text-sm whitespace-nowrap px-3">Msgs</TabsTrigger>
+            </TabsList>
+          </div>
           <TabsContent value="albums" className="mt-4 md:mt-6"><AlbumsManager /></TabsContent>
           <TabsContent value="tracks" className="mt-4 md:mt-6"><TracksManager /></TabsContent>
           <TabsContent value="videos" className="mt-4 md:mt-6"><VideosManager /></TabsContent>

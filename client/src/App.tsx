@@ -20,7 +20,6 @@ import About from "@/pages/About";
 import Gallery from "@/pages/Gallery";
 import Press from "@/pages/Press";
 import Contact from "@/pages/Contact";
-import Live from "@/pages/Live";
 import Admin from "@/pages/Admin";
 import Login from "@/pages/Login";
 
@@ -41,7 +40,6 @@ function Router() {
             <Route path="/gallery" component={Gallery} />
             <Route path="/press" component={Press} />
             <Route path="/contact" component={Contact} />
-            <Route path="/live" component={Live} />
             <Route path="/admin" component={Admin} />
             <Route path="/login" component={Login} />
             <Route component={NotFound} />
