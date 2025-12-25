@@ -2,17 +2,17 @@ import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { motion } from "framer-motion";
 import { usePhotos } from "@/hooks/use-content";
 
-import damoImg1 from "@assets/LS2C6649_1766230961643.jpg";
-import damoImg2 from "@assets/LS2C6650_1766230961643.jpg";
-import damoImg3 from "@assets/LS2C6651_1766230961643.jpg";
-import damoImg4 from "@assets/LS2C6652_1766230961644.jpg";
-import damoImg5 from "@assets/LS2C6653_1766230961644.jpg";
-import damoImg6 from "@assets/LS2C6654_1766230961644.jpg";
-import damoImg7 from "@assets/LS2C6667_1766230961644.jpg";
-import damoImg8 from "@assets/LS2C6668_1766230961644.jpg";
-import damoImg9 from "@assets/LS2C6669_1766230961645.jpg";
-import damoImg10 from "@assets/LS2C6649_1766386247799.jpg";
-import damoImg11 from "@assets/DAMO_FAMA-3_1766384989330.png";
+import damoImg1 from "@assets/optimized/LS2C6649_1766230961643.webp";
+import damoImg2 from "@assets/optimized/LS2C6650_1766230961643.webp";
+import damoImg3 from "@assets/optimized/LS2C6651_1766230961643.webp";
+import damoImg4 from "@assets/optimized/LS2C6652_1766230961644.webp";
+import damoImg5 from "@assets/optimized/LS2C6653_1766230961644.webp";
+import damoImg6 from "@assets/optimized/LS2C6654_1766230961644.webp";
+import damoImg7 from "@assets/optimized/LS2C6667_1766230961644.webp";
+import damoImg8 from "@assets/optimized/LS2C6668_1766230961644.webp";
+import damoImg9 from "@assets/optimized/LS2C6669_1766230961645.webp";
+import damoImg10 from "@assets/optimized/LS2C6649_1766386247799.webp";
+import damoImg11 from "@assets/optimized/DAMO_FAMA-3_1766384989330.webp";
 
 const defaultGalleryItems = [
   { src: damoImg1, alt: "Damo Fama en concert - Performance live", category: "concert" },
