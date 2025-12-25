@@ -47,7 +47,7 @@ export function Footer() {
             <h4 className="font-display font-semibold mb-6 text-lg">Explore</h4>
             <ul className="space-y-4">
               <li><Link href="/music" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Music</a></Link></li>
-              <li><Link href="/events" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Live</a></Link></li>
+              <li><Link href="/events" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Dates</a></Link></li>
               <li><Link href="/gallery" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Gallery</a></Link></li>
               <li><Link href="/contact" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Contact</a></Link></li>
             </ul>
