@@ -77,8 +77,8 @@ export function Navigation() {
           onClick={() => setIsOpen(!isOpen)}
           data-testid="button-menu-toggle"
         >
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
           <span className="text-xs uppercase tracking-wide font-medium">Menu</span>
+          {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
