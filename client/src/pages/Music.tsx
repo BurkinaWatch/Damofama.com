@@ -31,9 +31,55 @@ export default function Music() {
       <PageTransition>
         <div className="container mx-auto px-6 space-y-24">
           
+          {/* Singles List */}
+          <section className="max-w-4xl mx-auto">
+            <SectionReveal>
+              <div className="flex items-center gap-4 mb-12">
+                <div className="h-[1px] bg-white/10 flex-1" />
+                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">Singles</h2>
+                <div className="h-[1px] bg-white/10 flex-1" />
+              </div>
+
+              <div className="space-y-2">
+                {tracks?.map((track, i) => (
+                  <div 
+                    key={track.id} 
+                    className={`group flex items-center justify-between p-4 border rounded transition-all cursor-pointer ${
+                      currentTrack?.id === track.id 
+                        ? 'border-primary/50 bg-white/10' 
+                        : 'border-transparent hover:border-white/10 hover:bg-white/5'
+                    }`}
+                    onClick={() => handlePlayTrack(track)}
+                    data-testid={`track-row-${track.id}`}
+                  >
+                    <div className="flex items-center gap-6">
+                      <span className="text-muted-foreground font-mono text-sm w-6">{(i + 1).toString().padStart(2, '0')}</span>
+                      <div>
+                        <h4 className="font-bold text-lg group-hover:text-primary transition-colors">{track.title}</h4>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <span className="text-sm text-muted-foreground font-mono">{track.duration}</span>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePlayTrack(track);
+                        }}
+                        className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
+                        data-testid={`button-play-track-${track.id}`}
+                      >
+                        <Play size={12} fill="currentColor" className="ml-0.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SectionReveal>
+          </section>
+
           {/* Albums Section */}
           <section>
-            <SectionReveal>
+            <SectionReveal delay={0.1}>
               <div className="flex items-center gap-4 mb-12">
                 <div className="h-[1px] bg-white/10 flex-1" />
                 <h2 className="text-2xl uppercase tracking-[0.2em] font-light">En Solo (Albums & EPs)</h2>
@@ -76,7 +122,7 @@ export default function Music() {
 
           {/* Group Discography Section */}
           <section>
-            <SectionReveal delay={0.1}>
+            <SectionReveal delay={0.2}>
               <div className="flex items-center gap-4 mb-12">
                 <div className="h-[1px] bg-white/10 flex-1" />
                 <h2 className="text-2xl uppercase tracking-[0.2em] font-light">En Groupe (KILÉ)</h2>
@@ -101,52 +147,6 @@ export default function Music() {
                       <p className="text-xs text-muted-foreground px-4">
                         {album.description}
                       </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </SectionReveal>
-          </section>
-
-          {/* Singles List */}
-          <section className="max-w-4xl mx-auto">
-            <SectionReveal delay={0.2}>
-              <div className="flex items-center gap-4 mb-12">
-                <div className="h-[1px] bg-white/10 flex-1" />
-                <h2 className="text-2xl uppercase tracking-[0.2em] font-light">Singles</h2>
-                <div className="h-[1px] bg-white/10 flex-1" />
-              </div>
-
-              <div className="space-y-2">
-                {tracks?.map((track, i) => (
-                  <div 
-                    key={track.id} 
-                    className={`group flex items-center justify-between p-4 border rounded transition-all cursor-pointer ${
-                      currentTrack?.id === track.id 
-                        ? 'border-primary/50 bg-white/10' 
-                        : 'border-transparent hover:border-white/10 hover:bg-white/5'
-                    }`}
-                    onClick={() => handlePlayTrack(track)}
-                    data-testid={`track-row-${track.id}`}
-                  >
-                    <div className="flex items-center gap-6">
-                      <span className="text-muted-foreground font-mono text-sm w-6">{(i + 1).toString().padStart(2, '0')}</span>
-                      <div>
-                        <h4 className="font-bold text-lg group-hover:text-primary transition-colors">{track.title}</h4>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <span className="text-sm text-muted-foreground font-mono">{track.duration}</span>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePlayTrack(track);
-                        }}
-                        className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
-                        data-testid={`button-play-track-${track.id}`}
-                      >
-                        <Play size={12} fill="currentColor" className="ml-0.5" />
-                      </button>
                     </div>
                   </div>
                 ))}
