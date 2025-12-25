@@ -73,11 +73,12 @@ export function Navigation() {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden z-50 relative text-foreground hover:text-primary transition-colors flex-shrink-0 p-1"
+          className="md:hidden z-50 relative text-foreground hover:text-primary transition-colors flex-shrink-0 p-1 flex items-center gap-1"
           onClick={() => setIsOpen(!isOpen)}
           data-testid="button-menu-toggle"
         >
           {isOpen ? <X size={20} /> : <Menu size={20} />}
+          <span className="text-xs uppercase tracking-wide font-medium">Menu</span>
         </button>
       </nav>
 
