@@ -19,6 +19,7 @@ export default function Home() {
       photoUrl: null,
       duration: "4:19",
       isSingle: true,
+      hidden: false,
     };
     play(track);
   };

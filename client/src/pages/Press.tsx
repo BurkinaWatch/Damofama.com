@@ -16,7 +16,7 @@ export default function Press() {
         <div className="container mx-auto px-6 max-w-4xl pb-24">
           <div className="space-y-12">
             {isLoading ? (
-              <div className="text-center text-muted-foreground">Loading press...</div>
+              <div className="text-center text-muted-foreground">Chargement des articles...</div>
             ) : pressItems && pressItems.length > 0 ? (
               pressItems.map((item, i) => (
                 <SectionReveal key={item.id} delay={i * 0.1}>
@@ -43,14 +43,15 @@ export default function Press() {
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-white hover:text-primary transition-colors"
+                      data-testid={`link-press-${item.id}`}
                     >
-                      Read Full Article <ExternalLink size={14} />
+                      Lire l'article complet <ExternalLink size={14} />
                     </a>
                   </div>
                 </SectionReveal>
               ))
             ) : (
-              <div className="text-center text-muted-foreground">No press items yet.</div>
+              <div className="text-center text-muted-foreground">Aucun article de presse pour le moment.</div>
             )}
           </div>
         </div>

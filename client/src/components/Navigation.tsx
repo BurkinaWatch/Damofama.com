@@ -12,7 +12,6 @@ const links = [
   { href: "/gallery", label: "Galerie" },
   { href: "/press", label: "Presse" },
   { href: "/contact", label: "Contact" },
-  { href: "/live", label: "Live" },
 ];
 
 export function Navigation() {
@@ -103,6 +102,14 @@ export function Navigation() {
                   </a>
                 </Link>
               ))}
+              <Link href="/live" asChild>
+                <a className={clsx(
+                  "mt-2 text-sm border border-primary/50 text-primary px-6 py-2 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300 inline-block",
+                  location === "/live" ? "bg-primary text-primary-foreground" : ""
+                )}>
+                  LIVE
+                </a>
+              </Link>
               <div className="w-10 h-px bg-border mx-auto my-2" />
               <div className="flex flex-col gap-3 sm:gap-4">
                 <a href="https://www.facebook.com/share/1AHvShS3Qc/" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-sm text-primary uppercase tracking-widest font-medium hover:text-primary/80 transition-colors">

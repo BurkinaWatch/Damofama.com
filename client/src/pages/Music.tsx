@@ -4,9 +4,9 @@ import { Play } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
 
 export default function Music() {
-  const { data: albums } = useAlbums();
-  const { data: tracks } = useTracks();
-  const { data: videos } = useVideos();
+  const { data: albums, isLoading: albumsLoading } = useAlbums();
+  const { data: tracks, isLoading: tracksLoading } = useTracks();
+  const { data: videos, isLoading: videosLoading } = useVideos();
   const { play, currentTrack } = useAudio();
 
   const handlePlayTrack = (track: NonNullable<typeof tracks>[0]) => {
@@ -38,7 +38,11 @@ export default function Music() {
               </div>
 
               <div className="space-y-2">
-                {tracks?.map((track, i) => (
+                {tracksLoading ? (
+                  [...Array(4)].map((_, i) => (
+                    <div key={i} className="h-16 bg-card animate-pulse rounded" />
+                  ))
+                ) : tracks?.map((track, i) => (
                   <div 
                     key={track.id} 
                     className={`group flex items-center justify-between p-4 border rounded transition-all cursor-pointer ${
@@ -84,7 +88,15 @@ export default function Music() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                {albums?.filter(a => !["Dembé", "Un jour viendra", "Biko"].includes(a.title)).map((album) => (
+                {albumsLoading ? (
+                  [...Array(2)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="aspect-square bg-card mb-6" />
+                      <div className="h-6 bg-card w-2/3 mx-auto mb-2" />
+                      <div className="h-4 bg-card w-1/2 mx-auto" />
+                    </div>
+                  ))
+                ) : albums?.filter(a => !["Dembé", "Un jour viendra", "Biko"].includes(a.title)).map((album) => (
                   <div key={album.id} className="group cursor-pointer">
                     <div className="aspect-square overflow-hidden mb-6 relative">
                       <img 
@@ -101,7 +113,7 @@ export default function Music() {
                     <div className="text-center">
                       <h3 className="text-2xl font-display font-bold mb-1 group-hover:text-primary transition-colors">{album.title}</h3>
                       <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">
-                        {album.releaseDate ? new Date(album.releaseDate).getFullYear() : 'Coming Soon'}
+                        {album.releaseDate ? new Date(album.releaseDate).getFullYear() : 'Bientôt'}
                       </p>
                       <p className="text-xs text-muted-foreground px-4 mb-4 whitespace-pre-wrap">
                         {album.description}

@@ -27,15 +27,15 @@ export default function Contact() {
     sendMessage.mutate(data, {
       onSuccess: () => {
         toast({
-          title: "Message Sent",
-          description: "Thank you for reaching out. We'll get back to you soon.",
+          title: "Message envoyé",
+          description: "Merci de nous avoir contacté. Nous vous répondrons bientôt.",
         });
         form.reset();
       },
       onError: () => {
         toast({
-          title: "Error",
-          description: "Something went wrong. Please try again.",
+          title: "Erreur",
+          description: "Une erreur s'est produite. Veuillez réessayer.",
           variant: "destructive"
         });
       }

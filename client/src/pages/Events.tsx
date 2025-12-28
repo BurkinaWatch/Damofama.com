@@ -22,7 +22,7 @@ export default function Events() {
         <div className="container mx-auto px-6 max-w-4xl pb-24">
           <div className="space-y-6">
             {isLoading ? (
-              <div className="text-center text-muted-foreground py-12">Loading dates...</div>
+              <div className="text-center text-muted-foreground py-12">Chargement des dates...</div>
             ) : sortedEvents.length > 0 ? (
               sortedEvents.map((event, i) => (
                 <SectionReveal key={event.id} delay={i * 0.1}>
@@ -59,8 +59,8 @@ export default function Events() {
             ) : (
               <div className="py-24 text-center border border-dashed border-white/10 rounded-lg">
                 <Calendar className="w-12 h-12 mx-auto mb-6 text-muted-foreground opacity-30" />
-                <p className="text-muted-foreground text-lg">No upcoming dates announced at this time.</p>
-                <p className="text-sm text-muted-foreground mt-2">Check back soon for new announcements.</p>
+                <p className="text-muted-foreground text-lg">Aucune date annoncée pour le moment.</p>
+                <p className="text-sm text-muted-foreground mt-2">Revenez bientôt pour de nouvelles annonces.</p>
               </div>
             )}
           </div>

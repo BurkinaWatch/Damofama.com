@@ -38,23 +38,24 @@ export function Footer() {
               <a className="text-4xl font-display font-bold tracking-tighter mb-6 block">DamoFama</a>
             </Link>
             <p className="text-muted-foreground max-w-md font-light">
-              Afro-contemporary sounds meeting cinematic landscapes. 
-              Creating auditory experiences that transcend borders and genres.
+              Sons afro-contemporains rencontrant des paysages cinématiques. 
+              Créer des expériences auditives qui transcendent les frontières et les genres.
             </p>
           </div>
           
           <div>
-            <h4 className="font-display font-semibold mb-6 text-lg">Explore</h4>
+            <h4 className="font-display font-semibold mb-6 text-lg">Explorer</h4>
             <ul className="space-y-4">
-              <li><Link href="/music" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Music</a></Link></li>
+              <li><Link href="/music" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Musique</a></Link></li>
+              <li><Link href="/live" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Live</a></Link></li>
               <li><Link href="/events" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Dates</a></Link></li>
-              <li><Link href="/gallery" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Gallery</a></Link></li>
+              <li><Link href="/gallery" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Galerie</a></Link></li>
               <li><Link href="/contact" asChild><a className="text-muted-foreground hover:text-primary transition-colors">Contact</a></Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-display font-semibold mb-6 text-lg">Connect</h4>
+            <h4 className="font-display font-semibold mb-6 text-lg">Suivre</h4>
             <div className="flex flex-col gap-4">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon;
@@ -77,11 +78,11 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground/50">
-          <p>&copy; {new Date().getFullYear()} DamoFama. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Damo Fama. Tous droits réservés.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="/admin" asChild><a className="hover:text-muted-foreground">Admin</a></Link>
-            <a href="#" className="hover:text-muted-foreground">Privacy</a>
-            <a href="#" className="hover:text-muted-foreground">Terms</a>
+            <Link href="/press" asChild><a className="hover:text-muted-foreground">Presse</a></Link>
+            <Link href="/about" asChild><a className="hover:text-muted-foreground">Bio</a></Link>
           </div>
         </div>
       </div>
