@@ -22,6 +22,7 @@ import Press from "@/pages/Press";
 import Contact from "@/pages/Contact";
 import Admin from "@/pages/Admin";
 import Login from "@/pages/Login";
+import Live from "@/pages/Live";
 
 function Router() {
   const [location] = useLocation();
@@ -42,6 +43,7 @@ function Router() {
             <Route path="/contact" component={Contact} />
             <Route path="/admin" component={Admin} />
             <Route path="/login" component={Login} />
+            <Route path="/live" component={Live} />
             <Route component={NotFound} />
           </Switch>
         </AnimatePresence>

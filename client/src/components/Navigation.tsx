@@ -12,6 +12,7 @@ const links = [
   { href: "/gallery", label: "Galerie" },
   { href: "/press", label: "Presse" },
   { href: "/contact", label: "Contact" },
+  { href: "/live", label: "Live" },
 ];
 
 export function Navigation() {
@@ -64,9 +65,9 @@ export function Navigation() {
               </a>
             </Link>
           ))}
-          <Link href="/events" asChild>
+          <Link href="/live" asChild>
             <a className="ml-4 text-xs border border-primary/50 text-primary px-4 py-2 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-              DATES
+              LIVE
             </a>
           </Link>
         </div>
