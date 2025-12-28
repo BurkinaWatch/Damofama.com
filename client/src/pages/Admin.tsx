@@ -25,8 +25,8 @@ import { useToast } from "@/hooks/use-toast";
 
 // Social sharing helper function
 function shareToSocial(platform: string, content: { title: string; url?: string; description?: string }) {
-  const baseUrl = window.location.origin;
-  const shareUrl = content.url || baseUrl;
+  // Use the provided URL or default to site URL only if no URL is provided
+  const shareUrl = content.url || window.location.origin;
   const text = content.description || content.title;
   
   const urls = {
@@ -618,11 +618,11 @@ function VideosManager() {
                 <Share2 size={16} />
               </Button>
               <div id={`share-menu-video-${video.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: video.title, url: video.youtubeUrl })}>Facebook</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: video.title, url: video.youtubeUrl })}>Twitter</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: video.title, url: video.youtubeUrl })}>WhatsApp</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('youtube', { title: video.title })}>YouTube</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('tiktok', { title: video.title })}>TikTok</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: video.title, url: video.youtubeUrl || undefined })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: video.title, url: video.youtubeUrl || undefined })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: video.title, url: video.youtubeUrl || undefined })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('youtube', { title: video.title, url: video.youtubeUrl || undefined })}>YouTube</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('tiktok', { title: video.title, url: video.youtubeUrl || undefined })}>TikTok</Button>
               </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(video)} title={video.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-video-${video.id}`}>
                 {video.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
