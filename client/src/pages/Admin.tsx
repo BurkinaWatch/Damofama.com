@@ -190,10 +190,10 @@ function AlbumsManager() {
                 <Share2 size={16} />
               </Button>
               <div id={`share-menu-album-${album.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: album.title, description: album.description || '' })}>Facebook</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: album.title, description: album.description || '' })}>Twitter</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: album.title, description: album.description || '' })}>WhatsApp</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: album.title })}>Instagram</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: album.title, description: album.description || '', url: album.coverImage || undefined })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: album.title, description: album.description || '', url: album.coverImage || undefined })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: album.title, description: album.description || '', url: album.coverImage || undefined })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: album.title, url: album.coverImage || undefined })}>Instagram</Button>
               </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(album)} title={album.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-album-${album.id}`}>
                 {album.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -369,9 +369,9 @@ function TracksManager() {
                 <Share2 size={16} />
               </Button>
               <div id={`share-menu-track-${track.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: track.title })}>Facebook</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: track.title })}>Twitter</Button>
-                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: track.title })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: track.title, url: track.audioUrl || undefined })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: track.title, url: track.audioUrl || undefined })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: track.title, url: track.audioUrl || undefined })}>WhatsApp</Button>
                 <Button variant="ghost" size="sm" onClick={() => shareToSocial('youtube', { title: track.title })}>YouTube</Button>
               </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(track)} title={track.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-track-${track.id}`}>
@@ -1134,9 +1134,9 @@ function PhotosManager() {
                   <Share2 size={12} />
                 </Button>
                 <div id={`share-menu-photo-${photo.id}`} className="hidden absolute right-0 top-8 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1 min-w-[120px]">
-                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: photo.title })}>Facebook</Button>
-                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: photo.title })}>Instagram</Button>
-                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: photo.title })}>Twitter</Button>
+                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: photo.title, url: photo.imageUrl })}>Facebook</Button>
+                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: photo.title, url: photo.imageUrl })}>Instagram</Button>
+                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: photo.title, url: photo.imageUrl })}>Twitter</Button>
                 </div>
                 <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => handleToggleHidden(photo)} title={photo.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-photo-${photo.id}`}>
                   {photo.hidden ? <Eye size={12} /> : <EyeOff size={12} />}
