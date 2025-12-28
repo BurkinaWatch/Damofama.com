@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, LogOut, Edit2, Eye, EyeOff } from "lucide-react";
+import { Trash2, Plus, LogOut, Edit2, Eye, EyeOff, Share2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -22,6 +22,28 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Textarea } from "@/components/ui/textarea";
 import { FileUploadButton } from "@/components/FileUploadButton";
 import { useToast } from "@/hooks/use-toast";
+
+// Social sharing helper function
+function shareToSocial(platform: string, content: { title: string; url?: string; description?: string }) {
+  const baseUrl = window.location.origin;
+  const shareUrl = content.url || baseUrl;
+  const text = content.description || content.title;
+  
+  const urls = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(text)}`,
+    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`,
+    instagram: 'https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu', // Instagram doesn't support direct sharing, redirect to profile
+    youtube: 'https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD',
+    tiktok: 'https://www.tiktok.com/@damofama',
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${text} ${shareUrl}`)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+  };
+  
+  const url = urls[platform as keyof typeof urls];
+  if (url) {
+    window.open(url, '_blank', 'width=600,height=400');
+  }
+}
 
 // Simple CRUD for Albums
 function AlbumsManager() {
@@ -155,6 +177,24 @@ function AlbumsManager() {
               </div>
             </div>
             <div className="flex gap-1 md:gap-2 flex-shrink-0">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => {
+                  const shareMenu = document.getElementById(`share-menu-album-${album.id}`);
+                  if (shareMenu) shareMenu.classList.toggle('hidden');
+                }} 
+                title="Partager"
+                data-testid={`button-share-album-${album.id}`}
+              >
+                <Share2 size={16} />
+              </Button>
+              <div id={`share-menu-album-${album.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: album.title, description: album.description || '' })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: album.title, description: album.description || '' })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: album.title, description: album.description || '' })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: album.title })}>Instagram</Button>
+              </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(album)} title={album.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-album-${album.id}`}>
                 {album.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
               </Button>
@@ -316,6 +356,24 @@ function TracksManager() {
               </div>
             </div>
             <div className="flex gap-1 md:gap-2 flex-shrink-0">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => {
+                  const shareMenu = document.getElementById(`share-menu-track-${track.id}`);
+                  if (shareMenu) shareMenu.classList.toggle('hidden');
+                }} 
+                title="Partager"
+                data-testid={`button-share-track-${track.id}`}
+              >
+                <Share2 size={16} />
+              </Button>
+              <div id={`share-menu-track-${track.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: track.title })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: track.title })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: track.title })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('youtube', { title: track.title })}>YouTube</Button>
+              </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(track)} title={track.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-track-${track.id}`}>
                 {track.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
               </Button>
@@ -547,6 +605,25 @@ function VideosManager() {
               </div>
             </div>
             <div className="flex gap-1 md:gap-2 flex-shrink-0">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => {
+                  const shareMenu = document.getElementById(`share-menu-video-${video.id}`);
+                  if (shareMenu) shareMenu.classList.toggle('hidden');
+                }} 
+                title="Partager"
+                data-testid={`button-share-video-${video.id}`}
+              >
+                <Share2 size={16} />
+              </Button>
+              <div id={`share-menu-video-${video.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: video.title, url: video.youtubeUrl })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: video.title, url: video.youtubeUrl })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: video.title, url: video.youtubeUrl })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('youtube', { title: video.title })}>YouTube</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('tiktok', { title: video.title })}>TikTok</Button>
+              </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(video)} title={video.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-video-${video.id}`}>
                 {video.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
               </Button>
@@ -700,7 +777,25 @@ function EventsManager() {
                 {event.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 relative">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => {
+                  const shareMenu = document.getElementById(`share-menu-event-${event.id}`);
+                  if (shareMenu) shareMenu.classList.toggle('hidden');
+                }} 
+                title="Partager"
+                data-testid={`button-share-event-${event.id}`}
+              >
+                <Share2 size={16} />
+              </Button>
+              <div id={`share-menu-event-${event.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: event.title, description: `${event.location} - ${new Date(event.date).toLocaleDateString()}`, url: event.ticketUrl || undefined })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: event.title, description: `${event.location} - ${new Date(event.date).toLocaleDateString()}`, url: event.ticketUrl || undefined })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: event.title, description: `${event.location} - ${new Date(event.date).toLocaleDateString()}`, url: event.ticketUrl || undefined })}>WhatsApp</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: event.title })}>Instagram</Button>
+              </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(event)} title={event.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-event-${event.id}`}>
                 {event.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
               </Button>
@@ -846,7 +941,25 @@ function PressManager() {
                 {item.hidden && <span className="ml-2 text-yellow-500">(Masqué)</span>}
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 relative">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => {
+                  const shareMenu = document.getElementById(`share-menu-press-${item.id}`);
+                  if (shareMenu) shareMenu.classList.toggle('hidden');
+                }} 
+                title="Partager"
+                data-testid={`button-share-press-${item.id}`}
+              >
+                <Share2 size={16} />
+              </Button>
+              <div id={`share-menu-press-${item.id}`} className="hidden absolute right-0 mt-10 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1">
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: item.title, description: item.snippet || '', url: item.url })}>Facebook</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: item.title, description: item.snippet || '', url: item.url })}>Twitter</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('linkedin', { title: item.title, url: item.url })}>LinkedIn</Button>
+                <Button variant="ghost" size="sm" onClick={() => shareToSocial('whatsapp', { title: item.title, description: item.snippet || '', url: item.url })}>WhatsApp</Button>
+              </div>
               <Button variant="outline" size="icon" onClick={() => handleToggleHidden(item)} title={item.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-press-${item.id}`}>
                 {item.hidden ? <Eye size={16} /> : <EyeOff size={16} />}
               </Button>
@@ -1006,7 +1119,25 @@ function PhotosManager() {
                   {photo.hidden && <span className="ml-1 text-yellow-500">(Masqué)</span>}
                 </div>
               </div>
-              <div className="flex gap-1 flex-shrink-0">
+              <div className="flex gap-1 flex-shrink-0 relative">
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="h-7 w-7"
+                  onClick={() => {
+                    const shareMenu = document.getElementById(`share-menu-photo-${photo.id}`);
+                    if (shareMenu) shareMenu.classList.toggle('hidden');
+                  }} 
+                  title="Partager"
+                  data-testid={`button-share-photo-${photo.id}`}
+                >
+                  <Share2 size={12} />
+                </Button>
+                <div id={`share-menu-photo-${photo.id}`} className="hidden absolute right-0 top-8 bg-card border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-1 min-w-[120px]">
+                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('facebook', { title: photo.title })}>Facebook</Button>
+                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('instagram', { title: photo.title })}>Instagram</Button>
+                  <Button variant="ghost" size="sm" onClick={() => shareToSocial('twitter', { title: photo.title })}>Twitter</Button>
+                </div>
                 <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => handleToggleHidden(photo)} title={photo.hidden ? "Afficher" : "Masquer"} data-testid={`button-toggle-photo-${photo.id}`}>
                   {photo.hidden ? <Eye size={12} /> : <EyeOff size={12} />}
                 </Button>
