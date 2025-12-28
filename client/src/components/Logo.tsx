@@ -8,9 +8,9 @@ interface LogoProps {
 
 export function Logo({ className = "", size = "md" }: LogoProps) {
   const sizeClasses = {
-    sm: "h-10",
-    md: "h-12",
-    lg: "h-20"
+    sm: "h-14",
+    md: "h-20",
+    lg: "h-28"
   };
 
   return (
@@ -19,7 +19,7 @@ export function Logo({ className = "", size = "md" }: LogoProps) {
         <img 
           src={logoImage} 
           alt="Damo Fama" 
-          className={`${sizeClasses[size]} w-auto object-contain transition-transform duration-300 group-hover:scale-105`}
+          className={`${sizeClasses[size]} w-auto object-contain transition-transform duration-300 group-hover:scale-105 rounded-md`}
         />
       </a>
     </Link>
@@ -31,7 +31,7 @@ export function LogoIcon({ className = "" }: { className?: string }) {
     <img 
       src={logoImage} 
       alt="Damo Fama" 
-      className={`h-10 w-auto object-contain ${className}`}
+      className={`h-14 w-auto object-contain rounded-md ${className}`}
     />
   );
 }
