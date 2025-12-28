@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logoImage from "@assets/LOGO_1766926032524.png";
+import logoImage from "@assets/LOGO_1766926511815.png";
 
 interface LogoProps {
   className?: string;
@@ -8,9 +8,9 @@ interface LogoProps {
 
 export function Logo({ className = "", size = "md" }: LogoProps) {
   const sizeClasses = {
-    sm: "h-14",
-    md: "h-20",
-    lg: "h-28"
+    sm: "h-12 sm:h-14",
+    md: "h-14 sm:h-16",
+    lg: "h-20 sm:h-24"
   };
 
   return (
