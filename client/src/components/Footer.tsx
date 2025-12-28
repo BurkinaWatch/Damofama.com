@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Facebook, Instagram, Youtube, Music } from "lucide-react";
+import { Logo } from "./Logo";
 
 export function Footer() {
   const socialLinks = [
@@ -34,9 +35,9 @@ export function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
-            <Link href="/" asChild>
-              <a className="text-4xl font-display font-bold tracking-tighter mb-6 block">DamoFama</a>
-            </Link>
+            <div className="mb-6">
+              <Logo size="lg" />
+            </div>
             <p className="text-muted-foreground max-w-md font-light">
               Sons afro-contemporains rencontrant des paysages cinématiques. 
               Créer des expériences auditives qui transcendent les frontières et les genres.

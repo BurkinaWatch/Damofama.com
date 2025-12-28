@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { clsx } from "clsx";
+import { Logo } from "./Logo";
 
 const links = [
   { href: "/", label: "Accueil" },
@@ -40,11 +41,9 @@ export function Navigation() {
           scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5 py-2" : "bg-transparent"
         )}
       >
-        <Link href="/" asChild>
-          <a className="text-sm sm:text-base md:text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors duration-300 z-50 relative uppercase text-white drop-shadow-lg whitespace-nowrap flex-shrink-0">
-            Damo Fama
-          </a>
-        </Link>
+        <div className="z-50 relative flex-shrink-0">
+          <Logo size="md" className="drop-shadow-lg" />
+        </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-6 lg:gap-8 items-center flex-shrink-0">
