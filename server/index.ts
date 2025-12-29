@@ -58,6 +58,15 @@ app.use("/attached_assets", express.static(attachedAssetsDir, {
   maxAge: '1d'
 }));
 
+// Serve audio files statically
+const audioDir = path.join(process.cwd(), "public", "audio");
+if (!fs.existsSync(audioDir)) {
+  fs.mkdirSync(audioDir, { recursive: true });
+}
+app.use("/audio", express.static(audioDir, {
+  maxAge: '1d'
+}));
+
 app.use((req, res, next) => {
   const start = Date.now();
   const pathname = req.path;
