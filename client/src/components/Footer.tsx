@@ -39,7 +39,7 @@ export function Footer() {
               <Logo size="lg" />
             </div>
             <p className="text-muted-foreground max-w-md font-light">
-              Sons afro-contemporains rencontrant des paysages cinématiques. 
+              Sons afro-contemporains rencontrant des paysages universels. 
               Créer des expériences auditives qui transcendent les frontières et les genres.
             </p>
           </div>
