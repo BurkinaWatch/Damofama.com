@@ -33,6 +33,16 @@ export async function registerRoutes(
     res.json(includeHidden ? tracks : tracks.filter(t => !t.hidden));
   });
 
+  app.get("/api/tracks/featured", async (req, res) => {
+    const tracks = await storage.getTracks();
+    const featured = tracks.find(t => t.isFeatured && !t.hidden);
+    if (featured) {
+      res.json(featured);
+    } else {
+      res.status(404).json({ message: "No featured track" });
+    }
+  });
+
   app.get(api.videos.list.path, async (req, res) => {
     const includeHidden = req.query.includeHidden === 'true' && req.isAuthenticated?.();
     const videos = await storage.getVideos();

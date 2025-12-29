@@ -40,6 +40,7 @@ export const tracks = pgTable("tracks", {
   photoUrl: text("photo_url"),
   duration: text("duration"),
   isSingle: boolean("is_single").default(false),
+  isFeatured: boolean("is_featured").default(false),
   hidden: boolean("hidden").default(false),
 });
 

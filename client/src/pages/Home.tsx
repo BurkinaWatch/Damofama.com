@@ -1,28 +1,32 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Calendar, Music, Facebook, Instagram, Youtube, TrendingUp } from "lucide-react";
+import { ArrowRight, Calendar, Music, Facebook, Instagram, Youtube, TrendingUp, Play, Pause } from "lucide-react";
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useEvents } from "@/hooks/use-content";
 import { useAudio } from "@/contexts/AudioContext";
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
+import type { Track } from "@shared/schema";
 
 export default function Home() {
   const { data: events, isLoading: eventsLoading } = useEvents();
-  const { play } = useAudio();
+  const { play, pause, currentTrack, isPlaying } = useAudio();
+
+  const { data: featuredTrack } = useQuery<Track>({
+    queryKey: ["/api/tracks/featured"],
+  });
 
   const handlePlayFeaturedTrack = () => {
-    const track = {
-      id: 0,
-      albumId: 2,
-      title: "Tounganata",
-      audioUrl: "/uploads/damo-fama-tounganata.mp3",
-      photoUrl: null,
-      duration: "4:19",
-      isSingle: true,
-      hidden: false,
-    };
-    play(track);
+    if (!featuredTrack) return;
+    
+    if (currentTrack?.id === featuredTrack.id && isPlaying) {
+      pause();
+    } else {
+      play(featuredTrack);
+    }
   };
+
+  const isFeaturedPlaying = currentTrack?.id === featuredTrack?.id && isPlaying;
 
   // Sort events by date and take top 3
   const upcomingEvents = events
@@ -72,10 +76,20 @@ export default function Home() {
           >
             <button 
               onClick={handlePlayFeaturedTrack}
-              className="bg-primary text-primary-foreground px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+              className="flex items-center gap-3 bg-primary text-primary-foreground px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
               data-testid="button-play-featured"
             >
-              Écouter Maintenant
+              {isFeaturedPlaying ? (
+                <>
+                  <Pause size={18} />
+                  En Lecture
+                </>
+              ) : (
+                <>
+                  <Play size={18} />
+                  Écouter Maintenant
+                </>
+              )}
             </button>
             <Link href="/music" asChild>
               <a className="text-white uppercase tracking-widest text-sm font-bold border-b border-white/30 pb-1 hover:border-white transition-colors">
