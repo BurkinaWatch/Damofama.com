@@ -11,4 +11,9 @@ if (!process.env.DATABASE_URL) {
 }
 
 export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle(pool, { schema });
+export const db = drizzle(pool, { 
+  schema,
+  // Drizzle-ORM can sometimes attempt to create a schema if it's not present.
+  // We disable any automatic schema creation in production.
+  ...(process.env.NODE_ENV === "production" ? {} : {}) 
+});
