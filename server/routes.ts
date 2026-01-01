@@ -6,11 +6,15 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import { randomUUID } from "crypto";
 import sharp from "sharp";
+import { initDatabase } from "./db";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // Ensure tables exist before setting up routes/auth
+  await initDatabase();
+
   // Set up authentication first
   setupAuth(app);
 
