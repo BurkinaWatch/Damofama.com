@@ -356,7 +356,7 @@ export async function registerRoutes(
   });
 
   // Seed data
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== "production" || process.env.SEED_PROD === "true") {
     await seedDatabase();
   }
 
