@@ -365,6 +365,20 @@ export async function registerRoutes(
 
 async function seedDatabase() {
   const existing = await storage.getAlbums();
+  
+  // Toujours mettre à jour le titre mis en avant, même si la base n'est pas "vide" 
+  // car on veut s'assurer que l'audioUrl est correct
+  const allTracks = await storage.getTracks();
+  const featured = allTracks.find(t => t.title.toLowerCase() === "tounganata");
+  if (featured) {
+    await storage.updateTrack(featured.id, {
+      ...featured,
+      audioUrl: "/attached_assets/DAMO_FAMA_-_TOUNGANATA_1767356408342.mp3",
+      isFeatured: true
+    });
+    console.log(`Featured track updated: ${featured.title} (${featured.id})`);
+  }
+
   if (existing.length === 0) {
     // Add bio content
     await storage.updateContentBlock({
@@ -477,13 +491,16 @@ async function seedDatabase() {
 
     // Update featured track with the real audio file
     const tracks = await storage.getTracks();
-    const featured = tracks.find(t => t.title === "Tounganata");
+    const featured = tracks.find(t => t.title.toLowerCase() === "tounganata");
     if (featured) {
       await storage.updateTrack(featured.id, {
         ...featured,
         audioUrl: "/attached_assets/DAMO_FAMA_-_TOUNGANATA_1767356408342.mp3",
         isFeatured: true
       });
+      console.log(`Featured track updated: ${featured.title} (${featured.id})`);
+    } else {
+      console.log("Could not find Tounganata track to feature");
     }
 
     // Seed Admin

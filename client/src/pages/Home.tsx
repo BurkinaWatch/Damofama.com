@@ -17,6 +17,7 @@ export default function Home() {
   });
 
   const handlePlayFeaturedTrack = () => {
+    console.log("Play featured clicked", { featuredTrack, currentTrack, isPlaying });
     if (!featuredTrack) return;
     
     if (currentTrack?.id === featuredTrack.id && isPlaying) {
