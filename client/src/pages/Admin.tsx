@@ -1213,14 +1213,14 @@ export default function Admin() {
 
         <Tabs defaultValue="albums" className="w-full">
           <div className="overflow-x-auto -mx-2 px-2 pb-2">
-            <TabsList className="inline-flex w-auto min-w-full md:w-full md:grid md:grid-cols-7 gap-1 h-auto">
-              <TabsTrigger value="albums" className="text-xs sm:text-sm whitespace-nowrap px-3">Albums</TabsTrigger>
-              <TabsTrigger value="tracks" className="text-xs sm:text-sm whitespace-nowrap px-3">Tracks</TabsTrigger>
-              <TabsTrigger value="videos" className="text-xs sm:text-sm whitespace-nowrap px-3">Videos</TabsTrigger>
-              <TabsTrigger value="events" className="text-xs sm:text-sm whitespace-nowrap px-3">Events</TabsTrigger>
-              <TabsTrigger value="press" className="text-xs sm:text-sm whitespace-nowrap px-3">Press</TabsTrigger>
-              <TabsTrigger value="photos" className="text-xs sm:text-sm whitespace-nowrap px-3">Photos</TabsTrigger>
-              <TabsTrigger value="messages" className="text-xs sm:text-sm whitespace-nowrap px-3">Msgs</TabsTrigger>
+            <TabsList className="inline-flex w-auto min-w-full md:w-full md:grid md:grid-cols-7 gap-1 h-auto bg-muted/50 p-1 rounded-lg">
+              <TabsTrigger value="albums" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Albums</TabsTrigger>
+              <TabsTrigger value="tracks" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Tracks</TabsTrigger>
+              <TabsTrigger value="videos" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Videos</TabsTrigger>
+              <TabsTrigger value="events" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Events</TabsTrigger>
+              <TabsTrigger value="press" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Press</TabsTrigger>
+              <TabsTrigger value="photos" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Photos</TabsTrigger>
+              <TabsTrigger value="messages" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">Msgs</TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="albums" className="mt-4 md:mt-6"><AlbumsManager /></TabsContent>
