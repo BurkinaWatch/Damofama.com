@@ -1,8 +1,8 @@
 import { db } from "./db";
-import { press, videos } from "../shared/schema";
+import { press, videos, photos } from "../shared/schema";
 
 async function main() {
-  console.log("Starting seed process...");
+  console.log("Starting full seed process...");
 
   const pressArticles = [
     {
@@ -28,14 +28,6 @@ async function main() {
       snippet: "Le 25 février 2022, Damo Fama a officiellement lancé sa carrière solo avec l'EP Sissan (Maintenant en Dioula), un hommage spirituel à ses parents.",
       date: new Date("2022-03-16"),
       hidden: false
-    },
-    {
-      title: "IN-OUT Dance and World Arts Festival : le public émerveillé à la clôture",
-      source: "Infos Culture du Faso",
-      url: "https://www.infosculturedufaso.net/in-out-dance-and-world-arts-festival-le-public-emerveille-a-la-cloture-de-la-11%E1%B5%89-edition/",
-      snippet: "Damo Fama s'est produit lors de la clôture du IN-OUT Dance and World Arts Festival 2024 à Bobo-Dioulasso, plongeant le public dans une ambiance festive.",
-      date: new Date("2024-12-23"),
-      hidden: false
     }
   ];
 
@@ -47,61 +39,32 @@ async function main() {
       category: "music_video",
       isFeatured: true,
       hidden: false
-    },
-    {
-      title: "Sissan (Clip Officiel)",
-      youtubeUrl: "https://www.youtube.com/watch?v=P2f8M_u2W9o",
-      thumbnailUrl: "https://img.youtube.com/vi/P2f8M_u2W9o/hqdefault.jpg",
-      category: "music_video",
-      isFeatured: false,
-      hidden: false
-    },
-    {
-      title: "Damo Fama - Live IN-OUT Festival 2024",
-      youtubeUrl: "https://www.youtube.com/watch?v=Live_InOut_2024",
-      thumbnailUrl: "https://img.youtube.com/vi/Live_InOut_2024/hqdefault.jpg",
-      category: "live",
-      isFeatured: false,
-      hidden: false
-    },
-    {
-      title: "Damo Fama - Performance au MASA Abidjan",
-      youtubeUrl: "https://www.youtube.com/watch?v=MASA_Abidjan_2024",
-      thumbnailUrl: "https://img.youtube.com/vi/MASA_Abidjan_2024/hqdefault.jpg",
-      category: "live",
-      isFeatured: false,
-      hidden: false
-    },
-    {
-      title: "Damo Fama - Interview leFaso.net",
-      youtubeUrl: "https://www.youtube.com/watch?v=Interview_leFaso",
-      thumbnailUrl: "https://img.youtube.com/vi/Interview_leFaso/hqdefault.jpg",
-      category: "interview",
-      isFeatured: false,
-      hidden: false
     }
   ];
 
+  const photoData = [
+    { title: "Damo Fama en concert - Performance live", imageUrl: "/attached_assets/optimized/LS2C6649_1766230961643.webp", category: "concert" },
+    { title: "Damo Fama - Portrait officiel", imageUrl: "/attached_assets/optimized/DAMO_FAMA-3_1766384989330.webp", category: "portrait" },
+    { title: "Damo Fama sur scène", imageUrl: "/attached_assets/optimized/LS2C6650_1766230961643.webp", category: "concert" },
+    { title: "Damo Fama avec sa guitare", imageUrl: "/attached_assets/optimized/LS2C6651_1766230961643.webp", category: "portrait" }
+  ];
+
   console.log("Cleaning existing data...");
-  // Clear existing to avoid duplicates if re-run
   await db.delete(press);
   await db.delete(videos);
+  await db.delete(photos);
 
-  console.log("Inserting press articles...");
-  for (const article of pressArticles) {
-    await db.insert(press).values(article);
-  }
-
+  console.log("Inserting press...");
+  for (const item of pressArticles) await db.insert(press).values(item);
+  
   console.log("Inserting videos...");
-  for (const video of videoData) {
-    await db.insert(videos).values(video);
-  }
+  for (const item of videoData) await db.insert(videos).values(item);
 
-  console.log("Seed completed successfully!");
+  console.log("Inserting photos...");
+  for (const item of photoData) await db.insert(photos).values(item);
+
+  console.log("Seed completed!");
   process.exit(0);
 }
 
-main().catch((err) => {
-  console.error("Seed failed:", err);
-  process.exit(1);
-});
+main().catch(console.error);

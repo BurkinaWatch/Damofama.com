@@ -33,7 +33,7 @@ export default function Gallery() {
   
   const galleryItems = photos.length > 0 
     ? photos.map(p => ({ src: p.imageUrl, alt: p.title, category: p.category || "concert" }))
-    : defaultGalleryItems;
+    : [];
 
   return (
     <div className="min-h-screen">
