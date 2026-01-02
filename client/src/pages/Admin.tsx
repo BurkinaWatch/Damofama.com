@@ -99,7 +99,7 @@ function AlbumsManager() {
       releaseDate: album.releaseDate ? new Date(album.releaseDate) : undefined,
       description: album.description,
     });
-    setOpen(true);
+    setTimeout(() => setOpen(true), 0);
   };
 
   const handleDelete = (id: number) => {
@@ -271,7 +271,8 @@ function TracksManager() {
       duration: track.duration,
       isSingle: track.isSingle,
     });
-    setOpen(true);
+    // Use a small delay to avoid "Cannot update a component while rendering a different component"
+    setTimeout(() => setOpen(true), 0);
   };
 
   const handleDelete = (id: number) => {
@@ -484,7 +485,7 @@ function VideosManager() {
       isFeatured: video.isFeatured,
     });
     setThumbnailPreview(video.thumbnailUrl || "");
-    setOpen(true);
+    setTimeout(() => setOpen(true), 0);
   };
 
   const handleDelete = (id: number) => {
@@ -698,7 +699,7 @@ function EventsManager() {
       type: event.type,
       ticketUrl: event.ticketUrl || "",
     });
-    setOpen(true);
+    setTimeout(() => setOpen(true), 0);
   };
 
   const handleDelete = (id: number) => {
@@ -869,7 +870,7 @@ function PressManager() {
       snippet: item.snippet || "",
       date: item.date ? new Date(item.date) : undefined,
     });
-    setOpen(true);
+    setTimeout(() => setOpen(true), 0);
   };
 
   const handleDelete = (id: number) => {
@@ -1032,7 +1033,7 @@ function PhotosManager() {
       category: photo.category || "concert",
       displayOrder: photo.displayOrder || 0,
     });
-    setOpen(true);
+    setTimeout(() => setOpen(true), 0);
   };
 
   const handleDelete = (id: number) => {
