@@ -264,10 +264,10 @@ function TracksManager() {
   const handleEdit = (track: any) => {
     setEditingId(track.id);
     form.reset({
-      albumId: track.albumId,
+      albumId: track.albumId || undefined,
       title: track.title,
       audioUrl: track.audioUrl,
-      photoUrl: track.photoUrl,
+      photoUrl: track.photoUrl || "",
       duration: track.duration,
       isSingle: track.isSingle,
     });
@@ -692,11 +692,11 @@ function EventsManager() {
     setEditingId(event.id);
     form.reset({
       title: event.title,
-      date: event.date,
+      date: event.date ? new Date(event.date) : undefined,
       location: event.location,
-      venue: event.venue,
+      venue: event.venue || "",
       type: event.type,
-      ticketUrl: event.ticketUrl,
+      ticketUrl: event.ticketUrl || "",
     });
     setOpen(true);
   };
@@ -866,8 +866,8 @@ function PressManager() {
       title: item.title,
       source: item.source,
       url: item.url,
-      snippet: item.snippet,
-      date: item.date,
+      snippet: item.snippet || "",
+      date: item.date ? new Date(item.date) : undefined,
     });
     setOpen(true);
   };
