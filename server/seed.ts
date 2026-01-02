@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { press, videos, photos } from "../shared/schema";
+import { press, videos } from "../shared/schema";
 
 async function main() {
   console.log("Starting seed process...");
@@ -82,24 +82,10 @@ async function main() {
     }
   ];
 
-  const photoData = [
-    { title: "Damo Fama en concert - Performance live", imageUrl: "@assets/optimized/LS2C6649_1766230961643.webp", category: "concert" },
-    { title: "Damo Fama - Portrait officiel", imageUrl: "@assets/optimized/DAMO_FAMA-3_1766384989330.webp", category: "portrait" },
-    { title: "Damo Fama sur scène", imageUrl: "@assets/optimized/LS2C6650_1766230961643.webp", category: "concert" },
-    { title: "Damo Fama avec sa guitare", imageUrl: "@assets/optimized/LS2C6651_1766230961643.webp", category: "portrait" },
-    { title: "Damo Fama - Performance acoustique", imageUrl: "@assets/optimized/LS2C6652_1766230961644.webp", category: "concert" },
-    { title: "Damo Fama en live", imageUrl: "@assets/optimized/LS2C6653_1766230961644.webp", category: "concert" },
-    { title: "Damo Fama - Moment scénique", imageUrl: "@assets/optimized/LS2C6654_1766230961644.webp", category: "concert" },
-    { title: "Damo Fama - Ambiance concert", imageUrl: "@assets/optimized/LS2C6667_1766230961644.webp", category: "concert" },
-    { title: "Damo Fama - Public en délire", imageUrl: "@assets/optimized/LS2C6668_1766230961644.webp", category: "concert" },
-    { title: "Damo Fama - Final de concert", imageUrl: "@assets/optimized/LS2C6669_1766230961645.webp", category: "concert" },
-    { title: "Damo Fama - Photo promotionnelle", imageUrl: "@assets/optimized/LS2C6649_1766386247799.webp", category: "promo" }
-  ];
-
   console.log("Cleaning existing data...");
+  // Clear existing to avoid duplicates if re-run
   await db.delete(press);
   await db.delete(videos);
-  await db.delete(photos);
 
   console.log("Inserting press articles...");
   for (const article of pressArticles) {
@@ -109,11 +95,6 @@ async function main() {
   console.log("Inserting videos...");
   for (const video of videoData) {
     await db.insert(videos).values(video);
-  }
-
-  console.log("Inserting photos...");
-  for (const photo of photoData) {
-    await db.insert(photos).values(photo);
   }
 
   console.log("Seed completed successfully!");
