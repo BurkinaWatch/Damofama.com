@@ -475,6 +475,17 @@ async function seedDatabase() {
       snippet: "An electrifying debut that bridges continents and eras...",
     });
 
+    // Update featured track with the real audio file
+    const tracks = await storage.getTracks();
+    const featured = tracks.find(t => t.title === "Tounganata");
+    if (featured) {
+      await storage.updateTrack(featured.id, {
+        ...featured,
+        audioUrl: "/attached_assets/DAMO_FAMA_-_TOUNGANATA_1767356408342.mp3",
+        isFeatured: true
+      });
+    }
+
     // Seed Admin
     const admin = await storage.getUserByUsername("admin");
     if (!admin) {
