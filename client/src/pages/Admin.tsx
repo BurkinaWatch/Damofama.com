@@ -50,7 +50,11 @@ function AlbumsManager() {
           form.reset();
           toast({ title: "Album mis à jour" });
         },
-        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
+        onError: (err: any) => toast({ 
+          title: "Erreur lors de la mise à jour", 
+          description: err.message,
+          variant: "destructive" 
+        }),
       });
     } else {
       createAlbum.mutate(data, {
@@ -59,7 +63,11 @@ function AlbumsManager() {
           form.reset();
           toast({ title: "Album créé" });
         },
-        onError: () => toast({ title: "Erreur lors de la création", variant: "destructive" }),
+        onError: (err: any) => toast({ 
+          title: "Erreur lors de la création", 
+          description: err.message,
+          variant: "destructive" 
+        }),
       });
     }
   };
@@ -146,10 +154,12 @@ function TracksManager() {
     if (editingId) {
       updateTrack.mutate({ id: editingId, data }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Morceau mis à jour" }); },
+        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
       });
     } else {
       createTrack.mutate(data, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Morceau ajouté" }); },
+        onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
       });
     }
   };
@@ -162,19 +172,32 @@ function TracksManager() {
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouveau"} Morceau</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{editingId ? "Modifier" : "Nouveau"} Morceau</DialogTitle>
+          </DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input {...form.register("title")} placeholder="Titre" />
-            <div className="flex gap-2">
-              <Input {...form.register("audioUrl")} placeholder="URL Audio" className="flex-1" />
-              <FileUploadButton accept="audio/*" onUploadComplete={(path) => form.setValue("audioUrl", path)} />
+            <div className="space-y-2">
+              <Label>Titre</Label>
+              <Input {...form.register("title")} placeholder="Titre" />
             </div>
-            <Input {...form.register("duration")} placeholder="Durée (ex: 3:45)" />
+            <div className="space-y-2">
+              <Label>Fichier Audio</Label>
+              <div className="flex gap-2">
+                <Input {...form.register("audioUrl")} placeholder="URL Audio" className="flex-1" />
+                <FileUploadButton accept="audio/*" onUploadComplete={(path) => form.setValue("audioUrl", path)} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Durée (ex: 3:45)</Label>
+              <Input {...form.register("duration")} placeholder="Durée (ex: 3:45)" />
+            </div>
             <div className="flex items-center gap-2">
               <input type="checkbox" {...form.register("isSingle")} id="track-single" />
               <Label htmlFor="track-single">Single</Label>
             </div>
-            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+            <Button type="submit" disabled={createTrack.isPending || updateTrack.isPending}>
+              {editingId ? "Modifier" : "Ajouter"}
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
@@ -211,10 +234,12 @@ function VideosManager() {
     if (editingId) {
       updateVideo.mutate({ id: editingId, data }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Vidéo mise à jour" }); },
+        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
       });
     } else {
       createVideo.mutate(data, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Vidéo ajoutée" }); },
+        onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
       });
     }
   };
@@ -290,10 +315,12 @@ function EventsManager() {
     if (editingId) {
       updateEvent.mutate({ id: editingId, data }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Événement mis à jour" }); },
+        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
       });
     } else {
       createEvent.mutate(data, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Événement ajouté" }); },
+        onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
       });
     }
   };
@@ -349,10 +376,12 @@ function PressManager() {
     if (editingId) {
       updatePress.mutate({ id: editingId, data }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Article mis à jour" }); },
+        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
       });
     } else {
       createPress.mutate(data, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Article ajouté" }); },
+        onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
       });
     }
   };
@@ -405,6 +434,11 @@ function PhotosManager() {
   const onSubmit = (data: InsertPhoto) => {
     createPhoto.mutate(data, {
       onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Photo ajoutée" }); },
+      onError: (err: any) => toast({ 
+        title: "Erreur lors de l'ajout", 
+        description: err.message,
+        variant: "destructive" 
+      }),
     });
   };
 
