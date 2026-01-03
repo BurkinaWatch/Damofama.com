@@ -11,38 +11,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, LogOut, Edit2, Eye, EyeOff, Share2 } from "lucide-react";
+import { Trash2, Plus, LogOut, Edit2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   insertAlbumSchema, insertTrackSchema, insertEventSchema, insertVideoSchema, insertPressSchema, insertPhotoSchema,
   type InsertAlbum, type InsertTrack, type InsertEvent, type InsertVideo, type InsertPress, type InsertPhoto
 } from "@shared/schema";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUploadButton } from "@/components/FileUploadButton";
 import { useToast } from "@/hooks/use-toast";
-
-// Social sharing helper function
-function shareToSocial(platform: string, content: { title: string; url?: string; description?: string }) {
-  const shareUrl = content.url || window.location.origin;
-  const text = content.description || content.title;
-  
-  const urls = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(text)}`,
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`,
-    instagram: 'https://www.instagram.com/damodamsool?igsh=cDd6dG93MjNkcHZu',
-    youtube: 'https://youtube.com/@damofama5246?si=0488M76i0AEFvVjD',
-    tiktok: 'https://www.tiktok.com/@damofama',
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${text} ${shareUrl}`)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-  };
-  
-  const url = urls[platform as keyof typeof urls];
-  if (url) {
-    window.open(url, '_blank', 'width=600,height=400');
-  }
-}
 
 function AlbumsManager() {
   const { data: albums = [] } = useAlbums(true);
@@ -93,28 +72,16 @@ function AlbumsManager() {
       releaseDate: album.releaseDate ? new Date(album.releaseDate) : undefined,
       description: album.description,
     });
-    setTimeout(() => setOpen(true), 0);
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm("Êtes-vous sûr ?")) {
-      deleteAlbum.mutate(id, {
-        onSuccess: () => toast({ title: "Album supprimé" }),
-        onError: () => toast({ title: "Erreur lors de la suppression", variant: "destructive" }),
-      });
-    }
+    setOpen(true);
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
-      <div className="flex justify-between items-center gap-2 flex-wrap">
-        <h2 className="text-xl md:text-2xl font-bold">Albums</h2>
-        <Dialog open={open} onOpenChange={(isOpen) => {
-          if (!isOpen) { setEditingId(null); form.reset(); }
-          setOpen(isOpen);
-        }}>
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Albums</h2>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button data-testid="button-add-album"><Plus size={16} className="mr-2" /> Ajouter Album</Button>
+            <Button><Plus size={16} className="mr-2" /> Ajouter Album</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -122,23 +89,19 @@ function AlbumsManager() {
             </DialogHeader>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label htmlFor="album-title">Titre</Label>
-                <Input id="album-title" {...form.register("title")} />
+                <Label>Titre</Label>
+                <Input {...form.register("title")} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="album-cover">Image de couverture</Label>
+                <Label>Image de couverture</Label>
                 <div className="flex gap-2">
-                  <Input id="album-cover" {...form.register("coverImage")} className="flex-1" />
+                  <Input {...form.register("coverImage")} className="flex-1" />
                   <FileUploadButton accept="image/*" onUploadComplete={(path) => form.setValue("coverImage", path)} />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="album-description">Description</Label>
-                <Textarea id="album-description" {...form.register("description")} rows={3} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="album-release">Date de sortie</Label>
-                <Input id="album-release" type="datetime-local" {...form.register("releaseDate", { valueAsDate: true })} />
+                <Label>Description</Label>
+                <Textarea {...form.register("description")} rows={3} />
               </div>
               <Button type="submit" disabled={createAlbum.isPending || updateAlbum.isPending}>
                 {editingId ? "Modifier" : "Créer"}
@@ -149,17 +112,14 @@ function AlbumsManager() {
       </div>
       <div className="grid gap-3">
         {albums.map(album => (
-          <div key={album.id} className={`flex items-center justify-between p-3 border rounded bg-card gap-2 ${album.hidden ? 'opacity-50' : ''}`}>
-            <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div key={album.id} className="flex items-center justify-between p-3 border rounded bg-card">
+            <div className="flex items-center gap-3">
               <img src={album.coverImage} className="w-10 h-10 rounded object-cover" alt={album.title} />
-              <div className="truncate">
-                <div className="font-bold text-sm truncate">{album.title}</div>
-                <div className="text-xs text-muted-foreground">{album.releaseDate ? new Date(album.releaseDate).toLocaleDateString() : 'N/A'}</div>
-              </div>
+              <div className="font-bold">{album.title}</div>
             </div>
-            <div className="flex gap-1 flex-shrink-0">
+            <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => handleEdit(album)}><Edit2 size={16} /></Button>
-              <Button variant="destructive" size="icon" onClick={() => handleDelete(album.id)}><Trash2 size={16} /></Button>
+              <Button variant="destructive" size="icon" onClick={() => deleteAlbum.mutate(album.id)}><Trash2 size={16} /></Button>
             </div>
           </div>
         ))}
@@ -221,8 +181,8 @@ function TracksManager() {
       <div className="grid gap-2">
         {tracks.map(track => (
           <div key={track.id} className="flex items-center justify-between p-3 border rounded bg-card">
-            <div className="truncate font-medium">{track.title}</div>
-            <div className="flex gap-1">
+            <div className="font-medium">{track.title}</div>
+            <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => { setEditingId(track.id); form.reset(track); setOpen(true); }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deleteTrack.mutate(track.id)}><Trash2 size={16} /></Button>
             </div>
@@ -261,48 +221,36 @@ function VideosManager() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center gap-2 flex-wrap">
+      <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Vidéos</h2>
-        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter</Button>
+        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Vidéo</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent>
           <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvelle"} Vidéo</DialogTitle></DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label>Titre</Label>
-              <Input {...form.register("title")} placeholder="Titre de la vidéo" />
-            </div>
-            <div className="space-y-2">
-              <Label>Type</Label>
-              <select {...form.register("type")} className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-                <option value="clip">Clip Vidéo</option>
-                <option value="live">Live / Concert</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-              <Label>URL YouTube</Label>
-              <div className="flex gap-2">
-                <Input {...form.register("youtubeUrl")} placeholder="URL" className="flex-1" />
-                <FileUploadButton accept="video/*" onUploadComplete={(path) => form.setValue("youtubeUrl", path)} />
-              </div>
-            </div>
+            <Input {...form.register("title")} placeholder="Titre" />
+            <select {...form.register("type")} className="w-full h-10 rounded border bg-background px-3">
+              <option value="clip">Clip Vidéo</option>
+              <option value="live">Live / Concert</option>
+            </select>
+            <Input {...form.register("youtubeUrl")} placeholder="URL YouTube" />
             <div className="flex items-center gap-2">
-              <input type="checkbox" {...form.register("isFeatured")} id="video-featured" className="h-4 w-4 rounded border-gray-300" />
-              <Label htmlFor="video-featured">Mettre en avant</Label>
+              <input type="checkbox" {...form.register("isFeatured")} id="v-feat" />
+              <Label htmlFor="v-feat">Mettre en avant</Label>
             </div>
-            <Button type="submit" className="w-full">{editingId ? "Modifier" : "Ajouter"}</Button>
+            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
           </form>
         </DialogContent>
       </Dialog>
       <div className="grid gap-2">
         {videos.map(video => (
-          <div key={video.id} className="flex items-center justify-between p-3 border rounded bg-card gap-2">
-            <div className="min-w-0 flex-1">
-              <div className="truncate font-medium text-sm">{video.title}</div>
-              <div className="text-xs text-muted-foreground uppercase">{video.type === 'live' ? 'Live' : 'Clip'}</div>
+          <div key={video.id} className="flex items-center justify-between p-3 border rounded bg-card">
+            <div>
+              <div className="font-medium">{video.title}</div>
+              <div className="text-xs text-muted-foreground uppercase">{video.type}</div>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => { setEditingId(video.id); form.reset(video); setOpen(true); }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deleteVideo.mutate(video.id)}><Trash2 size={16} /></Button>
             </div>
@@ -351,9 +299,8 @@ function EventsManager() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <Input {...form.register("title")} placeholder="Titre" />
             <Input type="datetime-local" {...form.register("date", { valueAsDate: true })} />
-            <Input {...form.register("location")} placeholder="Lieu (Ville, Pays)" />
+            <Input {...form.register("location")} placeholder="Lieu" />
             <Input {...form.register("venue")} placeholder="Salle" />
-            <Input {...form.register("ticketUrl")} placeholder="URL Billetterie" />
             <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
           </form>
         </DialogContent>
@@ -361,16 +308,9 @@ function EventsManager() {
       <div className="grid gap-2">
         {events.map(event => (
           <div key={event.id} className="flex items-center justify-between p-3 border rounded bg-card">
-            <div className="truncate font-medium">{event.title} - {event.date ? new Date(event.date).toLocaleDateString() : 'N/A'}</div>
-            <div className="flex gap-1">
-              <Button variant="outline" size="icon" onClick={() => {
-                setEditingId(event.id);
-                form.reset({
-                  ...event,
-                  date: event.date ? new Date(event.date) : new Date()
-                } as any);
-                setOpen(true);
-              }}><Edit2 size={16} /></Button>
+            <div className="font-medium">{event.title}</div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={() => { setEditingId(event.id); form.reset({ ...event, date: event.date ? new Date(event.date) : undefined } as any); setOpen(true); }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deleteEvent.mutate(event.id)}><Trash2 size={16} /></Button>
             </div>
           </div>
@@ -420,7 +360,6 @@ function PressManager() {
             <Input {...form.register("source")} placeholder="Source" />
             <Input {...form.register("url")} placeholder="URL" />
             <Textarea {...form.register("snippet")} placeholder="Extrait" />
-            <Input type="date" {...form.register("date", { valueAsDate: true })} />
             <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
           </form>
         </DialogContent>
@@ -428,16 +367,9 @@ function PressManager() {
       <div className="grid gap-2">
         {press.map(item => (
           <div key={item.id} className="flex items-center justify-between p-3 border rounded bg-card">
-            <div className="truncate font-medium">{item.title} ({item.source})</div>
-            <div className="flex gap-1">
-              <Button variant="outline" size="icon" onClick={() => {
-                setEditingId(item.id);
-                form.reset({
-                  ...item,
-                  date: item.date ? new Date(item.date) : new Date()
-                } as any);
-                setOpen(true);
-              }}><Edit2 size={16} /></Button>
+            <div className="font-medium">{item.title}</div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={() => { setEditingId(item.id); form.reset(item); setOpen(true); }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deletePress.mutate(item.id)}><Trash2 size={16} /></Button>
             </div>
           </div>
@@ -450,11 +382,9 @@ function PressManager() {
 function PhotosManager() {
   const { data: photos = [] } = usePhotos(true);
   const createPhoto = useCreatePhoto();
-  const updatePhoto = useUpdatePhoto();
   const deletePhoto = useDeletePhoto();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
 
   const form = useForm<InsertPhoto>({
     resolver: zodResolver(insertPhotoSchema),
@@ -462,26 +392,20 @@ function PhotosManager() {
   });
 
   const onSubmit = (data: InsertPhoto) => {
-    if (editingId) {
-      updatePhoto.mutate({ id: editingId, data }, {
-        onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Photo mise à jour" }); },
-      });
-    } else {
-      createPhoto.mutate(data, {
-        onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Photo ajoutée" }); },
-      });
-    }
+    createPhoto.mutate(data, {
+      onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Photo ajoutée" }); },
+    });
   };
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Photos</h2>
-        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Photo</Button>
+        <Button onClick={() => { form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Photo</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvelle"} Photo</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Nouvelle Photo</DialogTitle></DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <Input {...form.register("title")} placeholder="Titre" />
             <div className="flex gap-2">
@@ -489,7 +413,7 @@ function PhotosManager() {
               <FileUploadButton accept="image/*" onUploadComplete={(path) => form.setValue("imageUrl", path)} />
             </div>
             <Input {...form.register("category")} placeholder="Catégorie" />
-            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+            <Button type="submit">Ajouter</Button>
           </form>
         </DialogContent>
       </Dialog>
@@ -497,8 +421,7 @@ function PhotosManager() {
         {photos.map(photo => (
           <div key={photo.id} className="relative group aspect-square">
             <img src={photo.imageUrl} alt={photo.title} className="w-full h-full object-cover rounded border" />
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
-              <Button variant="outline" size="icon" onClick={() => { setEditingId(photo.id); form.reset(photo); setOpen(true); }}><Edit2 size={16} /></Button>
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
               <Button variant="destructive" size="icon" onClick={() => deletePhoto.mutate(photo.id)}><Trash2 size={16} /></Button>
             </div>
           </div>
@@ -517,12 +440,11 @@ function MessagesManager() {
         {messages.length === 0 && <p className="text-muted-foreground">Aucun message.</p>}
         {messages.map(msg => (
           <div key={msg.id} className="p-4 border rounded bg-card space-y-2">
-            <div className="flex justify-between">
-              <div className="font-bold">{msg.name} ({msg.email})</div>
+            <div className="flex justify-between font-bold">
+              <div>{msg.name} ({msg.email})</div>
               <div className="text-xs text-muted-foreground">{msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'N/A'}</div>
             </div>
-            <div className="text-sm font-medium">{msg.subject}</div>
-            <div className="text-sm whitespace-pre-wrap">{msg.message}</div>
+            <p className="text-sm">{msg.message}</p>
           </div>
         ))}
       </div>
@@ -530,15 +452,8 @@ function MessagesManager() {
   );
 }
 
-export default function Admin() {
-  const { user, logout } = useAuth();
-  const [, setLocation] = useLocation();
+function AdminDashboard({ logout }: { logout: any }) {
   const [activeTab, setActiveTab] = useState("albums");
-
-  if (!user) {
-    setLocation("/login");
-    return null;
-  }
 
   const tabs = [
     { value: "albums", label: "Albums" },
@@ -551,37 +466,50 @@ export default function Admin() {
   ];
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-8">
+    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center gap-4 mb-6">
-          <h1 className="text-2xl sm:text-4xl font-bold truncate">Admin</h1>
-          <Button variant="outline" size="icon" onClick={() => logout()} data-testid="button-logout">
-            <LogOut size={16} />
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold uppercase tracking-tight">Admin Dashboard</h1>
+          <Button variant="outline" size="sm" onClick={() => logout.mutate()} disabled={logout.isPending}>
+            <LogOut size={16} className="mr-2" /> Déconnexion
           </Button>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6">
-            <TabsList className="inline-flex w-auto sm:w-full min-w-max sm:min-w-0 h-auto p-1">
+          <div className="overflow-x-auto mb-6">
+            <TabsList className="inline-flex w-auto min-w-max">
               {tabs.map((tab) => (
-                <TabsTrigger key={tab.value} value={tab.value} className="px-3 sm:px-4 py-2">
+                <TabsTrigger key={tab.value} value={tab.value} className="px-4 py-2">
                   {tab.label}
                 </TabsTrigger>
               ))}
             </TabsList>
           </div>
           
-          <div className="mt-2">
-            <TabsContent value="albums"><AlbumsManager /></TabsContent>
-            <TabsContent value="tracks"><TracksManager /></TabsContent>
-            <TabsContent value="videos"><VideosManager /></TabsContent>
-            <TabsContent value="events"><EventsManager /></TabsContent>
-            <TabsContent value="press"><PressManager /></TabsContent>
-            <TabsContent value="photos"><PhotosManager /></TabsContent>
-            <TabsContent value="messages"><MessagesManager /></TabsContent>
-          </div>
+          <TabsContent value="albums"><AlbumsManager /></TabsContent>
+          <TabsContent value="tracks"><TracksManager /></TabsContent>
+          <TabsContent value="videos"><VideosManager /></TabsContent>
+          <TabsContent value="events"><EventsManager /></TabsContent>
+          <TabsContent value="press"><PressManager /></TabsContent>
+          <TabsContent value="photos"><PhotosManager /></TabsContent>
+          <TabsContent value="messages"><MessagesManager /></TabsContent>
         </Tabs>
       </div>
     </div>
   );
+}
+
+export default function Admin() {
+  const { user, logout } = useAuth();
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      setLocation("/login");
+    }
+  }, [user, setLocation]);
+
+  if (!user || user.role !== "admin") return null;
+
+  return <AdminDashboard logout={logout} />;
 }
