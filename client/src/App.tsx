@@ -23,6 +23,7 @@ import Contact from "@/pages/Contact";
 import Admin from "@/pages/Admin";
 import Login from "@/pages/Login";
 import Live from "@/pages/Live";
+import Videos from "@/pages/Videos";
 
 function Router() {
   const [location] = useLocation();
@@ -36,6 +37,7 @@ function Router() {
           <Switch location={location} key={location}>
             <Route path="/" component={Home} />
             <Route path="/music" component={Music} />
+            <Route path="/videos" component={Videos} />
             <Route path="/events" component={Events} />
             <Route path="/about" component={About} />
             <Route path="/gallery" component={Gallery} />
