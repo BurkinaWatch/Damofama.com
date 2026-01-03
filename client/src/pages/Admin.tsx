@@ -230,11 +230,284 @@ function TracksManager() {
   );
 }
 
-function VideosManager() { return <div className="p-4 border rounded">Gestionnaire Vidéos (Simplifié)</div>; }
-function EventsManager() { return <div className="p-4 border rounded">Gestionnaire Événements (Simplifié)</div>; }
-function PressManager() { return <div className="p-4 border rounded">Gestionnaire Presse (Simplifié)</div>; }
-function PhotosManager() { return <div className="p-4 border rounded">Gestionnaire Photos (Simplifié)</div>; }
-function MessagesManager() { return <div className="p-4 border rounded">Messages (Simplifié)</div>; }
+function VideosManager() {
+  const { data: videos = [] } = useVideos(true);
+  const createVideo = useCreateVideo();
+  const updateVideo = useUpdateVideo();
+  const deleteVideo = useDeleteVideo();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const form = useForm<InsertVideo>({
+    resolver: zodResolver(insertVideoSchema),
+    defaultValues: { title: "", youtubeUrl: "", category: "music_video", isFeatured: false },
+  });
+
+  const onSubmit = (data: InsertVideo) => {
+    if (editingId) {
+      updateVideo.mutate({ id: editingId, data }, {
+        onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Vidéo mise à jour" }); },
+      });
+    } else {
+      createVideo.mutate(data, {
+        onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Vidéo ajoutée" }); },
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Vidéos</h2>
+        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Vidéo</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvelle"} Vidéo</DialogTitle></DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <Input {...form.register("title")} placeholder="Titre" />
+            <Input {...form.register("youtubeUrl")} placeholder="URL YouTube (Embed)" />
+            <Input {...form.register("thumbnailUrl")} placeholder="URL Miniature" />
+            <div className="flex items-center gap-2">
+              <input type="checkbox" {...form.register("isFeatured")} id="video-featured" />
+              <Label htmlFor="video-featured">Mettre en avant</Label>
+            </div>
+            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="grid gap-2">
+        {videos.map(video => (
+          <div key={video.id} className="flex items-center justify-between p-3 border rounded bg-card">
+            <div className="truncate font-medium">{video.title}</div>
+            <div className="flex gap-1">
+              <Button variant="outline" size="icon" onClick={() => { setEditingId(video.id); form.reset(video); setOpen(true); }}><Edit2 size={16} /></Button>
+              <Button variant="destructive" size="icon" onClick={() => deleteVideo.mutate(video.id)}><Trash2 size={16} /></Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EventsManager() {
+  const { data: events = [] } = useEvents(true);
+  const createEvent = useCreateEvent();
+  const updateEvent = useUpdateEvent();
+  const deleteEvent = useDeleteEvent();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const form = useForm<InsertEvent>({
+    resolver: zodResolver(insertEventSchema),
+    defaultValues: { title: "", location: "", venue: "", type: "concert" },
+  });
+
+  const onSubmit = (data: InsertEvent) => {
+    if (editingId) {
+      updateEvent.mutate({ id: editingId, data }, {
+        onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Événement mis à jour" }); },
+      });
+    } else {
+      createEvent.mutate(data, {
+        onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Événement ajouté" }); },
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Événements</h2>
+        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Événement</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvel"} Événement</DialogTitle></DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <Input {...form.register("title")} placeholder="Titre" />
+            <Input type="datetime-local" {...form.register("date", { valueAsDate: true })} />
+            <Input {...form.register("location")} placeholder="Lieu (Ville, Pays)" />
+            <Input {...form.register("venue")} placeholder="Salle" />
+            <Input {...form.register("ticketUrl")} placeholder="URL Billetterie" />
+            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="grid gap-2">
+        {events.map(event => (
+          <div key={event.id} className="flex items-center justify-between p-3 border rounded bg-card">
+            <div className="truncate font-medium">{event.title} - {event.date ? new Date(event.date).toLocaleDateString() : 'N/A'}</div>
+            <div className="flex gap-1">
+              <Button variant="outline" size="icon" onClick={() => {
+                setEditingId(event.id);
+                form.reset({
+                  ...event,
+                  date: event.date ? new Date(event.date) : new Date()
+                } as any);
+                setOpen(true);
+              }}><Edit2 size={16} /></Button>
+              <Button variant="destructive" size="icon" onClick={() => deleteEvent.mutate(event.id)}><Trash2 size={16} /></Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PressManager() {
+  const { data: press = [] } = usePress(true);
+  const createPress = useCreatePress();
+  const updatePress = useUpdatePress();
+  const deletePress = useDeletePress();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const form = useForm<InsertPress>({
+    resolver: zodResolver(insertPressSchema),
+    defaultValues: { title: "", source: "", url: "", snippet: "" },
+  });
+
+  const onSubmit = (data: InsertPress) => {
+    if (editingId) {
+      updatePress.mutate({ id: editingId, data }, {
+        onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Article mis à jour" }); },
+      });
+    } else {
+      createPress.mutate(data, {
+        onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Article ajouté" }); },
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Presse</h2>
+        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Article</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvel"} Article</DialogTitle></DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <Input {...form.register("title")} placeholder="Titre" />
+            <Input {...form.register("source")} placeholder="Source" />
+            <Input {...form.register("url")} placeholder="URL" />
+            <Textarea {...form.register("snippet")} placeholder="Extrait" />
+            <Input type="date" {...form.register("date", { valueAsDate: true })} />
+            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="grid gap-2">
+        {press.map(item => (
+          <div key={item.id} className="flex items-center justify-between p-3 border rounded bg-card">
+            <div className="truncate font-medium">{item.title} ({item.source})</div>
+            <div className="flex gap-1">
+              <Button variant="outline" size="icon" onClick={() => {
+                setEditingId(item.id);
+                form.reset({
+                  ...item,
+                  date: item.date ? new Date(item.date) : new Date()
+                } as any);
+                setOpen(true);
+              }}><Edit2 size={16} /></Button>
+              <Button variant="destructive" size="icon" onClick={() => deletePress.mutate(item.id)}><Trash2 size={16} /></Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PhotosManager() {
+  const { data: photos = [] } = usePhotos(true);
+  const createPhoto = useCreatePhoto();
+  const updatePhoto = useUpdatePhoto();
+  const deletePhoto = useDeletePhoto();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const form = useForm<InsertPhoto>({
+    resolver: zodResolver(insertPhotoSchema),
+    defaultValues: { title: "", imageUrl: "", category: "concert" },
+  });
+
+  const onSubmit = (data: InsertPhoto) => {
+    if (editingId) {
+      updatePhoto.mutate({ id: editingId, data }, {
+        onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Photo mise à jour" }); },
+      });
+    } else {
+      createPhoto.mutate(data, {
+        onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Photo ajoutée" }); },
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Photos</h2>
+        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Photo</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvelle"} Photo</DialogTitle></DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <Input {...form.register("title")} placeholder="Titre" />
+            <div className="flex gap-2">
+              <Input {...form.register("imageUrl")} placeholder="URL Image" className="flex-1" />
+              <FileUploadButton accept="image/*" onUploadComplete={(path) => form.setValue("imageUrl", path)} />
+            </div>
+            <Input {...form.register("category")} placeholder="Catégorie" />
+            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {photos.map(photo => (
+          <div key={photo.id} className="relative group aspect-square">
+            <img src={photo.imageUrl} alt={photo.title} className="w-full h-full object-cover rounded border" />
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
+              <Button variant="outline" size="icon" onClick={() => { setEditingId(photo.id); form.reset(photo); setOpen(true); }}><Edit2 size={16} /></Button>
+              <Button variant="destructive" size="icon" onClick={() => deletePhoto.mutate(photo.id)}><Trash2 size={16} /></Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MessagesManager() {
+  const { data: messages = [] } = useMessages();
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-bold">Messages reçus</h2>
+      <div className="grid gap-4">
+        {messages.length === 0 && <p className="text-muted-foreground">Aucun message.</p>}
+        {messages.map(msg => (
+          <div key={msg.id} className="p-4 border rounded bg-card space-y-2">
+            <div className="flex justify-between">
+              <div className="font-bold">{msg.name} ({msg.email})</div>
+              <div className="text-xs text-muted-foreground">{msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'N/A'}</div>
+            </div>
+            <div className="text-sm font-medium">{msg.subject}</div>
+            <div className="text-sm whitespace-pre-wrap">{msg.message}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Admin() {
   const { user, logout } = useAuth();
