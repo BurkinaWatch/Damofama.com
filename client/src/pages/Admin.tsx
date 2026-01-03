@@ -251,7 +251,18 @@ function VideosManager() {
               <div className="text-xs text-muted-foreground uppercase">{video.type}</div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" onClick={() => { setEditingId(video.id); form.reset(video); setOpen(true); }}><Edit2 size={16} /></Button>
+              <Button variant="outline" size="icon" onClick={() => { 
+                setEditingId(video.id); 
+                form.reset({
+                  title: video.title,
+                  youtubeUrl: video.youtubeUrl,
+                  type: video.type as "clip" | "live",
+                  category: video.category ?? "music_video",
+                  isFeatured: video.isFeatured ?? false,
+                  hidden: video.hidden ?? false
+                }); 
+                setOpen(true); 
+              }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deleteVideo.mutate(video.id)}><Trash2 size={16} /></Button>
             </div>
           </div>
