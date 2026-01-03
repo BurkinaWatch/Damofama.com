@@ -142,6 +142,7 @@ export function useCreateVideo() {
       const res = await fetch(api.videos.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to create video");
@@ -159,6 +160,7 @@ export function useUpdateVideo() {
       const res = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update video");
@@ -173,7 +175,7 @@ export function useDeleteVideo() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.videos.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetch(url, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Failed to delete video");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.videos.list.path] }),
@@ -204,6 +206,7 @@ export function useCreateEvent() {
       const res = await fetch(api.events.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to create event");
@@ -221,6 +224,7 @@ export function useUpdateEvent() {
       const res = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update event");
@@ -235,7 +239,7 @@ export function useDeleteEvent() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.events.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetch(url, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Failed to delete event");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.events.list.path] }),
@@ -266,6 +270,7 @@ export function useCreatePress() {
       const res = await fetch(api.press.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to create press item");
@@ -283,6 +288,7 @@ export function useUpdatePress() {
       const res = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update press item");
@@ -297,7 +303,7 @@ export function useDeletePress() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.press.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetch(url, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Failed to delete press item");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.press.list.path] }),
