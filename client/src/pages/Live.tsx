@@ -1,75 +1,100 @@
 import { motion } from "framer-motion";
 import { useVideos } from "@/hooks/use-content";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SiYoutube } from "react-icons/si";
+import { Button } from "@/components/ui/button";
 
 export default function Live() {
-  const { data: videos = [] } = useVideos();
-  const featuredVideo = videos.find(v => v.isFeatured && v.category === "music_video") || videos[0];
+  const { data: videos = [], isLoading } = useVideos();
+  const liveVideos = videos.filter(v => v.type === 'live' && !v.hidden);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-24">
+        <Skeleton className="h-12 w-48 mb-8 mx-auto" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="aspect-video w-full rounded-xl" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl mb-12"
-      >
-        {featuredVideo ? (
-          <iframe
-            src={featuredVideo.youtubeUrl.replace("watch?v=", "embed/") + "?autoplay=1&mute=0"}
-            className="w-full h-full"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        ) : (
-          <div className="w-full h-full bg-card flex items-center justify-center">
-            <p className="text-white/40">Chargement du live...</p>
-          </div>
-        )}
-        <div className="absolute top-4 left-4">
-          <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse uppercase tracking-wider">
+    <div className="min-h-screen bg-background pb-20 pt-24 sm:pt-32">
+      <div className="container mx-auto px-4">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-4xl mx-auto mb-16 text-center"
+        >
+          <h1 className="text-4xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent tracking-tighter">
             LIVE
-          </span>
-        </div>
-      </motion.div>
-
-      <div className="grid md:grid-cols-3 gap-8 items-center">
-        <div className="md:col-span-2">
-          <h1 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
-            VIBRATIONS EN DIRECT
           </h1>
-          <p className="text-lg text-white/70 mb-6 leading-relaxed">
-            Plongez dans l'expérience immersive de DAMO FAMA. Retrouvez ici nos diffusions en direct, concerts virtuels et moments exclusifs.
+          <div className="w-24 h-1 bg-primary mx-auto mb-6" />
+          <p className="text-muted-foreground text-lg uppercase tracking-widest">
+            Vivez l'énergie des performances de Damo Fama en direct.
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8">
-              REJOINDRE LE CHAT
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <a href="https://youtube.com/@damofama5246" target="_blank" rel="noopener noreferrer">
-                <SiYoutube className="mr-2 h-5 w-5" /> S'ABONNER SUR YOUTUBE
-              </a>
-            </Button>
-          </div>
-        </div>
-        <div className="bg-white/5 backdrop-blur-md rounded-xl p-6 border border-white/10">
-          <h3 className="text-xl font-bold mb-4 text-primary uppercase tracking-widest text-sm" data-testid="text-next-live">Prochain Direct</h3>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                15
-              </div>
-              <div>
-                <p className="font-bold">Session Acoustique</p>
-                <p className="text-xs text-white/50">Juin 2024 • 20:00 GMT</p>
-              </div>
-            </div>
-            <p className="text-sm text-white/60">
-              Une soirée intime avec DAMO FAMA, explorant les racines de l'Afro-Fusion.
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 max-w-6xl mx-auto">
+          {liveVideos.length > 0 ? (
+            liveVideos.map((video, index) => (
+              <motion.div
+                key={video.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <VideoCard video={video} />
+              </motion.div>
+            ))
+          ) : (
+            <p className="col-span-full text-center text-muted-foreground py-20 uppercase tracking-widest opacity-50">
+              Aucune performance live disponible pour le moment.
             </p>
-          </div>
+          )}
+        </div>
+
+        <div className="mt-20 text-center">
+          <Button size="lg" variant="outline" asChild>
+            <a href="https://youtube.com/@damofama5246" target="_blank" rel="noopener noreferrer">
+              <SiYoutube className="mr-2 h-5 w-5" /> REJOINDRE SUR YOUTUBE
+            </a>
+          </Button>
         </div>
       </div>
     </div>
+  );
+}
+
+function VideoCard({ video }: { video: any }) {
+  const videoId = video.youtubeUrl.includes('v=') 
+    ? video.youtubeUrl.split('v=')[1]?.split('&')[0]
+    : video.youtubeUrl.split('/').pop();
+
+  return (
+    <Card className="overflow-hidden border-white/5 bg-white/5 backdrop-blur-sm group hover:border-primary/50 transition-all duration-500">
+      <CardContent className="p-0">
+        <div className="aspect-video relative overflow-hidden">
+          <iframe
+            className="w-full h-full"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title={video.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        <div className="p-6">
+          <h3 className="font-bold text-xl line-clamp-1 group-hover:text-primary transition-colors tracking-tight">
+            {video.title}
+          </h3>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
