@@ -244,7 +244,7 @@ function VideosManager() {
 
   const form = useForm<InsertVideo>({
     resolver: zodResolver(insertVideoSchema),
-    defaultValues: { title: "", youtubeUrl: "", category: "music_video", isFeatured: false },
+    defaultValues: { title: "", youtubeUrl: "", type: "clip", category: "music_video", isFeatured: false },
   });
 
   const onSubmit = (data: InsertVideo) => {
@@ -261,35 +261,47 @@ function VideosManager() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-2 flex-wrap">
         <h2 className="text-xl font-bold">Vidéos</h2>
-        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Vidéo</Button>
+        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvelle"} Vidéo</DialogTitle></DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input {...form.register("title")} placeholder="Titre" />
-            <div className="flex gap-2">
-              <Input {...form.register("youtubeUrl")} placeholder="URL Vidéo (YouTube ou Direct)" className="flex-1" />
-              <FileUploadButton accept="video/*" onUploadComplete={(path) => form.setValue("youtubeUrl", path)} />
+            <div className="space-y-2">
+              <Label>Titre</Label>
+              <Input {...form.register("title")} placeholder="Titre de la vidéo" />
             </div>
-            <div className="flex gap-2">
-              <Input {...form.register("thumbnailUrl")} placeholder="URL Miniature" className="flex-1" />
-              <FileUploadButton accept="image/*" onUploadComplete={(path) => form.setValue("thumbnailUrl", path)} />
+            <div className="space-y-2">
+              <Label>Type</Label>
+              <select {...form.register("type")} className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                <option value="clip">Clip Vidéo</option>
+                <option value="live">Live / Concert</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label>URL YouTube</Label>
+              <div className="flex gap-2">
+                <Input {...form.register("youtubeUrl")} placeholder="URL" className="flex-1" />
+                <FileUploadButton accept="video/*" onUploadComplete={(path) => form.setValue("youtubeUrl", path)} />
+              </div>
             </div>
             <div className="flex items-center gap-2">
-              <input type="checkbox" {...form.register("isFeatured")} id="video-featured" />
+              <input type="checkbox" {...form.register("isFeatured")} id="video-featured" className="h-4 w-4 rounded border-gray-300" />
               <Label htmlFor="video-featured">Mettre en avant</Label>
             </div>
-            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+            <Button type="submit" className="w-full">{editingId ? "Modifier" : "Ajouter"}</Button>
           </form>
         </DialogContent>
       </Dialog>
       <div className="grid gap-2">
         {videos.map(video => (
-          <div key={video.id} className="flex items-center justify-between p-3 border rounded bg-card">
-            <div className="truncate font-medium">{video.title}</div>
+          <div key={video.id} className="flex items-center justify-between p-3 border rounded bg-card gap-2">
+            <div className="min-w-0 flex-1">
+              <div className="truncate font-medium text-sm">{video.title}</div>
+              <div className="text-xs text-muted-foreground uppercase">{video.type === 'live' ? 'Live' : 'Clip'}</div>
+            </div>
             <div className="flex gap-1">
               <Button variant="outline" size="icon" onClick={() => { setEditingId(video.id); form.reset(video); setOpen(true); }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deleteVideo.mutate(video.id)}><Trash2 size={16} /></Button>
@@ -528,34 +540,46 @@ export default function Admin() {
     return null;
   }
 
+  const tabs = [
+    { value: "albums", label: "Albums" },
+    { value: "tracks", label: "Musique" },
+    { value: "videos", label: "Vidéos" },
+    { value: "events", label: "Events" },
+    { value: "press", label: "Presse" },
+    { value: "photos", label: "Photos" },
+    { value: "messages", label: "Contact" },
+  ];
+
   return (
     <div className="min-h-screen bg-background p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-          <h1 className="text-2xl font-bold">Administration</h1>
-          <Button variant="outline" onClick={() => logout()} className="w-full sm:w-auto">
-            <LogOut size={16} className="mr-2" /> Déconnexion
+        <div className="flex justify-between items-center gap-4 mb-6">
+          <h1 className="text-2xl sm:text-4xl font-bold truncate">Admin</h1>
+          <Button variant="outline" size="icon" onClick={() => logout()} data-testid="button-logout">
+            <LogOut size={16} />
           </Button>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 md:grid-cols-7 mb-8 h-auto">
-            <TabsTrigger value="albums">Albums</TabsTrigger>
-            <TabsTrigger value="tracks">Morceaux</TabsTrigger>
-            <TabsTrigger value="videos">Vidéos</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="press">Presse</TabsTrigger>
-            <TabsTrigger value="photos">Photos</TabsTrigger>
-            <TabsTrigger value="messages">Messages</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6">
+            <TabsList className="inline-flex w-auto sm:w-full min-w-max sm:min-w-0 h-auto p-1">
+              {tabs.map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value} className="px-3 sm:px-4 py-2">
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
           
-          <TabsContent value="albums"><AlbumsManager /></TabsContent>
-          <TabsContent value="tracks"><TracksManager /></TabsContent>
-          <TabsContent value="videos"><VideosManager /></TabsContent>
-          <TabsContent value="events"><EventsManager /></TabsContent>
-          <TabsContent value="press"><PressManager /></TabsContent>
-          <TabsContent value="photos"><PhotosManager /></TabsContent>
-          <TabsContent value="messages"><MessagesManager /></TabsContent>
+          <div className="mt-2">
+            <TabsContent value="albums"><AlbumsManager /></TabsContent>
+            <TabsContent value="tracks"><TracksManager /></TabsContent>
+            <TabsContent value="videos"><VideosManager /></TabsContent>
+            <TabsContent value="events"><EventsManager /></TabsContent>
+            <TabsContent value="press"><PressManager /></TabsContent>
+            <TabsContent value="photos"><PhotosManager /></TabsContent>
+            <TabsContent value="messages"><MessagesManager /></TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>

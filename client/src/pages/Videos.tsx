@@ -1,22 +1,30 @@
 import { motion } from "framer-motion";
 import { useVideos } from "@/hooks/use-content";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play } from "lucide-react";
 
 export default function Videos() {
   const { data: videos = [], isLoading } = useVideos();
 
-  const musicVideos = videos.filter(v => v.category === "music_video");
-  const liveVideos = videos.filter(v => v.category === "live");
-  const otherVideos = videos.filter(v => v.category !== "music_video" && v.category !== "live");
+  const clips = videos.filter(v => v.type === 'clip' && !v.hidden);
+  const lives = videos.filter(v => v.type === 'live' && !v.hidden);
+  const otherVideos = videos.filter(v => v.type !== 'clip' && v.type !== 'live' && !v.hidden);
 
-  const VideoGrid = ({ title, items }: { title: string; items: any[] }) => {
-    if (items.length === 0) return null;
+  const VideoGrid = ({ items }: { items: any[] }) => {
+    if (items.length === 0) return (
+      <p className="text-center text-white/40 py-12 uppercase tracking-widest text-sm">
+        Aucune vidéo disponible dans cette catégorie.
+      </p>
+    );
     return (
-      <section className="mb-12">
-        <h2 className="text-2xl font-display font-bold mb-6 text-primary">{title}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((video) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((video) => {
+          const videoId = video.youtubeUrl.includes('v=') 
+            ? video.youtubeUrl.split('v=')[1]?.split('&')[0]
+            : video.youtubeUrl.split('/').pop();
+
+          return (
             <motion.div
               key={video.id}
               initial={{ opacity: 0, y: 20 }}
@@ -25,29 +33,20 @@ export default function Videos() {
             >
               <Card className="overflow-hidden bg-card/50 backdrop-blur-sm border-white/5 hover:border-primary/50 transition-all duration-300">
                 <div className="aspect-video relative group cursor-pointer">
-                  {video.youtubeUrl.includes("youtube.com") || video.youtubeUrl.includes("youtu.be") ? (
-                    <iframe
-                      src={video.youtubeUrl.replace("watch?v=", "embed/")}
-                      className="w-full h-full"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <video
-                      src={video.youtubeUrl}
-                      controls
-                      poster={video.thumbnailUrl}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}`}
+                    className="w-full h-full"
+                    allowFullScreen
+                  />
                 </div>
                 <CardHeader className="p-4">
-                  <CardTitle className="text-lg font-medium">{video.title}</CardTitle>
+                  <CardTitle className="text-lg font-medium line-clamp-1">{video.title}</CardTitle>
                 </CardHeader>
               </Card>
             </motion.div>
-          ))}
-        </div>
-      </section>
+          );
+        })}
+      </div>
     );
   };
 
@@ -56,7 +55,7 @@ export default function Videos() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-16"
+        className="text-center mb-12"
       >
         <h1 className="text-4xl md:text-6xl font-display font-bold mb-4 tracking-tighter">
           VIDÉOS
@@ -74,11 +73,27 @@ export default function Videos() {
           ))}
         </div>
       ) : (
-        <>
-          <VideoGrid title="Clips Vidéos" items={musicVideos} />
-          <VideoGrid title="Performances Live" items={liveVideos} />
-          <VideoGrid title="Autres Vidéos" items={otherVideos} />
-        </>
+        <Tabs defaultValue="clips" className="w-full">
+          <div className="flex justify-center mb-10">
+            <TabsList className="bg-white/5 border border-white/10">
+              <TabsTrigger value="clips" className="data-[state=active]:bg-primary">CLIPS VIDÉOS</TabsTrigger>
+              <TabsTrigger value="lives" className="data-[state=active]:bg-primary">LIVE / CONCERTS</TabsTrigger>
+              {otherVideos.length > 0 && <TabsTrigger value="others" className="data-[state=active]:bg-primary">AUTRES</TabsTrigger>}
+            </TabsList>
+          </div>
+
+          <TabsContent value="clips" className="mt-0">
+            <VideoGrid items={clips} />
+          </TabsContent>
+
+          <TabsContent value="lives" className="mt-0">
+            <VideoGrid items={lives} />
+          </TabsContent>
+
+          <TabsContent value="others" className="mt-0">
+            <VideoGrid items={otherVideos} />
+          </TabsContent>
+        </Tabs>
       )}
     </div>
   );

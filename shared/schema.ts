@@ -50,6 +50,7 @@ export const videos = pgTable("videos", {
   title: text("title").notNull(),
   youtubeUrl: text("youtube_url").notNull(),
   thumbnailUrl: text("thumbnail_url"),
+  type: text("type").default("clip").notNull(), // 'clip' or 'live'
   category: text("category").default("music_video"),
   isFeatured: boolean("is_featured").default(false),
   hidden: boolean("hidden").default(false),
