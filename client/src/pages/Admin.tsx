@@ -205,7 +205,10 @@ function TracksManager() {
           <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouveau"} Morceau</DialogTitle></DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <Input {...form.register("title")} placeholder="Titre" />
-            <Input {...form.register("audioUrl")} placeholder="URL Audio" />
+            <div className="flex gap-2">
+              <Input {...form.register("audioUrl")} placeholder="URL Audio" className="flex-1" />
+              <FileUploadButton accept="audio/*" onUploadComplete={(path) => form.setValue("audioUrl", path)} />
+            </div>
             <Input {...form.register("duration")} placeholder="Durée (ex: 3:45)" />
             <div className="flex items-center gap-2">
               <input type="checkbox" {...form.register("isSingle")} id="track-single" />
@@ -267,8 +270,14 @@ function VideosManager() {
           <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvelle"} Vidéo</DialogTitle></DialogHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <Input {...form.register("title")} placeholder="Titre" />
-            <Input {...form.register("youtubeUrl")} placeholder="URL YouTube (Embed)" />
-            <Input {...form.register("thumbnailUrl")} placeholder="URL Miniature" />
+            <div className="flex gap-2">
+              <Input {...form.register("youtubeUrl")} placeholder="URL Vidéo (YouTube ou Direct)" className="flex-1" />
+              <FileUploadButton accept="video/*" onUploadComplete={(path) => form.setValue("youtubeUrl", path)} />
+            </div>
+            <div className="flex gap-2">
+              <Input {...form.register("thumbnailUrl")} placeholder="URL Miniature" className="flex-1" />
+              <FileUploadButton accept="image/*" onUploadComplete={(path) => form.setValue("thumbnailUrl", path)} />
+            </div>
             <div className="flex items-center gap-2">
               <input type="checkbox" {...form.register("isFeatured")} id="video-featured" />
               <Label htmlFor="video-featured">Mettre en avant</Label>
