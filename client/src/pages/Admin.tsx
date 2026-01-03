@@ -522,9 +522,11 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-background p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
           <h1 className="text-2xl font-bold">Administration</h1>
-          <Button variant="outline" onClick={() => logout()}><LogOut size={16} className="mr-2" /> Déconnexion</Button>
+          <Button variant="outline" onClick={() => logout()} className="w-full sm:w-auto">
+            <LogOut size={16} className="mr-2" /> Déconnexion
+          </Button>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

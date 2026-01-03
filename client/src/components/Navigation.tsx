@@ -37,12 +37,12 @@ export function Navigation() {
     <>
       <nav
         className={clsx(
-          "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out py-2 px-2 sm:px-4 md:px-12 flex justify-between items-center gap-2 sm:gap-4",
-          scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5 py-2" : "bg-transparent"
+          "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out py-2 px-4 sm:px-6 md:px-12 flex justify-between items-center gap-4",
+          scrolled || isOpen ? "bg-background/95 backdrop-blur-md border-b border-white/5" : "bg-transparent"
         )}
       >
         <div className="z-50 relative flex-shrink-0">
-          <Logo size="md" className="drop-shadow-lg" />
+          <Logo size="md" className="drop-shadow-lg scale-90 sm:scale-100 origin-left" />
         </div>
 
         {/* Desktop Menu */}
