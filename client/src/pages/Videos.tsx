@@ -7,7 +7,7 @@ import { Play } from "lucide-react";
 export default function Videos() {
   const { data: videos = [], isLoading } = useVideos();
 
-  const clips = videos.filter(v => v.type === 'clip' && !v.hidden);
+  const clips = videos.filter(v => (v.type === 'clip' || v.type === 'music_video') && !v.hidden);
   const lives = videos.filter(v => v.type === 'live' && !v.hidden);
   const otherVideos = videos.filter(v => v.type !== 'clip' && v.type !== 'live' && !v.hidden);
 
