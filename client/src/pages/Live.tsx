@@ -53,7 +53,7 @@ export default function Live() {
           </div>
         </div>
         <div className="bg-white/5 backdrop-blur-md rounded-xl p-6 border border-white/10">
-          <h3 className="text-xl font-bold mb-4 text-primary uppercase tracking-widest text-sm">Prochain Direct</h3>
+          <h3 className="text-xl font-bold mb-4 text-primary uppercase tracking-widest text-sm" data-testid="text-next-live">Prochain Direct</h3>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
