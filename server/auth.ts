@@ -2,18 +2,14 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express } from "express";
 import session from "express-session";
-import createMemoryStore from "memorystore";
+import connectPg from "connect-pg-simple";
+import { pool } from "./db";
 import { storage } from "./storage";
 import { User as SelectUser } from "@shared/schema";
 
-declare global {
-  namespace Express {
-    interface User extends SelectUser {}
-  }
-}
+const PostgresSessionStore = connectPg(session);
 
 export function setupAuth(app: Express) {
-  const MemoryStore = createMemoryStore(session);
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "r3pl1t_s3cr3t_k3y",
     resave: false,
@@ -22,8 +18,9 @@ export function setupAuth(app: Express) {
       sameSite: "lax",
       httpOnly: true,
     },
-    store: new MemoryStore({
-      checkPeriod: 86400000,
+    store: new PostgresSessionStore({
+      pool,
+      createTableIfMissing: true,
     }),
   };
 
