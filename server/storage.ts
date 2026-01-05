@@ -132,13 +132,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createVideo(video: InsertVideo): Promise<Video> {
-    const [newVideo] = await db.insert(videos).values(video).returning();
-    return newVideo;
+    try {
+      const [newVideo] = await db.insert(videos).values(video).returning();
+      return newVideo;
+    } catch (error) {
+      console.error("Database error in createVideo:", error);
+      throw error;
+    }
   }
 
   async updateVideo(id: number, video: InsertVideo): Promise<Video> {
-    const [updated] = await db.update(videos).set(video).where(eq(videos.id, id)).returning();
-    return updated;
+    try {
+      const [updated] = await db.update(videos).set(video).where(eq(videos.id, id)).returning();
+      if (!updated) {
+        throw new Error(`Video with id ${id} not found`);
+      }
+      return updated;
+    } catch (error) {
+      console.error("Database error in updateVideo:", error);
+      throw error;
+    }
   }
 
   async deleteVideo(id: number): Promise<void> {

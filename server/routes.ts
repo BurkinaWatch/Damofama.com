@@ -135,15 +135,31 @@ export async function registerRoutes(
   });
 
   app.post(api.videos.create.path, requireAuth, async (req, res) => {
-    const input = api.videos.create.input.parse(req.body);
-    const video = await storage.createVideo(input);
-    res.status(201).json(video);
+    try {
+      const input = api.videos.create.input.parse(req.body);
+      const video = await storage.createVideo(input);
+      res.status(201).json(video);
+    } catch (error) {
+      console.error("Error creating video:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
   });
 
   app.patch(api.videos.update.path, requireAuth, async (req, res) => {
-    const input = api.videos.update.input.parse(req.body);
-    const video = await storage.updateVideo(Number(req.params.id), input);
-    res.json(video);
+    try {
+      const input = api.videos.update.input.parse(req.body);
+      const video = await storage.updateVideo(Number(req.params.id), input);
+      res.json(video);
+    } catch (error) {
+      console.error("Error updating video:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
   });
 
   app.delete(api.videos.delete.path, requireAuth, async (req, res) => {
