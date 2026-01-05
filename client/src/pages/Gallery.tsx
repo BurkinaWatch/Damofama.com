@@ -53,22 +53,24 @@ export default function Gallery() {
               ))}
             </div>
           ) : (
-            <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {galleryItems.map((item, idx) => (
                 <SectionReveal key={idx} delay={idx * 0.05}>
                   <motion.div 
-                    className="relative group overflow-hidden bg-card break-inside-avoid rounded-md"
+                    className="relative group overflow-hidden bg-card rounded-md h-full"
                     whileHover={{ y: -5 }}
                     transition={{ duration: 0.3 }}
                     data-testid={`card-gallery-${idx}`}
                   >
-                    <img 
-                      src={item.src} 
-                      alt={item.alt}
-                      className="w-full h-auto object-cover transition-all duration-700"
-                      loading="lazy"
-                      data-testid={`img-gallery-${idx}`}
-                    />
+                    <div className="aspect-square overflow-hidden">
+                      <img 
+                        src={item.src} 
+                        alt={item.alt}
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                        loading="lazy"
+                        data-testid={`img-gallery-${idx}`}
+                      />
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                       <p className="text-white text-sm font-medium">{item.alt}</p>
