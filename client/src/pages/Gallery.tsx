@@ -32,7 +32,18 @@ export default function Gallery() {
   const { data: photos = [], isLoading } = usePhotos();
   
   const galleryItems = photos.length > 0 
-    ? photos.map(p => ({ src: p.imageUrl, alt: p.title, category: p.category || "concert" }))
+    ? photos.map(p => {
+        // Handle local uploads that were optimized to webp
+        let src = p.imageUrl;
+        if (src.startsWith('/uploads/') && !src.endsWith('.webp')) {
+          src = `${src}.webp`;
+        }
+        return {
+          src,
+          alt: p.title,
+          category: p.category || "concert"
+        };
+      })
     : [];
 
   return (
