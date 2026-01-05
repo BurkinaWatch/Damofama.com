@@ -231,15 +231,48 @@ function VideosManager() {
   });
 
   const onSubmit = (data: InsertVideo) => {
+    console.log("Submitting video data:", data);
+    // Assurer que le type est présent
+    const submissionData = {
+      ...data,
+      type: data.type || "clip",
+      category: data.category || "music_video"
+    };
+    
     if (editingId) {
-      updateVideo.mutate({ id: editingId, data }, {
-        onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Vidéo mise à jour" }); },
-        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
+      updateVideo.mutate({ id: editingId, data: submissionData }, {
+        onSuccess: () => { 
+          console.log("Video updated successfully");
+          setOpen(false); 
+          setEditingId(null); 
+          form.reset(); 
+          toast({ title: "Vidéo mise à jour" }); 
+        },
+        onError: (err: any) => {
+          console.error("Error updating video:", err);
+          toast({ 
+            title: "Erreur lors de la mise à jour", 
+            description: err.message || "Une erreur est survenue lors de la communication avec le serveur.",
+            variant: "destructive" 
+          });
+        },
       });
     } else {
-      createVideo.mutate(data, {
-        onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Vidéo ajoutée" }); },
-        onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
+      createVideo.mutate(submissionData, {
+        onSuccess: () => { 
+          console.log("Video created successfully");
+          setOpen(false); 
+          form.reset(); 
+          toast({ title: "Vidéo ajoutée" }); 
+        },
+        onError: (err: any) => {
+          console.error("Error creating video:", err);
+          toast({ 
+            title: "Erreur lors de l'ajout", 
+            description: err.message || "Une erreur est survenue lors de la communication avec le serveur.",
+            variant: "destructive" 
+          });
+        },
       });
     }
   };
