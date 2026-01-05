@@ -66,6 +66,7 @@ export async function initDatabase() {
         title TEXT NOT NULL,
         youtube_url TEXT NOT NULL,
         thumbnail_url TEXT,
+        type TEXT DEFAULT 'clip',
         category TEXT DEFAULT 'music_video',
         is_featured BOOLEAN DEFAULT FALSE,
         hidden BOOLEAN DEFAULT FALSE
