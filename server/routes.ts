@@ -137,28 +137,30 @@ export async function registerRoutes(
   app.post(api.videos.create.path, requireAuth, async (req, res) => {
     try {
       const input = api.videos.create.input.parse(req.body);
+      console.log("Creating video with input:", input);
       const video = await storage.createVideo(input);
       res.status(201).json(video);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating video:", error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid input", errors: error.errors });
-      }
-      res.status(500).json({ message: "Internal server error" });
+      const errorMessage = error instanceof z.ZodError 
+        ? "Invalid input: " + JSON.stringify(error.errors)
+        : error.message || "Unknown error";
+      res.status(500).json({ message: "Failed to create video", details: errorMessage });
     }
   });
 
   app.patch(api.videos.update.path, requireAuth, async (req, res) => {
     try {
       const input = api.videos.update.input.parse(req.body);
+      console.log("Updating video with input:", input);
       const video = await storage.updateVideo(Number(req.params.id), input);
       res.json(video);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating video:", error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid input", errors: error.errors });
-      }
-      res.status(500).json({ message: "Internal server error" });
+      const errorMessage = error instanceof z.ZodError 
+        ? "Invalid input: " + JSON.stringify(error.errors)
+        : error.message || "Unknown error";
+      res.status(500).json({ message: "Failed to update video", details: errorMessage });
     }
   });
 

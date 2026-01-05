@@ -250,9 +250,16 @@ function VideosManager() {
         },
         onError: (err: any) => {
           console.error("Error updating video:", err);
+          let description = "Une erreur est survenue lors de la communication avec le serveur.";
+          try {
+            const errorData = JSON.parse(err.message);
+            if (errorData.details) description = errorData.details;
+          } catch (e) {
+            if (err.message) description = err.message;
+          }
           toast({ 
             title: "Erreur lors de la mise à jour", 
-            description: err.message || "Une erreur est survenue lors de la communication avec le serveur.",
+            description,
             variant: "destructive" 
           });
         },
@@ -267,9 +274,16 @@ function VideosManager() {
         },
         onError: (err: any) => {
           console.error("Error creating video:", err);
+          let description = "Une erreur est survenue lors de la communication avec le serveur.";
+          try {
+            const errorData = JSON.parse(err.message);
+            if (errorData.details) description = errorData.details;
+          } catch (e) {
+            if (err.message) description = err.message;
+          }
           toast({ 
             title: "Erreur lors de l'ajout", 
-            description: err.message || "Une erreur est survenue lors de la communication avec le serveur.",
+            description,
             variant: "destructive" 
           });
         },
@@ -557,7 +571,7 @@ function AdminDashboard({ logout }: { logout: any }) {
           <div className="overflow-x-auto mb-6">
             <TabsList className="inline-flex w-auto min-w-max">
               {tabs.map((tab) => (
-                <TabsTrigger key={tab.value} value={tab.value} className="px-4 py-2">
+                <TabsTrigger key={tab.value} value={tab.value} className="px-4 py-2" data-testid={`tab-${tab.value}`}>
                   {tab.label}
                 </TabsTrigger>
               ))}
