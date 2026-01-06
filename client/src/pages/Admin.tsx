@@ -440,14 +440,41 @@ function PressManager() {
         <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Article</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvel"} Article</DialogTitle></DialogHeader>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input {...form.register("title")} placeholder="Titre" />
-            <Input {...form.register("source")} placeholder="Source" />
-            <Input {...form.register("url")} placeholder="URL" />
-            <Textarea {...form.register("snippet")} placeholder="Extrait" />
-            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>{editingId ? "Modifier" : "Nouvel"} Article de Presse</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+            <div className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="title">Titre de l'article</Label>
+                <Input id="title" {...form.register("title")} placeholder="Ex: Interview exclusive avec..." />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="source">Source / Média</Label>
+                  <Input id="source" {...form.register("source")} placeholder="Ex: Rolling Stone" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="url">Lien de l'article</Label>
+                  <Input id="url" {...form.register("url")} placeholder="https://..." />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="snippet">Extrait / Description</Label>
+                <Textarea 
+                  id="snippet" 
+                  {...form.register("snippet")} 
+                  placeholder="Un court résumé de l'article..."
+                  className="min-h-[100px]"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end pt-4">
+              <Button type="submit" className="w-full sm:w-auto">
+                {editingId ? "Enregistrer les modifications" : "Ajouter l'article"}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>
