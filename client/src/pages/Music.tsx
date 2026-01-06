@@ -57,6 +57,16 @@ export default function Music() {
                   >
                     <div className="flex items-center gap-6">
                       <span className="text-muted-foreground font-mono text-sm w-6">{(i + 1).toString().padStart(2, '0')}</span>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePlayTrack(track);
+                        }}
+                        className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
+                        data-testid={`button-play-track-${track.id}`}
+                      >
+                        <Play size={12} fill="currentColor" className="ml-0.5" />
+                      </button>
                       <div>
                         <h4 className="font-bold text-lg group-hover:text-primary transition-colors">{track.title}</h4>
                       </div>
@@ -81,16 +91,6 @@ export default function Music() {
                           </a>
                         )}
                         <SocialShare title={track.title} />
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handlePlayTrack(track);
-                          }}
-                          className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
-                          data-testid={`button-play-track-${track.id}`}
-                        >
-                          <Play size={12} fill="currentColor" className="ml-0.5" />
-                        </button>
                       </div>
                     </div>
                   </div>
