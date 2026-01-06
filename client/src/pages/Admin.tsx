@@ -204,7 +204,10 @@ function TracksManager() {
       <div className="grid gap-2">
         {tracks.map(track => (
           <div key={track.id} className="flex items-center justify-between p-3 border rounded bg-card">
-            <div className="font-medium">{track.title}</div>
+            <div className="flex flex-col">
+              <div className="font-medium">{track.title}</div>
+              <div className="text-xs text-muted-foreground">{track.playCount || 0} lectures</div>
+            </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon" onClick={() => { setEditingId(track.id); form.reset(track); setOpen(true); }}><Edit2 size={16} /></Button>
               <Button variant="destructive" size="icon" onClick={() => deleteTrack.mutate(track.id)}><Trash2 size={16} /></Button>

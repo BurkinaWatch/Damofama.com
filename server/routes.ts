@@ -134,6 +134,11 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
+  app.post("/api/tracks/:id/play", async (req, res) => {
+    await storage.incrementPlayCount(Number(req.params.id));
+    res.status(204).send();
+  });
+
   app.post(api.videos.create.path, requireAuth, async (req, res) => {
     try {
       const input = api.videos.create.input.parse(req.body);

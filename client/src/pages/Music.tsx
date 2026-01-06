@@ -1,7 +1,8 @@
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useAlbums, useTracks, useVideos } from "@/hooks/use-content";
-import { Play } from "lucide-react";
+import { Play, Headphones } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function Music() {
   const { data: albums, isLoading: albumsLoading } = useAlbums();
@@ -9,9 +10,15 @@ export default function Music() {
   const { data: videos, isLoading: videosLoading } = useVideos();
   const { play, currentTrack } = useAudio();
 
-  const handlePlayTrack = (track: NonNullable<typeof tracks>[0]) => {
+  const handlePlayTrack = async (track: NonNullable<typeof tracks>[0]) => {
     if (tracks) {
       play(track, tracks);
+      try {
+        await apiRequest("POST", `/api/tracks/${track.id}/play`);
+        queryClient.invalidateQueries({ queryKey: ["/api/tracks"] });
+      } catch (error) {
+        console.error("Failed to increment play count:", error);
+      }
     }
   };
 
@@ -57,6 +64,10 @@ export default function Music() {
                       <span className="text-muted-foreground font-mono text-sm w-6">{(i + 1).toString().padStart(2, '0')}</span>
                       <div>
                         <h4 className="font-bold text-lg group-hover:text-primary transition-colors">{track.title}</h4>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                          <Headphones size={12} />
+                          <span>{track.playCount || 0} lectures</span>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-6">
