@@ -416,17 +416,21 @@ function PressManager() {
 
   const form = useForm<InsertPress>({
     resolver: zodResolver(insertPressSchema),
-    defaultValues: { title: "", source: "", url: "", snippet: "" },
+    defaultValues: { title: "", source: "", url: "", snippet: "", date: new Date() },
   });
 
   const onSubmit = (data: InsertPress) => {
+    const submissionData = {
+      ...data,
+      date: data.date instanceof Date ? data.date.toISOString() : new Date().toISOString()
+    };
     if (editingId) {
-      updatePress.mutate({ id: editingId, data }, {
+      updatePress.mutate({ id: editingId, data: submissionData as any }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Article mis à jour" }); },
         onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
       });
     } else {
-      createPress.mutate(data, {
+      createPress.mutate(submissionData as any, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Article ajouté" }); },
         onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
       });

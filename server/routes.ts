@@ -191,11 +191,19 @@ export async function registerRoutes(
   });
 
   app.post(api.press.create.path, requireAuth, async (req, res) => {
-    const input = api.press.create.input.extend({
-      date: z.coerce.date(),
-    }).parse(req.body);
-    const item = await storage.createPress(input);
-    res.status(201).json(item);
+    try {
+      const input = api.press.create.input.extend({
+        date: z.preprocess((val) => val ? new Date(val as string) : new Date(), z.date()),
+      }).parse(req.body);
+      const item = await storage.createPress(input);
+      res.status(201).json(item);
+    } catch (error: any) {
+      console.error("Error creating press article:", error);
+      const errorMessage = error instanceof z.ZodError 
+        ? "Invalid input: " + JSON.stringify(error.errors)
+        : error.message || "Unknown error";
+      res.status(500).json({ message: "Failed to create press article", details: errorMessage });
+    }
   });
 
   app.patch(api.press.update.path, requireAuth, async (req, res) => {
