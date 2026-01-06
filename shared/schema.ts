@@ -39,6 +39,7 @@ export const tracks = pgTable("tracks", {
   audioUrl: text("audio_url").notNull(),
   photoUrl: text("photo_url"),
   duration: text("duration"),
+  playCount: integer("play_count").default(0).notNull(),
   isSingle: boolean("is_single").default(false),
   isFeatured: boolean("is_featured").default(false),
   hidden: boolean("hidden").default(false),

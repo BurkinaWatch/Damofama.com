@@ -60,7 +60,12 @@ export default function Music() {
                       </div>
                     </div>
                     <div className="flex items-center gap-6">
-                      <span className="text-sm text-muted-foreground font-mono">{track.duration}</span>
+                      <div className="text-right flex flex-col items-end">
+                        <span className="text-sm text-muted-foreground font-mono">{track.duration}</span>
+                        <span className="text-[10px] text-muted-foreground/60 font-mono uppercase tracking-tighter">
+                          {track.playCount || 0} écoutes
+                        </span>
+                      </div>
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();

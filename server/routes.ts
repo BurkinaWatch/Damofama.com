@@ -129,6 +129,15 @@ export async function registerRoutes(
     res.json(track);
   });
 
+  app.post("/api/tracks/:id/play", async (req, res) => {
+    try {
+      const track = await storage.incrementTrackPlayCount(Number(req.params.id));
+      res.json(track);
+    } catch (error: any) {
+      res.status(404).json({ message: error.message });
+    }
+  });
+
   app.delete(api.tracks.delete.path, requireAuth, async (req, res) => {
     await storage.deleteTrack(Number(req.params.id));
     res.status(204).send();

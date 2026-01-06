@@ -122,6 +122,21 @@ export function useDeleteTrack() {
   });
 }
 
+export function useIncrementPlayCount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/tracks/${id}/play`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to increment play count");
+      return await res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.tracks.list.path] }),
+  });
+}
+
 // === VIDEOS ===
 export function useVideos(includeHidden = false) {
   return useQuery({

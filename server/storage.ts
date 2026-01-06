@@ -28,6 +28,7 @@ export interface IStorage {
   createTrack(track: InsertTrack): Promise<Track>;
   updateTrack(id: number, track: InsertTrack): Promise<Track>;
   deleteTrack(id: number): Promise<void>;
+  incrementTrackPlayCount(id: number): Promise<Track>;
 
   // Videos
   getVideos(): Promise<Video[]>;
@@ -125,6 +126,18 @@ export class DatabaseStorage implements IStorage {
 
   async deleteTrack(id: number): Promise<void> {
     await db.delete(tracks).where(eq(tracks.id, id));
+  }
+
+  async incrementTrackPlayCount(id: number): Promise<Track> {
+    const [track] = await db.select().from(tracks).where(eq(tracks.id, id));
+    if (!track) throw new Error("Track not found");
+    
+    const [updated] = await db
+      .update(tracks)
+      .set({ playCount: (track.playCount || 0) + 1 })
+      .where(eq(tracks.id, id))
+      .returning();
+    return updated;
   }
 
   async getVideos(): Promise<Video[]> {

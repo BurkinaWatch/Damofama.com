@@ -1,7 +1,8 @@
 import { Play, Pause, SkipForward, SkipBack, Volume2, ChevronDown, ChevronUp } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAudio } from "@/contexts/AudioContext";
+import { useIncrementPlayCount } from "@/hooks/use-content";
 
 function formatTime(seconds: number): string {
   if (!seconds || isNaN(seconds)) return "0:00";
@@ -13,6 +14,13 @@ function formatTime(seconds: number): string {
 export function AudioPlayer() {
   const [isMinimized, setIsMinimized] = useState(false);
   const { currentTrack, isPlaying, togglePlay, nextTrack, prevTrack, seek, duration, currentTime, setVolume, volume } = useAudio();
+  const incrementPlayCount = useIncrementPlayCount();
+
+  useEffect(() => {
+    if (currentTrack?.id) {
+      incrementPlayCount.mutate(currentTrack.id);
+    }
+  }, [currentTrack?.id]);
 
   if (!currentTrack) {
     return null;
