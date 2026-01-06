@@ -2,6 +2,7 @@ import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useAlbums, useTracks, useVideos } from "@/hooks/use-content";
 import { Play } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
+import { SocialShare } from "@/components/SocialShare";
 
 export default function Music() {
   const { data: albums, isLoading: albumsLoading } = useAlbums();
@@ -66,16 +67,19 @@ export default function Music() {
                           {track.playCount || 0} écoutes
                         </span>
                       </div>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePlayTrack(track);
-                        }}
-                        className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
-                        data-testid={`button-play-track-${track.id}`}
-                      >
-                        <Play size={12} fill="currentColor" className="ml-0.5" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <SocialShare title={track.title} />
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePlayTrack(track);
+                          }}
+                          className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all"
+                          data-testid={`button-play-track-${track.id}`}
+                        >
+                          <Play size={12} fill="currentColor" className="ml-0.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}

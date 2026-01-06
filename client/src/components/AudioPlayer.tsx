@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAudio } from "@/contexts/AudioContext";
 import { useIncrementPlayCount } from "@/hooks/use-content";
+import { SocialShare } from "@/components/SocialShare";
 
 function formatTime(seconds: number): string {
   if (!seconds || isNaN(seconds)) return "0:00";
@@ -61,13 +62,19 @@ export function AudioPlayer() {
             </div>
           </div>
 
-          <button
-            onClick={() => setIsMinimized(!isMinimized)}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-            data-testid="button-minimize-player"
-          >
-            {isMinimized ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          </button>
+          <div className="flex items-center gap-2">
+            <SocialShare 
+              title={currentTrack.title} 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            />
+            <button
+              onClick={() => setIsMinimized(!isMinimized)}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              data-testid="button-minimize-player"
+            >
+              {isMinimized ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </button>
+          </div>
         </div>
 
         {/* Controls - only show when not minimized */}
