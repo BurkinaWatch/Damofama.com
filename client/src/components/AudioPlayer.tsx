@@ -1,4 +1,5 @@
 import { Play, Pause, SkipForward, SkipBack, Volume2, ChevronDown, ChevronUp } from "lucide-react";
+import { SiSpotify } from "react-icons/si";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAudio } from "@/contexts/AudioContext";
@@ -63,6 +64,17 @@ export function AudioPlayer() {
           </div>
 
           <div className="flex items-center gap-2">
+            {currentTrack.spotifyUrl && (
+              <a 
+                href={currentTrack.spotifyUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#1DB954] transition-colors"
+                title="Écouter sur Spotify"
+              >
+                <SiSpotify size={20} />
+              </a>
+            )}
             <SocialShare 
               title={currentTrack.title} 
               className="text-muted-foreground hover:text-foreground transition-colors"

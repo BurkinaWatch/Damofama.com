@@ -1,6 +1,7 @@
 import { PageTransition, SectionReveal } from "@/components/PageTransition";
 import { useAlbums, useTracks, useVideos } from "@/hooks/use-content";
 import { Play } from "lucide-react";
+import { SiSpotify } from "react-icons/si";
 import { useAudio } from "@/contexts/AudioContext";
 import { SocialShare } from "@/components/SocialShare";
 
@@ -68,6 +69,17 @@ export default function Music() {
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
+                        {track.spotifyUrl && (
+                          <a 
+                            href={track.spotifyUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#1DB954] hover:border-[#1DB954] hover:text-black transition-all"
+                            title="Écouter sur Spotify"
+                          >
+                            <SiSpotify size={14} />
+                          </a>
+                        )}
                         <SocialShare title={track.title} />
                         <button 
                           onClick={(e) => {

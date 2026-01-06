@@ -37,6 +37,7 @@ export const tracks = pgTable("tracks", {
   albumId: integer("album_id").references(() => albums.id),
   title: text("title").notNull(),
   audioUrl: text("audio_url").notNull(),
+  spotifyUrl: text("spotify_url"),
   photoUrl: text("photo_url"),
   duration: text("duration"),
   playCount: integer("play_count").default(0).notNull(),
