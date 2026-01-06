@@ -47,9 +47,6 @@ export interface IStorage {
   updatePress(id: number, item: InsertPress): Promise<Press>;
   deletePress(id: number): Promise<void>;
 
-  // Tracks extra
-  incrementPlayCount(id: number): Promise<void>;
-
   // Photos
   getPhotos(): Promise<Photo[]>;
   createPhoto(photo: InsertPhoto): Promise<Photo>;
@@ -195,15 +192,6 @@ export class DatabaseStorage implements IStorage {
 
   async deletePress(id: number): Promise<void> {
     await db.delete(press).where(eq(press.id, id));
-  }
-
-  async incrementPlayCount(id: number): Promise<void> {
-    const [track] = await db.select().from(tracks).where(eq(tracks.id, id));
-    if (track) {
-      await db.update(tracks)
-        .set({ playCount: (track.playCount || 0) + 1 })
-        .where(eq(tracks.id, id));
-    }
   }
 
   async getPhotos(): Promise<Photo[]> {

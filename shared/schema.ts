@@ -41,7 +41,6 @@ export const tracks = pgTable("tracks", {
   duration: text("duration"),
   isSingle: boolean("is_single").default(false),
   isFeatured: boolean("is_featured").default(false),
-  playCount: integer("play_count").default(0),
   hidden: boolean("hidden").default(false),
 });
 
