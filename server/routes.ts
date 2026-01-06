@@ -129,14 +129,16 @@ export async function registerRoutes(
 
   app.post(api.tracks.create.path, requireAuth, async (req, res) => {
     try {
+      console.log("Creating track with input:", req.body);
       const input = api.tracks.create.input.parse(req.body);
       const track = await storage.createTrack(input);
       res.status(201).json(track);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid input", errors: error.errors });
-      }
-      throw error;
+    } catch (error: any) {
+      console.error("Error creating track:", error);
+      const errorMessage = error instanceof z.ZodError 
+        ? "Invalid input: " + JSON.stringify(error.errors)
+        : error.message || "Unknown error";
+      res.status(500).json({ message: "Failed to create track", details: errorMessage });
     }
   });
 
