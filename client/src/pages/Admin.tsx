@@ -138,6 +138,7 @@ function AlbumsManager() {
 
 function TracksManager() {
   const { data: tracks = [] } = useTracks(true);
+  const { data: albums = [] } = useAlbums(true);
   const createTrack = useCreateTrack();
   const updateTrack = useUpdateTrack();
   const deleteTrack = useDeleteTrack();
@@ -147,57 +148,104 @@ function TracksManager() {
 
   const form = useForm<InsertTrack>({
     resolver: zodResolver(insertTrackSchema),
-    defaultValues: { title: "", audioUrl: "", duration: "", isSingle: false },
+    defaultValues: { title: "", audioUrl: "", duration: "", isSingle: false, albumId: null },
   });
 
   const onSubmit = (data: InsertTrack) => {
+    // Ensure albumId is handled properly
+    const submissionData = {
+      ...data,
+      albumId: data.isSingle ? null : (data.albumId ? Number(data.albumId) : null),
+    };
+    
     if (editingId) {
-      updateTrack.mutate({ id: editingId, data }, {
+      updateTrack.mutate({ id: editingId, data: submissionData as any }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Morceau mis à jour" }); },
-        onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
+        onError: (err: any) => toast({ 
+          title: "Erreur lors de la mise à jour", 
+          description: err.message,
+          variant: "destructive" 
+        }),
       });
     } else {
-      createTrack.mutate(data, {
+      createTrack.mutate(submissionData as any, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Morceau ajouté" }); },
-        onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
+        onError: (err: any) => toast({ 
+          title: "Erreur lors de l'ajout", 
+          description: err.message,
+          variant: "destructive" 
+        }),
       });
     }
   };
+
+  const isSingle = form.watch("isSingle");
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Morceaux</h2>
-        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Morceau</Button>
+        <Button onClick={() => { setEditingId(null); form.reset({ title: "", audioUrl: "", duration: "", isSingle: false, albumId: null }); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Morceau</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>{editingId ? "Modifier" : "Nouveau"} Morceau</DialogTitle>
           </DialogHeader>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label>Titre</Label>
-              <Input {...form.register("title")} placeholder="Titre" />
-            </div>
-            <div className="space-y-2">
-              <Label>Fichier Audio</Label>
-              <div className="flex gap-2">
-                <Input {...form.register("audioUrl")} placeholder="URL Audio" className="flex-1" />
-                <FileUploadButton accept="audio/*" onUploadComplete={(path) => form.setValue("audioUrl", path)} />
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+            <div className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="track-title">Titre</Label>
+                <Input id="track-title" {...form.register("title")} placeholder="Titre du morceau" />
+              </div>
+              
+              <div className="flex items-center space-x-2 py-2">
+                <input 
+                  type="checkbox" 
+                  id="is-single" 
+                  className="h-4 w-4 rounded border-gray-300"
+                  {...form.register("isSingle")} 
+                />
+                <Label htmlFor="is-single" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  C'est un Single (ne fait pas partie d'un album)
+                </Label>
+              </div>
+
+              {!isSingle && (
+                <div className="grid gap-2">
+                  <Label htmlFor="track-album">Album</Label>
+                  <select 
+                    id="track-album"
+                    {...form.register("albumId")}
+                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm"
+                  >
+                    <option value="">Sélectionner un album...</option>
+                    {albums.map(album => (
+                      <option key={album.id} value={album.id}>{album.title}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="grid gap-2">
+                <Label htmlFor="track-audio">Fichier Audio</Label>
+                <div className="flex gap-2">
+                  <Input id="track-audio" {...form.register("audioUrl")} placeholder="URL du fichier audio" className="flex-1" />
+                  <FileUploadButton accept="audio/*" onUploadComplete={(path) => form.setValue("audioUrl", path)} />
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="track-duration">Durée (ex: 3:45)</Label>
+                <Input id="track-duration" {...form.register("duration")} placeholder="0:00" />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Durée (ex: 3:45)</Label>
-              <Input {...form.register("duration")} placeholder="Durée (ex: 3:45)" />
+            
+            <div className="flex justify-end pt-4">
+              <Button type="submit" className="w-full sm:w-auto" disabled={createTrack.isPending || updateTrack.isPending}>
+                {editingId ? "Enregistrer" : "Ajouter"}
+              </Button>
             </div>
-            <div className="flex items-center gap-2">
-              <input type="checkbox" {...form.register("isSingle")} id="track-single" />
-              <Label htmlFor="track-single">Single</Label>
-            </div>
-            <Button type="submit" disabled={createTrack.isPending || updateTrack.isPending}>
-              {editingId ? "Modifier" : "Ajouter"}
-            </Button>
           </form>
         </DialogContent>
       </Dialog>
