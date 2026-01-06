@@ -355,17 +355,23 @@ function EventsManager() {
 
   const form = useForm<InsertEvent>({
     resolver: zodResolver(insertEventSchema),
-    defaultValues: { title: "", location: "", venue: "", type: "concert" },
+    defaultValues: { title: "", location: "", venue: "", type: "concert", date: new Date() },
   });
 
   const onSubmit = (data: InsertEvent) => {
+    // Ensure date is properly handled
+    const submissionData = {
+      ...data,
+      date: data.date instanceof Date ? data.date : new Date(data.date)
+    };
+
     if (editingId) {
-      updateEvent.mutate({ id: editingId, data }, {
+      updateEvent.mutate({ id: editingId, data: submissionData }, {
         onSuccess: () => { setOpen(false); setEditingId(null); form.reset(); toast({ title: "Événement mis à jour" }); },
         onError: () => toast({ title: "Erreur lors de la mise à jour", variant: "destructive" }),
       });
     } else {
-      createEvent.mutate(data, {
+      createEvent.mutate(submissionData, {
         onSuccess: () => { setOpen(false); form.reset(); toast({ title: "Événement ajouté" }); },
         onError: () => toast({ title: "Erreur lors de l'ajout", variant: "destructive" }),
       });
@@ -376,17 +382,62 @@ function EventsManager() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Événements</h2>
-        <Button onClick={() => { setEditingId(null); form.reset(); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Événement</Button>
+        <Button onClick={() => { setEditingId(null); form.reset({ title: "", location: "", venue: "", type: "concert", date: new Date() }); setOpen(true); }}><Plus size={16} className="mr-2" /> Ajouter Événement</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>{editingId ? "Modifier" : "Nouvel"} Événement</DialogTitle></DialogHeader>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input {...form.register("title")} placeholder="Titre" />
-            <Input type="datetime-local" {...form.register("date", { valueAsDate: true })} />
-            <Input {...form.register("location")} placeholder="Lieu" />
-            <Input {...form.register("venue")} placeholder="Salle" />
-            <Button type="submit">{editingId ? "Modifier" : "Ajouter"}</Button>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>{editingId ? "Modifier" : "Nouvel"} Événement</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+            <div className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="event-title">Nom de l'événement</Label>
+                <Input id="event-title" {...form.register("title")} placeholder="Ex: Concert Tounganata" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="event-date">Date et heure</Label>
+                  <Input 
+                    id="event-date"
+                    type="datetime-local" 
+                    {...form.register("date", { 
+                      valueAsDate: true,
+                      setValueAs: (v) => v ? new Date(v) : new Date()
+                    })} 
+                    defaultValue={editingId ? undefined : new Date().toISOString().slice(0, 16)}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="event-type">Type</Label>
+                  <select 
+                    id="event-type"
+                    {...form.register("type")} 
+                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="concert">Concert</option>
+                    <option value="festival">Festival</option>
+                    <option value="showcase">Showcase</option>
+                    <option value="private">Privé</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="event-venue">Salle / Lieu précis</Label>
+                  <Input id="event-venue" {...form.register("venue")} placeholder="Ex: Palais de la Culture" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="event-location">Ville, Pays</Label>
+                  <Input id="event-location" {...form.register("location")} placeholder="Ex: Ouagadougou, BF" />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end pt-4">
+              <Button type="submit" className="w-full sm:w-auto" disabled={createEvent.isPending || updateEvent.isPending}>
+                {editingId ? "Enregistrer les modifications" : "Ajouter l'événement"}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>
