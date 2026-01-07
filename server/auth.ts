@@ -54,38 +54,30 @@ export function setupAuth(app: Express) {
   );
 
   passport.serializeUser((user: any, done) => {
-    console.log("Serializing user:", user.id);
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id: number, done) => {
     try {
-      console.log("Deserializing user:", id);
       const user = await storage.getUser(id);
       done(null, user);
     } catch (error) {
-      console.error("Deserialization error:", error);
       done(error);
     }
   });
 
   app.post("/api/login", (req, res, next) => {
-    console.log("Login attempt for:", req.body.username);
     passport.authenticate("local", (err: any, user: any, info: any) => {
       if (err) {
-        console.error("Auth error:", err);
         return next(err);
       }
       if (!user) {
-        console.log("Auth failed:", info?.message);
         return res.status(401).json({ message: info?.message || "Invalid credentials" });
       }
       req.logIn(user, (err) => {
         if (err) {
-          console.error("Login error:", err);
           return next(err);
         }
-        console.log("Login successful:", user.username);
         return res.json(user);
       });
     })(req, res, next);
