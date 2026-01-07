@@ -5,38 +5,38 @@
 @tailwind utilities;
 
 :root {
-  /* HSL Color System - Afro-contemporary Cinematic Luxury */
+  /* HSL Color System - Afro-contemporary Artistic Soul */
   
-  /* Backgrounds: Deep Black & Dark Earth Tones */
-  --background: 240 10% 4%;       /* Almost black, hint of richness */
-  --foreground: 40 20% 90%;       /* Off-white, warm parchment */
+  /* Backgrounds: Warm Deep Ochre & Earthy Charcoal */
+  --background: 25 15% 6%;         /* Very deep warm charcoal with an earthy base */
+  --foreground: 35 30% 85%;       /* Warm linen white */
   
-  /* Cards & Surface: Slightly lighter than background */
-  --card: 240 10% 6%;
-  --card-foreground: 40 20% 90%;
-  --popover: 240 10% 6%;
-  --popover-foreground: 40 20% 90%;
+  /* Cards & Surface: Elevating the earth tones */
+  --card: 25 15% 8%;
+  --card-foreground: 35 30% 85%;
+  --popover: 25 15% 8%;
+  --popover-foreground: 35 30% 85%;
 
-  /* Primary: Gold/Bronze - Luxury & Warmth */
-  --primary: 45 40% 50%;
-  --primary-foreground: 240 10% 4%;
+  /* Primary: Burnt Orange / Sunset - Representing vitality and African soul */
+  --primary: 25 70% 55%;
+  --primary-foreground: 25 15% 6%;
 
-  /* Secondary: Deep Earth/Clay */
-  --secondary: 15 30% 20%;
-  --secondary-foreground: 40 20% 90%;
+  /* Secondary: Deep Savannah Green / Forest */
+  --secondary: 120 15% 15%;
+  --secondary-foreground: 35 30% 85%;
 
-  /* Muted: Subtle gray-browns */
-  --muted: 240 5% 15%;
-  --muted-foreground: 40 10% 60%;
+  /* Muted: Dusty Savannah Earth */
+  --muted: 25 10% 15%;
+  --muted-foreground: 35 15% 50%;
 
-  /* Accent: Electric Blue or Deep Red (Using Deep Red here for drama) */
-  --accent: 350 60% 40%;
-  --accent-foreground: 40 20% 95%;
+  /* Accent: Terra Cotta / Red Earth */
+  --accent: 15 50% 45%;
+  --accent-foreground: 35 30% 95%;
 
   /* Borders & Inputs */
-  --border: 240 5% 15%;
-  --input: 240 5% 15%;
-  --ring: 45 40% 50%; /* Gold ring */
+  --border: 25 10% 15%;
+  --input: 25 10% 15%;
+  --ring: 25 70% 55%;
 
   --radius: 0.25rem;
 
