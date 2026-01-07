@@ -23,22 +23,58 @@ export default function Live() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20 pt-24 sm:pt-32">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-background pb-20">
+      {/* Artistic Hero Section */}
+      <section className="relative h-[70vh] min-h-[500px] w-full overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/attached_assets/10_1767776421949.jpg" 
+            alt="Damo Fama Live" 
+            className="w-full h-full object-cover"
+          />
+          {/* Artistic Wash Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        </div>
+
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto mb-16 text-center"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="container relative z-10 mx-auto px-4 text-center"
         >
-          <h1 className="text-4xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent tracking-tighter">
-            LIVE
-          </h1>
-          <div className="w-24 h-1 bg-primary mx-auto mb-6" />
-          <p className="text-muted-foreground text-lg uppercase tracking-widest">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            <h1 className="text-6xl sm:text-8xl md:text-9xl font-display font-bold mb-4 tracking-tighter text-white drop-shadow-2xl">
+              LIVE
+            </h1>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ width: 0 }}
+            animate={{ width: "8rem" }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="h-1 bg-primary mx-auto mb-8 shadow-[0_0_15px_rgba(var(--primary),0.5)]" 
+          />
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.7 }}
+            className="text-white/80 text-lg sm:text-xl uppercase tracking-[0.3em] font-light max-w-2xl mx-auto px-4"
+          >
             Vivez l'énergie des performances de Damo Fama en direct.
-          </p>
+          </motion.p>
         </motion.div>
 
+        {/* Decorative elements */}
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent z-10" />
+      </section>
+
+      <div className="container mx-auto px-4 -mt-10 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 max-w-6xl mx-auto">
           {liveVideos.length > 0 ? (
             liveVideos.map((video, index) => (
