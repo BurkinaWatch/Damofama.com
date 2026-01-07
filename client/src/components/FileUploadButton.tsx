@@ -63,7 +63,6 @@ export function FileUploadButton({
       console.log("Got upload URL:", uploadURL);
 
       // Step 2: Upload file to the URL
-      // Remove default headers for the PUT request to avoid CORS issues with the fake local endpoint
       const uploadResponse = await fetch(uploadURL, {
         method: "PUT",
         body: file,
