@@ -35,9 +35,10 @@ export default function Gallery() {
     ? photos
         .filter(p => p.imageUrl && p.imageUrl.trim() !== "")
         .map(p => {
-          // Handle local uploads that were optimized to webp
           let src = p.imageUrl;
-          if (src.startsWith('/uploads/') && !src.endsWith('.webp')) {
+          // Si c'est une image locale (importée avec @assets), on l'utilise telle quelle
+          // Si c'est une image téléchargée (commençant par /uploads/), on s'assure de l'extension
+          if (src.startsWith('/uploads/') && !src.endsWith('.webp') && !src.includes('.')) {
             src = `${src}.webp`;
           }
           return {
@@ -46,7 +47,7 @@ export default function Gallery() {
             category: p.category || "concert"
           };
         })
-    : [];
+    : defaultGalleryItems;
 
   return (
     <div className="min-h-screen">
