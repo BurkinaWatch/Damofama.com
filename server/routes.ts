@@ -8,6 +8,8 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import sharp from "sharp";
 import { initDatabase } from "./db";
+import path from "path";
+import fs from "fs";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -320,8 +322,6 @@ export async function registerRoutes(
   app.put("/api/uploads/:fileId", async (req, res) => {
     try {
       const { fileId } = req.params;
-      const fs = await import("fs");
-      const path = await import("path");
 
       // Set CORS headers for file uploads
       const origin = req.get('origin') || "*";
@@ -331,14 +331,14 @@ export async function registerRoutes(
       res.header("Access-Control-Allow-Credentials", "true");
 
       // Store in public/uploads directory
-      const uploadsDir = path.default.join(process.cwd(), "public", "uploads");
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
 
       // Create uploads directory if it doesn't exist
       if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir, { recursive: true });
       }
 
-      const filePath = path.default.join(uploadsDir, fileId);
+      const filePath = path.join(uploadsDir, fileId);
 
       // First save the file using streaming
       const writeStream = fs.createWriteStream(filePath);
@@ -354,7 +354,7 @@ export async function registerRoutes(
           if (isImage) {
             // Read the saved file and optimize it
             const optimizedFileId = fileId + '.webp';
-            const optimizedPath = path.default.join(uploadsDir, optimizedFileId);
+            const optimizedPath = path.join(uploadsDir, optimizedFileId);
             
             try {
               await sharp(filePath)
