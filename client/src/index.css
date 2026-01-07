@@ -7,35 +7,35 @@
 :root {
   /* HSL Color System - Sophisticated Afro Urban (Muted & Classy) */
   
-  /* Backgrounds: Darker Stone / Sophisticated Deep Grey */
-  --background: 40 5% 12%;        /* Much darker base for a cinematic feel */
-  --foreground: 40 5% 85%;       /* Light stone for readability on dark */
+  /* Backgrounds: Earthy African Brown (#1C120D) */
+  --background: 19 37% 8%;        /* #1C120D in HSL is roughly 19 37% 8% */
+  --foreground: 40 5% 85%;       /* Light stone for readability */
   
-  /* Cards & Surface: Deep Obsidian / Charcoal */
-  --card: 40 5% 15%;
+  /* Cards & Surface: Slightly lighter shade of Earthy Brown */
+  --card: 19 37% 10%;
   --card-foreground: 40 5% 85%;
-  --popover: 40 5% 15%;
+  --popover: 19 37% 10%;
   --popover-foreground: 40 5% 85%;
 
   /* Primary: Muted Golden Ochre - Less vibrant, more high-end */
   --primary: 38 60% 50%;
-  --primary-foreground: 20 8% 5%;
+  --primary-foreground: 19 37% 4%;
 
   /* Secondary: Deep Earth / Mahogany */
   --secondary: 15 20% 18%;
   --secondary-foreground: 40 5% 90%;
 
   /* Muted: Deep Industrial Taupe */
-  --muted: 40 5% 18%;
+  --muted: 19 37% 12%;
   --muted-foreground: 40 5% 55%;
 
   /* Accent: Muted Terra Cotta */
   --accent: 15 40% 42%;
   --accent-foreground: 40 5% 98%;
 
-  /* Borders & Inputs: Subtle Deep Stone lines */
-  --border: 40 5% 22%;
-  --input: 40 5% 22%;
+  /* Borders & Inputs: Subtle Deep Earth lines */
+  --border: 19 37% 16%;
+  --input: 19 37% 16%;
   --ring: 38 60% 50%;
 
   --radius: 0.375rem;
@@ -45,12 +45,12 @@
 }
 
 .dark {
-  --background: 20 8% 6%;
+  --background: 19 37% 6%;
   --foreground: 40 5% 85%;
-  --card: 20 8% 8%;
+  --card: 19 37% 8%;
   --card-foreground: 40 5% 85%;
   --primary: 38 60% 50%;
-  --primary-foreground: 20 8% 5%;
+  --primary-foreground: 19 37% 4%;
 }
 
 @layer base {
