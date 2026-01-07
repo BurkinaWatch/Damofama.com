@@ -16,24 +16,29 @@ export async function registerRoutes(
   // Ensure tables exist before setting up routes/auth
   await initDatabase();
 
-  const objectStorageService = new ObjectStorageService();
+    const isReplit = !!process.env.REPL_ID;
+    const objectStorageService = new ObjectStorageService();
 
-  // Set up authentication first
-  setupAuth(app);
-
-  // Serve uploaded objects from Object Storage
-  app.get("/objects/:objectPath(*)", async (req, res) => {
-    try {
-      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
-      await objectStorageService.downloadObject(objectFile, res);
-    } catch (error) {
-      console.error("Error serving object:", error);
-      if (error instanceof ObjectNotFoundError) {
-        return res.status(404).json({ error: "Object not found" });
+    // Serve uploaded objects
+    app.get("/objects/:objectPath(*)", async (req, res) => {
+      try {
+        if (isReplit) {
+          // Replit Object Storage
+          const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+          await objectStorageService.downloadObject(objectFile, res);
+        } else {
+          // Fallback for Railway/Local: Serve from public/uploads
+          const fileName = req.params.objectPath.split('/').pop();
+          if (!fileName) throw new Error("Invalid path");
+          const uploadsDir = path.join(process.cwd(), "public", "uploads");
+          const filePath = path.join(uploadsDir, fileName);
+          res.sendFile(filePath);
+        }
+      } catch (error) {
+        console.error("Error serving object:", error);
+        res.status(404).json({ error: "Object not found" });
       }
-      return res.status(500).json({ error: "Failed to serve object" });
-    }
-  });
+    });
 
   // === PUBLIC API (filters hidden items) ===
 
@@ -276,25 +281,24 @@ export async function registerRoutes(
     res.json(messages);
   });
 
-  // Upload URL endpoint (Object Storage)
+  // Upload URL endpoint
   app.post("/api/uploads/request-url", requireAuth, async (req, res) => {
     try {
       const { name, size, contentType } = req.body;
+      if (!name) return res.status(400).json({ error: "Missing name" });
 
-      if (!name) {
-        return res.status(400).json({
-          error: "Missing required field: name",
-        });
+      if (isReplit) {
+        const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+        const objectPath = objectStorageService.normalizeObjectEntityPath(uploadURL);
+        res.json({ uploadURL, objectPath, metadata: { name, size, contentType } });
+      } else {
+        const fileId = randomUUID();
+        const host = req.get("host") || "localhost";
+        const protocol = req.protocol;
+        const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
+        const objectPath = `/objects/${fileId}`; // Consistency with /objects/ endpoint
+        res.json({ uploadURL, objectPath, metadata: { name, size, contentType } });
       }
-
-      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      const objectPath = objectStorageService.normalizeObjectEntityPath(uploadURL);
-
-      res.json({
-        uploadURL,
-        objectPath,
-        metadata: { name, size, contentType },
-      });
     } catch (error) {
       console.error("Error generating upload URL:", error);
       res.status(500).json({ error: "Failed to generate upload URL" });
@@ -365,23 +369,21 @@ export async function registerRoutes(
               
               res.status(200).json({
                 success: true,
-                objectPath: `/uploads/${optimizedFileId}`,
+                objectPath: isReplit ? `/objects/${optimizedFileId}` : `/objects/${optimizedFileId}`,
                 fileId: optimizedFileId,
               });
             } catch (sharpError) {
               console.error("Sharp optimization failed, keeping original:", sharpError);
-              // Keep original file if Sharp fails
               res.status(200).json({
                 success: true,
-                objectPath: `/uploads/${fileId}`,
+                objectPath: isReplit ? `/objects/${fileId}` : `/objects/${fileId}`,
                 fileId,
               });
             }
           } else {
-            // Non-image files saved as-is
             res.status(200).json({
               success: true,
-              objectPath: `/uploads/${fileId}`,
+              objectPath: isReplit ? `/objects/${fileId}` : `/objects/${fileId}`,
               fileId,
             });
           }
