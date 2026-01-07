@@ -31,7 +31,7 @@ export default function About() {
                   <img 
                     src="/images/LS2C6651_1766230961643.jpg" 
                     alt="Damo Fama Portrait" 
-                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+                    className="w-full h-full object-cover transition-all duration-1000"
                   />
                   <div className="absolute inset-0 border border-white/10 m-4 pointer-events-none" />
                 </div>
