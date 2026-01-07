@@ -43,7 +43,7 @@ export default function Gallery() {
           }
           return {
             src,
-            alt: p.title,
+            alt: p.title || "Damo Fama",
             category: p.category || "concert"
           };
         })
