@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
+import { ObjectStorageService, ObjectNotFoundError } from "./replit_integrations/object_storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { randomUUID } from "crypto";
@@ -15,8 +16,24 @@ export async function registerRoutes(
   // Ensure tables exist before setting up routes/auth
   await initDatabase();
 
+  const objectStorageService = new ObjectStorageService();
+
   // Set up authentication first
   setupAuth(app);
+
+  // Serve uploaded objects from Object Storage
+  app.get("/objects/:objectPath(*)", async (req, res) => {
+    try {
+      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+      await objectStorageService.downloadObject(objectFile, res);
+    } catch (error) {
+      console.error("Error serving object:", error);
+      if (error instanceof ObjectNotFoundError) {
+        return res.status(404).json({ error: "Object not found" });
+      }
+      return res.status(500).json({ error: "Failed to serve object" });
+    }
+  });
 
   // === PUBLIC API (filters hidden items) ===
 
@@ -257,7 +274,7 @@ export async function registerRoutes(
     res.json(messages);
   });
 
-  // Upload URL endpoint (local storage)
+  // Upload URL endpoint (Object Storage)
   app.post("/api/uploads/request-url", requireAuth, async (req, res) => {
     try {
       const { name, size, contentType } = req.body;
@@ -268,10 +285,8 @@ export async function registerRoutes(
         });
       }
 
-      const fileId = randomUUID();
-      // Use relative URL for upload endpoint (works better in Replit iframe)
-      const uploadURL = `/api/uploads/${fileId}`;
-      const objectPath = `/uploads/${fileId}`;
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      const objectPath = objectStorageService.normalizeObjectEntityPath(uploadURL);
 
       res.json({
         uploadURL,

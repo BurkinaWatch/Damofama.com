@@ -36,7 +36,8 @@ export default function Gallery() {
         .filter(p => p.imageUrl && p.imageUrl.trim() !== "")
         .map(p => {
           let src = p.imageUrl;
-          // Si c'est une image téléchargée (commençant par /uploads/), on s'assure de l'extension
+          // Si c'est une image de stockage cloud (commençant par /objects/), on l'utilise telle quelle
+          // Si c'est une image téléchargée locale (commençant par /uploads/), on s'assure de l'extension
           if (src.startsWith('/uploads/') && !src.endsWith('.webp') && !src.includes('.')) {
             src = `${src}.webp`;
           }
