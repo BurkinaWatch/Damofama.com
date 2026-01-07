@@ -47,7 +47,9 @@ export default function Events() {
 
                     <div className="flex md:flex-col items-center md:items-end gap-4 mt-2 md:mt-0">
                       <a 
-                        href="tel:+22664290393"
+                        href="https://website.e-events.net/"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="bg-white text-black px-8 py-3 md:py-2 text-sm font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-colors w-full md:w-auto text-center"
                       >
                         Réserver
