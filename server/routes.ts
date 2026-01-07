@@ -287,8 +287,12 @@ export async function registerRoutes(
         });
       }
 
-      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      const objectPath = objectStorageService.normalizeObjectEntityPath(uploadURL);
+      // Use a local URL for the fake presigned URL
+      const host = req.get("host") || "localhost";
+      const protocol = req.protocol;
+      const fileId = randomUUID();
+      const uploadURL = `${protocol}://${host}/api/uploads/${fileId}`;
+      const objectPath = `/uploads/${fileId}`;
 
       res.json({
         uploadURL,
