@@ -35,8 +35,19 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setCurrentTime(0);
     
     if (audioRef.current) {
-      audioRef.current.src = track.audioUrl;
-      audioRef.current.play();
+      // Use absolute path for attached assets and ensure uploads are served correctly
+      let audioUrl = track.audioUrl;
+      if (audioUrl.startsWith('attached_assets/')) {
+        audioUrl = `/${audioUrl}`;
+      } else if (audioUrl.startsWith('uploads/')) {
+        audioUrl = `/${audioUrl}`;
+      }
+      
+      audioRef.current.src = audioUrl;
+      audioRef.current.load(); // Force load
+      audioRef.current.play().catch(err => {
+        console.error("Playback failed:", err);
+      });
       setIsPlaying(true);
     }
   };
