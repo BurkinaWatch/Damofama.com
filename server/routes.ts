@@ -24,17 +24,32 @@ export async function registerRoutes(
     // Serve uploaded objects
     app.get("/objects/:objectPath(*)", async (req, res) => {
       try {
+        const objectPath = req.params.objectPath;
         if (isReplit) {
-          // Replit Object Storage
-          const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+          // Replit Object Storage - ensure path is correctly handled
+          const objectFile = await objectStorageService.getObjectEntityFile(`/objects/${objectPath}`);
           await objectStorageService.downloadObject(objectFile, res);
         } else {
           // Fallback for Railway/Local: Serve from public/uploads
-          const fileName = req.params.objectPath.split('/').pop();
+          const fileName = objectPath.split('/').pop();
           if (!fileName) throw new Error("Invalid path");
           const uploadsDir = path.join(process.cwd(), "public", "uploads");
-          const filePath = path.join(uploadsDir, fileName);
-          res.sendFile(filePath);
+          
+          // Check for .webp version if original not found
+          let filePath = path.join(uploadsDir, fileName);
+          if (!fs.existsSync(filePath) && !fileName.endsWith('.webp')) {
+            const webpPath = filePath + '.webp';
+            if (fs.existsSync(webpPath)) {
+              filePath = webpPath;
+            }
+          }
+          
+          if (fs.existsSync(filePath)) {
+            res.sendFile(filePath);
+          } else {
+            console.error(`File not found: ${filePath}`);
+            res.status(404).json({ error: "Object not found" });
+          }
         }
       } catch (error) {
         console.error("Error serving object:", error);
