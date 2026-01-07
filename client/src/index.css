@@ -5,36 +5,38 @@
 @tailwind utilities;
 
 :root {
-  /* HSL Color System - Damofama Custom Palette */
+  /* HSL Color System - Sophisticated Afro Urban (Muted & Classy) */
   
-  /* Fond principal : #0E0A08 */
-  --background: 15 28% 5%;
-  --foreground: 0 0% 100%;
+  /* Backgrounds: Darker Stone / Sophisticated Deep Grey */
+  --background: 40 5% 12%;        /* Much darker base for a cinematic feel */
+  --foreground: 40 5% 85%;       /* Light stone for readability on dark */
   
-  /* Sections alternées : #1C120D */
-  --secondary: 19 37% 8%;
-  --secondary-foreground: 30 14% 81%;
+  /* Cards & Surface: Deep Obsidian / Charcoal */
+  --card: 40 5% 15%;
+  --card-foreground: 40 5% 85%;
+  --popover: 40 5% 15%;
+  --popover-foreground: 40 5% 85%;
 
-  /* Cartes / blocs : #F3EFEA */
-  --card: 33 26% 94%;
-  --card-foreground: 15 28% 5%;
-  --popover: 33 26% 94%;
-  --popover-foreground: 15 28% 5%;
+  /* Primary: Muted Golden Ochre - Less vibrant, more high-end */
+  --primary: 38 60% 50%;
+  --primary-foreground: 20 8% 5%;
 
-  /* Couleur d'accent : #F28C28 */
-  --primary: 30 88% 55%;
-  --primary-foreground: 0 0% 100%;
+  /* Secondary: Deep Earth / Mahogany */
+  --secondary: 15 20% 18%;
+  --secondary-foreground: 40 5% 90%;
 
-  /* Texte secondaire : #D6CFC7 */
-  --muted: 33 14% 81%;
-  --muted-foreground: 33 14% 81%;
+  /* Muted: Deep Industrial Taupe */
+  --muted: 40 5% 18%;
+  --muted-foreground: 40 5% 55%;
 
-  --accent: 30 88% 55%;
-  --accent-foreground: 0 0% 100%;
+  /* Accent: Muted Terra Cotta */
+  --accent: 15 40% 42%;
+  --accent-foreground: 40 5% 98%;
 
-  --border: 33 14% 81%;
-  --input: 33 14% 81%;
-  --ring: 30 88% 55%;
+  /* Borders & Inputs: Subtle Deep Stone lines */
+  --border: 40 5% 22%;
+  --input: 40 5% 22%;
+  --ring: 38 60% 50%;
 
   --radius: 0.375rem;
 
@@ -43,13 +45,12 @@
 }
 
 .dark {
-  /* On applique la même palette car c'est une demande spécifique */
-  --background: 15 28% 5%;
-  --foreground: 0 0% 100%;
-  --card: 33 26% 94%;
-  --card-foreground: 15 28% 5%;
-  --primary: 30 88% 55%;
-  --primary-foreground: 0 0% 100%;
+  --background: 20 8% 6%;
+  --foreground: 40 5% 85%;
+  --card: 20 8% 8%;
+  --card-foreground: 40 5% 85%;
+  --primary: 38 60% 50%;
+  --primary-foreground: 20 8% 5%;
 }
 
 @layer base {
