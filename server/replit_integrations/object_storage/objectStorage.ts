@@ -130,28 +130,25 @@ export class ObjectStorageService {
     }
   }
 
-  // Gets the upload URL for an object entity.
   async getObjectEntityUploadURL(): Promise<string> {
-    const privateObjectDir = this.getPrivateObjectDir();
-    if (!privateObjectDir) {
-      throw new Error(
-        "PRIVATE_OBJECT_DIR not set. Create a bucket in 'Object Storage' " +
-          "tool and set PRIVATE_OBJECT_DIR env var."
-      );
+    try {
+      const privateObjectDir = this.getPrivateObjectDir();
+      const objectId = randomUUID();
+      const fullPath = `${privateObjectDir}/uploads/${objectId}`;
+      const { bucketName, objectName } = parseObjectPath(fullPath);
+
+      console.log(`Generating signed URL for: ${fullPath} (Bucket: ${bucketName}, Object: ${objectName})`);
+
+      return await signObjectURL({
+        bucketName,
+        objectName,
+        method: "PUT",
+        ttlSec: 900,
+      });
+    } catch (error) {
+      console.error("Error in getObjectEntityUploadURL:", error);
+      throw error;
     }
-
-    const objectId = randomUUID();
-    const fullPath = `${privateObjectDir}/uploads/${objectId}`;
-
-    const { bucketName, objectName } = parseObjectPath(fullPath);
-
-    // Sign URL for PUT method with TTL
-    return signObjectURL({
-      bucketName,
-      objectName,
-      method: "PUT",
-      ttlSec: 900,
-    });
   }
 
   // Gets the object entity file from the object path.
@@ -243,16 +240,18 @@ function parseObjectPath(path: string): {
   bucketName: string;
   objectName: string;
 } {
+  // Normalize path to start with /
   if (!path.startsWith("/")) {
     path = `/${path}`;
   }
-  const pathParts = path.split("/");
-  if (pathParts.length < 3) {
-    throw new Error("Invalid path: must contain at least a bucket name");
+  
+  const pathParts = path.split("/").filter(p => p.length > 0);
+  if (pathParts.length < 2) {
+    throw new Error(`Invalid path: '${path}'. Path must contain at least a bucket name.`);
   }
 
-  const bucketName = pathParts[1];
-  const objectName = pathParts.slice(2).join("/");
+  const bucketName = pathParts[0];
+  const objectName = pathParts.slice(1).join("/");
 
   return {
     bucketName,
@@ -288,9 +287,11 @@ async function signObjectURL({
     }
   );
   if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Replit Sidecar Error (${response.status}):`, errorText);
     throw new Error(
       `Failed to sign object URL, errorcode: ${response.status}, ` +
-        `make sure you're running on Replit`
+        `details: ${errorText}`
     );
   }
 
