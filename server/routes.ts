@@ -96,21 +96,21 @@ export async function registerRoutes(
   });
 
   // === PROTECTED ADMIN API ===
+  setupAuth(app);
 
-  const requireAuth = (req: any, res: any, next: any) => {
-    if (req.isAuthenticated()) {
-      return next();
-    }
+  app.post(api.content.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
     res.status(401).json({ message: "Unauthorized" });
-  };
-
-  app.post(api.content.update.path, requireAuth, async (req, res) => {
+  }, async (req, res) => {
     const input = api.content.update.input.parse(req.body);
     const updated = await storage.updateContentBlock(input);
     res.json(updated);
   });
 
-  app.post(api.albums.create.path, requireAuth, async (req, res) => {
+  app.post(api.albums.create.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     try {
       const input = api.albums.create.input.parse(req.body);
       const album = await storage.createAlbum(input);
@@ -123,18 +123,27 @@ export async function registerRoutes(
     }
   });
 
-  app.patch(api.albums.update.path, requireAuth, async (req, res) => {
+  app.patch(api.albums.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.albums.update.input.parse(req.body);
     const album = await storage.updateAlbum(Number(req.params.id), input);
     res.json(album);
   });
 
-  app.delete(api.albums.delete.path, requireAuth, async (req, res) => {
+  app.delete(api.albums.delete.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     await storage.deleteAlbum(Number(req.params.id));
     res.status(204).send();
   });
 
-  app.post(api.tracks.create.path, requireAuth, async (req, res) => {
+  app.post(api.tracks.create.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     try {
       console.log("Creating track with input:", req.body);
       const input = api.tracks.create.input.parse(req.body);
@@ -149,7 +158,10 @@ export async function registerRoutes(
     }
   });
 
-  app.patch(api.tracks.update.path, requireAuth, async (req, res) => {
+  app.patch(api.tracks.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.tracks.update.input.parse(req.body);
     const track = await storage.updateTrack(Number(req.params.id), input);
     res.json(track);
@@ -164,12 +176,18 @@ export async function registerRoutes(
     }
   });
 
-  app.delete(api.tracks.delete.path, requireAuth, async (req, res) => {
+  app.delete(api.tracks.delete.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     await storage.deleteTrack(Number(req.params.id));
     res.status(204).send();
   });
 
-  app.post(api.videos.create.path, requireAuth, async (req, res) => {
+  app.post(api.videos.create.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     try {
       const input = api.videos.create.input.parse(req.body);
       console.log("Creating video with input:", input);
@@ -184,7 +202,10 @@ export async function registerRoutes(
     }
   });
 
-  app.patch(api.videos.update.path, requireAuth, async (req, res) => {
+  app.patch(api.videos.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     try {
       const input = api.videos.update.input.parse(req.body);
       console.log("Updating video with input:", input);
@@ -199,12 +220,18 @@ export async function registerRoutes(
     }
   });
 
-  app.delete(api.videos.delete.path, requireAuth, async (req, res) => {
+  app.delete(api.videos.delete.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     await storage.deleteVideo(Number(req.params.id));
     res.status(204).send();
   });
 
-  app.post(api.events.create.path, requireAuth, async (req, res) => {
+  app.post(api.events.create.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.events.create.input.extend({
       date: z.coerce.date(),
     }).parse(req.body);
@@ -212,7 +239,10 @@ export async function registerRoutes(
     res.status(201).json(event);
   });
 
-  app.patch(api.events.update.path, requireAuth, async (req, res) => {
+  app.patch(api.events.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.events.update.input.extend({
       date: z.coerce.date(),
     }).parse(req.body);
@@ -220,12 +250,18 @@ export async function registerRoutes(
     res.json(event);
   });
 
-  app.delete(api.events.delete.path, requireAuth, async (req, res) => {
+  app.delete(api.events.delete.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     await storage.deleteEvent(Number(req.params.id));
     res.status(204).send();
   });
 
-  app.post(api.press.create.path, requireAuth, async (req, res) => {
+  app.post(api.press.create.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     try {
       const input = api.press.create.input.extend({
         date: z.preprocess((val) => val ? new Date(val as string) : new Date(), z.date()),
@@ -241,7 +277,10 @@ export async function registerRoutes(
     }
   });
 
-  app.patch(api.press.update.path, requireAuth, async (req, res) => {
+  app.patch(api.press.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.press.update.input.extend({
       date: z.coerce.date(),
     }).parse(req.body);
@@ -249,7 +288,10 @@ export async function registerRoutes(
     res.json(item);
   });
 
-  app.delete(api.press.delete.path, requireAuth, async (req, res) => {
+  app.delete(api.press.delete.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     await storage.deletePress(Number(req.params.id));
     res.status(204).send();
   });
@@ -261,30 +303,45 @@ export async function registerRoutes(
     res.json(includeHidden ? photos : photos.filter(p => !p.hidden));
   });
 
-  app.post(api.photos.create.path, requireAuth, async (req, res) => {
+  app.post(api.photos.create.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.photos.create.input.parse(req.body);
     const photo = await storage.createPhoto(input);
     res.status(201).json(photo);
   });
 
-  app.patch(api.photos.update.path, requireAuth, async (req, res) => {
+  app.patch(api.photos.update.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const input = api.photos.update.input.parse(req.body);
     const photo = await storage.updatePhoto(Number(req.params.id), input);
     res.json(photo);
   });
 
-  app.delete(api.photos.delete.path, requireAuth, async (req, res) => {
+  app.delete(api.photos.delete.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     await storage.deletePhoto(Number(req.params.id));
     res.status(204).send();
   });
 
-  app.get(api.contact.list.path, requireAuth, async (req, res) => {
+  app.get(api.contact.list.path, (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     const messages = await storage.getMessages();
     res.json(messages);
   });
 
   // Upload URL endpoint
-  app.post("/api/uploads/request-url", requireAuth, async (req, res) => {
+  app.post("/api/uploads/request-url", (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(401).json({ message: "Unauthorized" });
+  }, async (req, res) => {
     try {
       const { name, size, contentType } = req.body;
       if (!name) return res.status(400).json({ error: "Missing name" });
