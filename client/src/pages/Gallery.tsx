@@ -36,7 +36,6 @@ export default function Gallery() {
         .filter(p => p.imageUrl && p.imageUrl.trim() !== "")
         .map(p => {
           let src = p.imageUrl;
-          // Si c'est une image locale (importée avec @assets), on l'utilise telle quelle
           // Si c'est une image téléchargée (commençant par /uploads/), on s'assure de l'extension
           if (src.startsWith('/uploads/') && !src.endsWith('.webp') && !src.includes('.')) {
             src = `${src}.webp`;
@@ -48,6 +47,8 @@ export default function Gallery() {
           };
         })
     : defaultGalleryItems;
+
+  const finalItems = galleryItems.length > 0 ? galleryItems : defaultGalleryItems;
 
   return (
     <div className="min-h-screen">
@@ -68,7 +69,7 @@ export default function Gallery() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryItems.map((item, idx) => (
+              {finalItems.map((item, idx) => (
                 <SectionReveal key={idx} delay={idx * 0.05}>
                   <motion.div 
                     className="relative group overflow-hidden bg-card rounded-md h-full"
@@ -76,12 +77,21 @@ export default function Gallery() {
                     transition={{ duration: 0.3 }}
                     data-testid={`card-gallery-${idx}`}
                   >
-                    <div className="aspect-square overflow-hidden">
+                    <div className="aspect-square overflow-hidden bg-muted">
                       <img 
                         src={item.src} 
                         alt={item.alt}
                         className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                         loading="lazy"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.classList.add('flex', 'items-center', 'justify-center');
+                            parent.innerHTML = '<span class="text-muted-foreground text-xs uppercase tracking-widest">Image non disponible</span>';
+                          }
+                        }}
                         data-testid={`img-gallery-${idx}`}
                       />
                     </div>
