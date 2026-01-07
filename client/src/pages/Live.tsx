@@ -25,16 +25,16 @@ export default function Live() {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Artistic Hero Section */}
-      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black">
+      <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden flex items-center justify-center bg-black">
         <div className="absolute inset-0 z-0">
           <img 
             src="/attached_assets/10_1767776421949.jpg" 
             alt="Damo Fama Live" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-[center_20%]"
           />
           {/* Cinematic Wash Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-90" />
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-90" />
+          <div className="absolute inset-0 bg-black/20" />
         </div>
 
         <motion.div 
