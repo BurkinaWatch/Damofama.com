@@ -66,7 +66,7 @@ export default function Home() {
               filter: "brightness(1.1)"
             }}
           >
-            DAMO FAMA
+            DAMO <span className="text-primary italic">FAMA</span>
           </motion.h1>
 
           <motion.div
@@ -109,31 +109,67 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div className="order-2 md:order-1 relative">
                 <div className="aspect-[3/4] overflow-hidden rounded-sm relative">
-                  {/* Portrait of artist in dark lighting */}
-                  {/* dramatic portrait of black musician */}
                   <img 
                     src="/images/LS2C6650_1766230961643.jpg" 
                     alt="Damo Fama Portrait" 
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   />
                   <div className="absolute inset-0 border border-white/10 m-4" />
+                  
+                  {/* Floating Quote for Dynamism */}
+                  <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    className="absolute -bottom-6 -right-6 bg-primary p-6 max-w-[200px] hidden lg:block shadow-2xl"
+                  >
+                    <p className="text-primary-foreground font-display italic text-lg leading-tight">
+                      "La musique est le souffle de l'âme."
+                    </p>
+                  </motion.div>
                 </div>
               </div>
               <div className="order-1 md:order-2 space-y-8">
                 <h2 className="text-4xl md:text-6xl font-display font-medium leading-tight">
-                  L'univers de <span className="text-primary">Damo Fama</span>
+                  L'essence de <span className="text-primary italic">l'Afro-Vibration</span>
                 </h2>
                 <div className="w-12 h-1 bg-primary" />
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Fusionnant les rythmes ancestraux et les sonorités contemporaines.
-                  Un voyage émotionnel qui transcende les frontières.
+                  Originaire du Burkina Faso, Damo Fama sculpte un univers sonore où les racines mandingues rencontrent l'énergie urbaine. Chaque note est une invitation au voyage, chaque rythme un battement de cœur universel.
                 </p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3 text-sm text-primary/80">
+                    <Music size={16} />
+                    <span>Fusion Afro-Contemporaine</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-primary/80">
+                    <TrendingUp size={16} />
+                    <span>Énergie Scénique Incomparable</span>
+                  </div>
+                </div>
                 <Link href="/about" asChild>
-                  <a className="inline-flex items-center gap-2 text-white border-b border-primary pb-1 hover:text-primary transition-colors uppercase tracking-widest text-sm">
-                    Découvrir la Biographie <ArrowRight size={16} />
+                  <a className="inline-flex items-center gap-2 text-white border-b border-primary pb-1 hover:text-primary transition-all uppercase tracking-widest text-sm font-bold">
+                    Explorer son Histoire <ArrowRight size={16} />
                   </a>
                 </Link>
               </div>
+            </div>
+          </SectionReveal>
+
+          {/* New Interactive Quote Section */}
+          <SectionReveal>
+            <div className="py-20 border-y border-white/5 text-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl mx-auto"
+              >
+                <span className="text-primary text-6xl font-serif opacity-20 block mb-4">“</span>
+                <p className="text-2xl md:text-4xl font-display leading-snug italic text-white/90">
+                  Ma musique ne connaît pas de frontières, elle cherche simplement à toucher ce qu'il y a de plus humain en chacun de nous.
+                </p>
+                <span className="mt-8 block uppercase tracking-[0.3em] text-xs text-primary font-bold">Engagement & Partage</span>
+              </motion.div>
             </div>
           </SectionReveal>
 
@@ -200,7 +236,6 @@ export default function Home() {
           <SectionReveal>
             <div className="relative overflow-hidden bg-card rounded-lg border border-white/5 p-8 md:p-16 text-center">
               <div className="absolute inset-0 opacity-20 pointer-events-none">
-                {/* abstract geometric texture */}
                 <img 
                   src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000" 
                   alt="Texture" 
@@ -210,9 +245,9 @@ export default function Home() {
               
               <div className="relative z-10 max-w-2xl mx-auto space-y-6">
                 <TrendingUp className="w-12 h-12 text-primary mx-auto mb-4" />
-                <h3 className="text-4xl md:text-5xl font-display">Suivez Damo Fama</h3>
-                <p className="text-muted-foreground">
-                  Connectez-vous sur les réseaux sociaux pour rester à jour.
+                <h3 className="text-4xl md:text-5xl font-display">L'Expérience <span className="text-primary italic">Live</span></h3>
+                <p className="text-muted-foreground text-lg italic">
+                  "Une communion par le son, une célébration de la vie."
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 pt-4">
                   <a 
