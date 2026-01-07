@@ -5,38 +5,38 @@
 @tailwind utilities;
 
 :root {
-  /* HSL Color System - Massademe Inspired Theme */
+  /* HSL Color System - Sophisticated Afro Urban (Muted & Classy) */
   
-  /* Backgrounds: Warm Paper / Off-White */
-  --background: 40 25% 94%;       /* Warm, slightly textured paper white */
-  --foreground: 20 15% 12%;       /* Deep charcoal-brown for high readability */
+  /* Backgrounds: Muted Stone / Sophisticated Grey */
+  --background: 40 5% 88%;        /* Muted, classy stone grey with subtle warmth */
+  --foreground: 20 10% 10%;       /* Deepest charcoal-brown for readability */
   
-  /* Cards & Surface: Soft Parchment */
-  --card: 40 20% 90%;
-  --card-foreground: 20 15% 12%;
-  --popover: 40 20% 90%;
-  --popover-foreground: 20 15% 12%;
+  /* Cards & Surface: Soft Shadow / Concrete Parchment */
+  --card: 40 5% 84%;
+  --card-foreground: 20 10% 10%;
+  --popover: 40 5% 84%;
+  --popover-foreground: 20 10% 10%;
 
-  /* Primary: Golden Ochre - High warmth, professional but artistic */
-  --primary: 40 85% 55%;
-  --primary-foreground: 20 15% 5%;
+  /* Primary: Muted Golden Ochre - Less vibrant, more high-end */
+  --primary: 38 60% 45%;
+  --primary-foreground: 40 5% 95%;
 
-  /* Secondary: Deep Earth / Mahogany */
-  --secondary: 15 30% 20%;
-  --secondary-foreground: 40 25% 95%;
+  /* Secondary: Deep Earth / Mahogany - Muted for elegance */
+  --secondary: 15 20% 18%;
+  --secondary-foreground: 40 5% 90%;
 
-  /* Muted: Soft Taupe */
-  --muted: 40 10% 88%;
-  --muted-foreground: 40 10% 40%;
+  /* Muted: Industrial Taupe */
+  --muted: 40 5% 78%;
+  --muted-foreground: 40 5% 35%;
 
-  /* Accent: Terra Cotta */
-  --accent: 15 60% 50%;
-  --accent-foreground: 40 25% 98%;
+  /* Accent: Muted Terra Cotta */
+  --accent: 15 40% 42%;
+  --accent-foreground: 40 5% 98%;
 
-  /* Borders & Inputs: Subtle Earth lines */
-  --border: 40 15% 85%;
-  --input: 40 15% 85%;
-  --ring: 40 85% 55%;
+  /* Borders & Inputs: Subtle Stone lines */
+  --border: 40 5% 75%;
+  --input: 40 5% 75%;
+  --ring: 38 60% 45%;
 
   --radius: 0.375rem;
 
@@ -45,12 +45,12 @@
 }
 
 .dark {
-  --background: 20 15% 8%;
-  --foreground: 40 25% 90%;
-  --card: 20 15% 10%;
-  --card-foreground: 40 25% 90%;
-  --primary: 40 85% 60%;
-  --primary-foreground: 20 15% 5%;
+  --background: 20 8% 6%;
+  --foreground: 40 5% 85%;
+  --card: 20 8% 8%;
+  --card-foreground: 40 5% 85%;
+  --primary: 38 60% 50%;
+  --primary-foreground: 20 8% 5%;
 }
 
 @layer base {
