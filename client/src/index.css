@@ -5,43 +5,53 @@
 @tailwind utilities;
 
 :root {
-  /* HSL Color System - Afro-contemporary Artistic Soul */
+  /* HSL Color System - AFRO Urban Mood */
   
-  /* Backgrounds: Warm Deep Ochre & Earthy Charcoal */
-  --background: 25 15% 6%;         /* Very deep warm charcoal with an earthy base */
-  --foreground: 35 30% 85%;       /* Warm linen white */
+  /* Backgrounds: Warm Clay & Sand */
+  --background: 35 30% 92%;       /* Light warm sand/linen background */
+  --foreground: 25 20% 15%;       /* Deep earthy charcoal for text */
   
-  /* Cards & Surface: Elevating the earth tones */
-  --card: 25 15% 8%;
-  --card-foreground: 35 30% 85%;
-  --popover: 25 15% 8%;
-  --popover-foreground: 35 30% 85%;
+  /* Cards & Surface: Soft Paper/Canvas */
+  --card: 35 25% 88%;
+  --card-foreground: 25 20% 15%;
+  --popover: 35 25% 88%;
+  --popover-foreground: 25 20% 15%;
 
-  /* Primary: Burnt Orange / Sunset - Representing vitality and African soul */
-  --primary: 25 70% 55%;
-  --primary-foreground: 25 15% 6%;
+  /* Primary: Bold Ochre / Saffron - Vibrant but natural */
+  --primary: 35 75% 50%;
+  --primary-foreground: 35 10% 10%;
 
-  /* Secondary: Deep Savannah Green / Forest */
-  --secondary: 120 15% 15%;
-  --secondary-foreground: 35 30% 85%;
+  /* Secondary: Deep Indigo / Urban Blue - Connecting tradition to city life */
+  --secondary: 220 30% 25%;
+  --secondary-foreground: 35 30% 95%;
 
-  /* Muted: Dusty Savannah Earth */
-  --muted: 25 10% 15%;
-  --muted-foreground: 35 15% 50%;
+  /* Muted: Soft Earth */
+  --muted: 35 15% 82%;
+  --muted-foreground: 35 10% 40%;
 
-  /* Accent: Terra Cotta / Red Earth */
-  --accent: 15 50% 45%;
-  --accent-foreground: 35 30% 95%;
+  /* Accent: Bright Terracotta */
+  --accent: 15 65% 50%;
+  --accent-foreground: 35 30% 98%;
 
   /* Borders & Inputs */
-  --border: 25 10% 15%;
-  --input: 25 10% 15%;
-  --ring: 25 70% 55%;
+  --border: 35 15% 80%;
+  --input: 35 15% 80%;
+  --ring: 35 75% 50%;
 
-  --radius: 0.25rem;
+  --radius: 0.5rem; /* Slightly more rounded for urban feel */
 
   --font-display: 'Playfair Display', serif;
   --font-body: 'DM Sans', sans-serif;
+}
+
+/* Light mode overrides for the specific Afro Urban look */
+.dark {
+  --background: 25 15% 10%;
+  --foreground: 35 30% 85%;
+  --card: 25 15% 12%;
+  --card-foreground: 35 30% 85%;
+  --primary: 35 75% 55%;
+  --primary-foreground: 25 15% 10%;
 }
 
 @layer base {
