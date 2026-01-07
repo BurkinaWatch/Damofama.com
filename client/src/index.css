@@ -7,36 +7,36 @@
 :root {
   /* HSL Color System - Sophisticated Afro Urban (Muted & Classy) */
   
-  /* Backgrounds: Muted Stone / Sophisticated Grey */
-  --background: 40 5% 88%;        /* Muted, classy stone grey with subtle warmth */
-  --foreground: 20 10% 10%;       /* Deepest charcoal-brown for readability */
+  /* Backgrounds: Darker Stone / Sophisticated Deep Grey */
+  --background: 40 5% 12%;        /* Much darker base for a cinematic feel */
+  --foreground: 40 5% 85%;       /* Light stone for readability on dark */
   
-  /* Cards & Surface: Soft Shadow / Concrete Parchment */
-  --card: 40 5% 84%;
-  --card-foreground: 20 10% 10%;
-  --popover: 40 5% 84%;
-  --popover-foreground: 20 10% 10%;
+  /* Cards & Surface: Deep Obsidian / Charcoal */
+  --card: 40 5% 15%;
+  --card-foreground: 40 5% 85%;
+  --popover: 40 5% 15%;
+  --popover-foreground: 40 5% 85%;
 
   /* Primary: Muted Golden Ochre - Less vibrant, more high-end */
-  --primary: 38 60% 45%;
-  --primary-foreground: 40 5% 95%;
+  --primary: 38 60% 50%;
+  --primary-foreground: 20 8% 5%;
 
-  /* Secondary: Deep Earth / Mahogany - Muted for elegance */
+  /* Secondary: Deep Earth / Mahogany */
   --secondary: 15 20% 18%;
   --secondary-foreground: 40 5% 90%;
 
-  /* Muted: Industrial Taupe */
-  --muted: 40 5% 78%;
-  --muted-foreground: 40 5% 35%;
+  /* Muted: Deep Industrial Taupe */
+  --muted: 40 5% 18%;
+  --muted-foreground: 40 5% 55%;
 
   /* Accent: Muted Terra Cotta */
   --accent: 15 40% 42%;
   --accent-foreground: 40 5% 98%;
 
-  /* Borders & Inputs: Subtle Stone lines */
-  --border: 40 5% 75%;
-  --input: 40 5% 75%;
-  --ring: 38 60% 45%;
+  /* Borders & Inputs: Subtle Deep Stone lines */
+  --border: 40 5% 22%;
+  --input: 40 5% 22%;
+  --ring: 38 60% 50%;
 
   --radius: 0.375rem;
 
